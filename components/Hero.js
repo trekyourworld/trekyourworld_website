@@ -37,22 +37,23 @@ const Hero = ({
             variants={scrollAnimation}>
             <div className=" flex flex-col justify-center items-start row-start-2 sm:row-start-1">
               <h1 className="text-3xl lg:text-4xl xl:text-5xl font-medium text-black-600 leading-normal">
-                Transform your trekking and hiking experience with <strong>trekyourworld</strong>.
+                Transform your trekking experience with <strong>trekyourworld</strong>.
               </h1>
               <p className="text-black-500 mt-4 mb-6">
-                Choose from the best possible treks suited as per your needs.
+                One stop-shop for all your trekking plans.
               </p>
               <ButtonPrimary>Get Started</ButtonPrimary>
             </div>
             <div className="flex w-full">
               <motion.div className="h-full w-full" variants={scrollAnimation}>
                 <Image
-                  src="/assets/logo.png"
+                  src="/assets/landing_page_scene.webp"
                   alt="VPN Illustrasi"
                   quality={100}
-                  width={552}
+                  width={602}
                   height={403}
                   layout="responsive"
+                  className="rounded-xl"
                 />
               </motion.div>
             </div>
