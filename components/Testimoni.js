@@ -11,7 +11,7 @@ const Testimoni = ({
   listTestimoni = [
     {
       name: "iezh Robert",
-      image: "/assets/people-3.png",
+      image: "",
       city: "Warsaw",
       country: "Poland",
       rating: "4.5",
@@ -20,7 +20,7 @@ const Testimoni = ({
     },
     {
       name: "iezh Robert",
-      image: "/assets/people-3.png",
+      image: "",
       city: "Warsaw",
       country: "Poland",
       rating: "4.5",
@@ -29,7 +29,7 @@ const Testimoni = ({
     },
     {
       name: "iezh Robert",
-      image: "/assets/people-3.png",
+      image: "",
       city: "Warsaw",
       country: "Poland",
       rating: "4.5",
@@ -38,7 +38,7 @@ const Testimoni = ({
     },
     {
       name: "iezh Robert",
-      image: "/assets/people-3.png",
+      image: "",
       city: "Warsaw",
       country: "Poland",
       rating: "4.5",

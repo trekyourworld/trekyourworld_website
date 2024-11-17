@@ -152,7 +152,7 @@ const favicons = [
   },
   {
     rel: 'icon',
-    href: '/favicon/favicon.ico',
+    href: '/favicon/enhanced_logo.ico',
   },
   {
     rel: 'icon',
