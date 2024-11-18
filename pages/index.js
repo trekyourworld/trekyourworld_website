@@ -5,14 +5,14 @@ import Layout from "../components/Layout/Layout";
 import SeoHead from "../components/SeoHead";
 
 export default function Home() {
-  return (
-    <>
-      <SeoHead title='Trekyourworld Landing Page' />
-      <Layout>
-        <Hero />
-        <Feature />
-        <Pricing />
-      </Layout>
-    </>
-  );
+    return (
+        <>
+            <SeoHead title='Trekyourworld Landing Page' />
+            <Layout>
+                <Hero />
+                <Feature />
+                {/* <Pricing /> */}
+            </Layout>
+        </>
+    );
 }
