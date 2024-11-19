@@ -15,12 +15,12 @@ const Hero = ({
     {
       name: "Listed Guides",
       number: "10",
-      icon: "/assets/Icon/gridicons_location.svg",
+      icon: "/assets/Icon/heroicons_sm-user.svg",
     },
     {
       name: "Listed Treks",
       number: "200",
-      icon: "/assets/Icon/bx_bxs-server.svg",
+      icon: "/assets/Icon/gridicons_location.svg",
     },
   ],
 }) => {

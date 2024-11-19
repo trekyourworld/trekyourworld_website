@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link as LinkScroll } from "react-scroll";
-import TLogo from "../../public/assets/enhanced_logo.svg"
+import TLogo from "../../public/assets/Logo_2.svg"
 
 const Header = () => {
     const [activeLink, setActiveLink] = useState(null);
@@ -22,7 +22,7 @@ const Header = () => {
             >
                 <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
                     <div className="col-start-1 col-end-2 flex items-center">
-                        <TLogo className="h-8 w-auto" />
+                        <TLogo className="h-20 w-auto" />
                     </div>
                 </nav>
             </header>
