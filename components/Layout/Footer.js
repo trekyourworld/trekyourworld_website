@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="row-span-2 sm:col-span-4 col-start-1 col-end-4 sm:col-end-5 flex flex-col items-start ">
                     <LogoVPN className="h-20 w-auto mb-6" />
                     <p className="mb-4">
-                        <strong className="font-medium">trekyourworld</strong> is a single
+                        <strong className="font-medium"><span className="text-stone-900">trek</span>yourworld</strong> is a single
                         solution to all your trekking plans, anywhere around the world.
                     </p>
                     <p className="text-gray-400">©{new Date().getFullYear()} - trekyourworld</p>
