@@ -16,7 +16,7 @@ const Footer = () => {
                 <div className="row-span-2 sm:col-span-2 sm:col-start-7 sm:col-end-9 flex flex-col">
                     <p className="text-black-600 mb-4 font-medium text-lg">Follow us on</p>
                     <ul className="text-black-500 ">
-                        <li className="my-2 hover:text-orange-500 cursor-pointer transition-all">
+                        <li className="my-2 cursor-pointer transition-all">
                             <Instagram className="h-6 w-6" />
                         </li>
                     </ul>

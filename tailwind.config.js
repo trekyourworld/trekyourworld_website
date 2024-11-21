@@ -40,6 +40,9 @@ module.exports = {
         400: "#AFB5C0",
         500: "#DDDDDD",
       },
+      stone: {
+        900: "#C4AE9C"
+      }
     },
     extend: {},
   },
