@@ -2,6 +2,15 @@ import React from "react";
 import LogoVPN from "../../public/assets/Logo_2.svg";
 import Instagram from "../../public/assets/Icon/instagram.svg";
 const Footer = () => {
+
+    const invokeLink = (invokeType) => {
+        switch (invokeType) {
+            case 'instagram': {
+                window.open("https://www.instagram.com/that.geeky.traveller", "_blank");
+            }
+        }
+    }
+
     return (
         <div className="bg-white-300 pt-14 pb-4">
             <div className="max-w-screen-xl w-full mx-auto px-6 sm:px-8 lg:px-16 grid grid-rows-6 sm:grid-rows-1 grid-flow-row sm:grid-flow-col grid-cols-3 sm:grid-cols-12 gap-4">
@@ -17,20 +26,20 @@ const Footer = () => {
                     <p className="text-black-600 mb-4 font-medium text-lg">Follow us on</p>
                     <ul className="text-black-500 ">
                         <li className="my-2 cursor-pointer transition-all">
-                            <Instagram className="h-6 w-6" />
+                            <Instagram className="h-6 w-6" onClick={() => invokeLink('instagram')}/>
                         </li>
                     </ul>
                 </div>
                 <div className="row-span-2 sm:col-span-2 sm:col-start-9 sm:col-end-11 flex flex-col">
                     <p className="text-black-600 mb-4 font-medium text-lg">Engage</p>
                     <ul className="text-black-500">
-                        <li className="my-2 hover:text-orange-500 cursor-pointer transition-all">
+                        <li className="my-2 hover:text-stone-900 cursor-pointer transition-all">
                             About Us{" "}
                         </li>
-                        <li className="my-2 hover:text-orange-500 cursor-pointer transition-all">
+                        <li className="my-2 hover:text-stone-900 cursor-pointer transition-all">
                             Privacy Policy{" "}
                         </li>
-                        <li className="my-2 hover:text-orange-500 cursor-pointer transition-all">
+                        <li className="my-2 hover:text-stone-900 cursor-pointer transition-all">
                             Terms of Service{" "}
                         </li>
                     </ul>
