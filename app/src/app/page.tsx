@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Layout from '../components/Layout';
+import Layout from './components/Layout';
 import { MapPin, Star, Users, Mountain, Globe, ChevronRight } from 'lucide-react';
 
 const Home: React.FC = () => {

@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
-import { Trek } from '../../types';
+import { Trek } from '../../../types';
 
 const Explore: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
