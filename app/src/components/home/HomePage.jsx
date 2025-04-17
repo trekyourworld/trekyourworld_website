@@ -22,11 +22,11 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 max-w-3xl">
+            <h1 className="text-4xl md:text-6xl text-left font-bold mb-4 max-w-3xl">
               Discover Breathtaking Adventures Around the World
             </h1>
             
-            <p className="text-xl md:text-2xl mb-8 max-w-xl">
+            <p className="text-xl text-left md:text-2xl mb-8 max-w-xl">
               Join expert guides on unforgettable treks to the world's most stunning destinations.
             </p>
             

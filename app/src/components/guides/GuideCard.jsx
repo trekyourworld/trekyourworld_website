@@ -36,15 +36,15 @@ const GuideCard = ({ guide }) => {
         <div className="flex items-start mb-3">
           <LanguageIcon className="h-5 w-5 text-blue-500 mt-0.5" />
           <div className="ml-2">
-            <p className="text-gray-600 text-sm">Languages</p>
-            <p className="font-medium">{guide.languages.join(', ')}</p>
+            <p className="text-gray-600 text-left text-sm">Languages</p>
+            <p className="font-medium text-left">{guide.languages.join(', ')}</p>
           </div>
         </div>
 
         {/* Specializations */}
         <div className="mb-4">
-          <p className="text-gray-600 text-sm">Specializations</p>
-          <div className="flex flex-wrap gap-2 mt-1">
+          <p className="text-gray-600 text-left text-sm">Specializations</p>
+          <div className="flex flex-wrap text-left gap-2 mt-1">
             {guide.specializations.map((spec, index) => (
               <span 
                 key={index}
@@ -60,8 +60,8 @@ const GuideCard = ({ guide }) => {
         <div className="flex items-start mb-4">
           <MapPinIcon className="h-5 w-5 text-green-500 mt-0.5" />
           <div className="ml-2">
-            <p className="text-gray-600 text-sm">Supported Treks</p>
-            <p className="font-medium">
+            <p className="text-gray-600 text-left text-sm">Supported Treks</p>
+            <p className="font-medium text-left">
               {guide.supportedTreks.slice(0, 2).map(trek => trek.name).join(', ')}
               {guide.supportedTreks.length > 2 ? ` +${guide.supportedTreks.length - 2} more` : ''}
             </p>
@@ -89,16 +89,16 @@ const GuideCard = ({ guide }) => {
           <div className="mt-4 pt-4 border-t border-gray-200">
             {/* Bio */}
             <div className="mb-4">
-              <p className="text-gray-600 text-sm">About</p>
-              <p className="mt-1">{guide.bio}</p>
+              <p className="text-gray-600 text-left text-sm">About</p>
+              <p className="mt-1 text-left">{guide.bio}</p>
             </div>
 
             {/* Available dates */}
             <div className="mb-4">
-              <p className="text-gray-600 text-sm mb-2">Available Dates</p>
+              <p className="text-gray-600 text-sm text-left mb-2">Available Dates</p>
               <div className="space-y-2">
                 {guide.availableDates.map((dateRange, index) => (
-                  <div key={index} className="flex items-center">
+                  <div key={index} className="flex text-left">
                     <CalendarDaysIcon className="h-5 w-5 text-orange-500" />
                     <span className="ml-2">
                       {formatDate(dateRange.start)} - {formatDate(dateRange.end)}
@@ -110,8 +110,8 @@ const GuideCard = ({ guide }) => {
 
             {/* All supported treks */}
             <div>
-              <p className="text-gray-600 text-sm mb-2">All Supported Treks</p>
-              <ul className="list-disc list-inside space-y-1">
+              <p className="text-gray-600 text-left text-sm mb-2">All Supported Treks</p>
+              <ul className="list-disc text-left list-inside space-y-1">
                 {guide.supportedTreks.map(trek => (
                   <li key={trek.id}>{trek.name}</li>
                 ))}

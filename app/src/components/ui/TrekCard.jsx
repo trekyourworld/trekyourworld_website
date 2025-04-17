@@ -59,12 +59,12 @@ const TrekCard = ({ trek }) => {
           </div>
         </div>
 
-        <div className="flex items-center text-gray-500 text-sm mb-2">
+        <div className="flex text-left items-center text-gray-500 text-sm mb-2">
           <MapPinIcon className="h-4 w-4 mr-1" />
           <span>{location}</span>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-gray-600 text-sm mb-4 text-left line-clamp-2">
           {description}
         </p>
 

@@ -78,7 +78,7 @@ const ContactPage = () => {
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-5">
-                  <label htmlFor="name" className="block text-gray-700 mb-2">Your Name</label>
+                  <label htmlFor="name" className="block text-gray-700 text-left mb-2">Your Name</label>
                   <input
                     type="text"
                     id="name"
@@ -92,7 +92,7 @@ const ContactPage = () => {
                 </div>
                 
                 <div className="mb-5">
-                  <label htmlFor="email" className="block text-gray-700 mb-2">Email Address</label>
+                  <label htmlFor="email" className="block text-gray-700 text-left mb-2">Email Address</label>
                   <input
                     type="email"
                     id="email"
@@ -106,7 +106,7 @@ const ContactPage = () => {
                 </div>
                 
                 <div className="mb-5">
-                  <label htmlFor="subject" className="block text-gray-700 mb-2">Subject</label>
+                  <label htmlFor="subject" className="block text-gray-700 text-left mb-2">Subject</label>
                   <input
                     type="text"
                     id="subject"
@@ -120,7 +120,7 @@ const ContactPage = () => {
                 </div>
                 
                 <div className="mb-6">
-                  <label htmlFor="message" className="block text-gray-700 mb-2">Your Message</label>
+                  <label htmlFor="message" className="block text-gray-700 text-left mb-2">Your Message</label>
                   <textarea
                     id="message"
                     name="message"
@@ -161,9 +161,9 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">Call Us</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
-                  <p className="text-gray-600">Mon-Fri: 9:00 AM - 6:00 PM</p>
+                  <h3 className="text-lg font-medium text-left text-gray-900 mb-1">Call Us</h3>
+                  <p className="text-gray-600 text-left">+1 (555) 123-4567</p>
+                  <p className="text-gray-600 text-left">Mon-Fri: 9:00 AM - 6:00 PM</p>
                 </div>
               </div>
             </div>
@@ -176,9 +176,9 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">Email Us</h3>
-                  <p className="text-gray-600">info@trekyourworld.com</p>
-                  <p className="text-gray-600">support@trekyourworld.com</p>
+                  <h3 className="text-lg font-medium text-left text-gray-900 mb-1">Email Us</h3>
+                  <p className="text-gray-600 text-left">info@trekyourworld.com</p>
+                  <p className="text-gray-600 text-left">support@trekyourworld.com</p>
                 </div>
               </div>
             </div>
@@ -192,16 +192,16 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">Visit Us</h3>
-                  <p className="text-gray-600">123 Adventure Street</p>
-                  <p className="text-gray-600">Mountain View, CA 94043</p>
+                  <h3 className="text-lg font-medium text-left text-gray-900 mb-1">Visit Us</h3>
+                  <p className="text-gray-600 text-left">123 Adventure Street</p>
+                  <p className="text-gray-600 text-left">Mountain View, CA 94043</p>
                 </div>
               </div>
             </div>
             
             {/* Social Media Links */}
             <div className="mt-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Connect With Us</h3>
+              <h3 className="text-lg font-medium text-left text-gray-900 mb-4">Connect With Us</h3>
               <div className="flex space-x-4">
                 <a href="#" className="bg-blue-600 p-3 rounded-full text-white hover:bg-blue-700 transition-colors">
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

@@ -11,7 +11,7 @@ const Footer = () => {
             <p className="text-gray-400 mb-4">
               Discover the most breathtaking treks around the world with our expert guides and community.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex justify-center space-x-4">
               <a href="#" className="text-gray-400 hover:text-white">
                 <span className="sr-only">Facebook</span>
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
