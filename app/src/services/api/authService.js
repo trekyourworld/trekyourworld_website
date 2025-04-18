@@ -10,7 +10,7 @@ export const authService = {
    * @returns {Promise<Object>} - Response with user data and token
    */
   login: async (credentials) => {
-    const response = await apiClient.post('/auth/login', credentials);
+    const response = await apiClient.post('/v1/auth/admin/login', credentials);
     
     // If successful, store the token
     if (response.data?.token) {
@@ -34,7 +34,7 @@ export const authService = {
    * @returns {Promise<Object>} - Response from the server
    */
   logout: async () => {
-    const response = await apiClient.post('/auth/logout');
+    const response = await apiClient.post('/v1/auth/admin/logout');
     localStorage.removeItem('auth_token');
     return response;
   },

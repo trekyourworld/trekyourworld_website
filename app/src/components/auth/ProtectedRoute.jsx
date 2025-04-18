@@ -3,11 +3,22 @@ import { useAuth } from './AuthContext';
 
 // Component to protect routes that require admin authentication
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, loading } = useAuth();
   const location = useLocation();
+
+  // Show loading state while authentication status is being determined
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <p className="ml-3">Authenticating...</p>
+      </div>
+    );
+  }
 
   // If not authenticated or not admin, redirect to login
   if (!isAuthenticated || !isAdmin()) {
+    console.log('back to login')
     // Save the location they were trying to access for redirect after login
     return <Navigate to="/login" state={{ from: location }} replace />;
   }

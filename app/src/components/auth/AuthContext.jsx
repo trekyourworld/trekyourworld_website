@@ -1,19 +1,13 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { authService } from '../../services/api/authService';
 
 // Create authentication context
 const AuthContext = createContext();
 
-// Mock admin credentials - in a real app this would be handled securely by the backend
-const ADMIN_CREDENTIALS = {
-  email: 'admin@trekyourworld.com',
-  password: 'admin123'  // In a real app, never store passwords in frontend code
-};
-
 export const AuthProvider = ({ children }) => {
   // Get initial auth state from localStorage if available
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const storedAuth = localStorage.getItem('isAuthenticated');
-    return storedAuth === 'true';
+    return authService.isAuthenticated();
   });
   
   const [user, setUser] = useState(() => {
@@ -22,38 +16,77 @@ export const AuthProvider = ({ children }) => {
   });
   
   const [authError, setAuthError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Update localStorage when authentication state changes
+  // Fetch user profile if authenticated but no user data
   useEffect(() => {
-    localStorage.setItem('isAuthenticated', isAuthenticated);
-    localStorage.setItem('user', user ? JSON.stringify(user) : null);
-  }, [isAuthenticated, user]);
+    const fetchUserProfile = async () => {
+      if (isAuthenticated && !user) {
+        try {
+          setLoading(true);
+          const response = await authService.getProfile();
+          setUser(response.data);
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          // If we can't get the user profile, log them out
+          logout();
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [isAuthenticated]);
 
   // Login function
-  const login = (email, password) => {
-    // In a real app, this would be an API call to validate credentials
-    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-      setIsAuthenticated(true);
-      setUser({ email, role: 'admin' });
+  const login = async (email, password) => {
+    try {
+      setLoading(true);
       setAuthError('');
+      
+      const response = await authService.login({ email, password });
+      
+      setIsAuthenticated(true);
+      setUser(response.data.user);
+      
+      // Store user data in localStorage for persistence
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
       return true;
-    } else {
-      setAuthError('Invalid email or password');
+    } catch (error) {
+      setAuthError(error.response?.data?.message || 'Invalid email or password');
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
   // Logout function
-  const logout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
+  const logout = async () => {
+    try {
+      setLoading(true);
+      await authService.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsAuthenticated(false);
+      setUser(null);
+      localStorage.removeItem('user');
+      setLoading(false);
+    }
   };
 
   // Check if current user is admin
   const isAdmin = () => {
-    return user?.role === 'admin';
+    if (user) {
+        for (const role of user.roles) {
+            if (role === 'admin') {
+                return true;
+            }
+        }
+    }
+    return false;
   };
 
   // Context value
@@ -64,6 +97,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     authError,
     isAdmin,
+    loading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
