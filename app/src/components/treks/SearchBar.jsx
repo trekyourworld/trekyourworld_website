@@ -72,17 +72,32 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (onSearch) {
-      onSearch(searchTerm);
+    if (searchTerm) {
+        if (onSearch) {
+          onSearch(searchTerm);
+        }
     }
     setIsFocused(false);
   };
 
   const selectSuggestion = (suggestion) => {
     setSearchTerm(suggestion.name);
-    if (onSearch) {
-      onSearch(suggestion.name);
-    }
+    // Also directly call the API search when a suggestion is selected
+    treksService.fetchTreksFromV1({ trekName: suggestion.name })
+      .then(response => {
+        console.log('Selected trek results:', response);
+        // Pass both the search term and results to the parent component
+        if (onSearch) {
+          onSearch(suggestion.name, response.data);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching selected trek:', error);
+        // Still call onSearch with just the search term if API fails
+        if (onSearch) {
+          onSearch(suggestion.name);
+        }
+      });
     setIsFocused(false);
   };
 
