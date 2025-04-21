@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import SearchBar from './SearchBar';
 import Filters from './Filters';
 import TrekCard from '../ui/TrekCard';
+import { treksService } from '../../services/api/treksService';
 
-// Mock data for treks
+// Mock data for fallback in case API fails
 const mockTrekData = [
   {
     id: 1,
@@ -140,9 +142,24 @@ const mockTrekData = [
   }
 ];
 
+// Helper function to transform API data to match our component's expected format
+const transformApiTrek = (apiTrek) => {
+  return {
+    id: apiTrek.uuid,
+    name: apiTrek.title,
+    image: `https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80`, // Default image as API doesn't provide one
+    location: apiTrek.location || "Unknown",
+    difficulty: Array.isArray(apiTrek.difficulty) ? apiTrek.difficulty[0] : "Moderate",
+    duration: apiTrek.duration ? `${apiTrek.duration} days` : "Unknown",
+    rating: 4.5, // Default rating as API doesn't provide one
+    price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
+    description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`
+  };
+};
+
 const TreksPage = () => {
-  const [allTreks, setAllTreks] = useState([]);
-  const [filteredTreks, setFilteredTreks] = useState([]);
+  const [treks, setTreks] = useState([]);
+  const [allTreks, setAllTreks] = useState([]); // Keep for filter operations
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilters, setActiveFilters] = useState({
@@ -151,26 +168,18 @@ const TreksPage = () => {
     location: [],
     price: []
   });
+  const [error, setError] = useState(null);
+  const [isServerSearch, setIsServerSearch] = useState(true);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTreks, setTotalTreks] = useState(0);
+  const [perPage] = useState(12);
 
-  // Fetch treks data (simulated)
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setAllTreks(mockTrekData);
-      setFilteredTreks(mockTrekData);
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  // Apply search and filters whenever they change
-  useEffect(() => {
-    if (allTreks.length === 0) return;
-
-    let results = [...allTreks];
+  // Apply client-side filters if server search fails
+  const applyClientSideFilters = useCallback((treksData) => {
+    let results = [...treksData];
 
     // Apply search term filter
     if (searchTerm) {
@@ -183,7 +192,7 @@ const TreksPage = () => {
       );
     }
 
-    // Apply difficulty filters
+    // Apply other filters (difficulty, duration, location, price)
     if (activeFilters.difficulty.length > 0) {
       results = results.filter(trek => 
         activeFilters.difficulty.includes(trek.difficulty.toLowerCase())
@@ -210,7 +219,7 @@ const TreksPage = () => {
       });
     }
 
-    // Apply location filters - simplified for demo purposes
+    // Apply location filters
     if (activeFilters.location.length > 0) {
       results = results.filter(trek => {
         const trekLocation = trek.location.toLowerCase();
@@ -246,8 +255,108 @@ const TreksPage = () => {
       });
     }
 
-    setFilteredTreks(results);
-  }, [searchTerm, activeFilters, allTreks]);
+    setTreks(results);
+  }, [searchTerm, activeFilters]);
+
+  // Fetch treks data from the API
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        // Create params object for filtering
+        const params = {
+          // Add pagination parameters
+          page: currentPage,
+          limit: perPage
+        };
+        
+        // Add search term to params if present
+        if (searchTerm) {
+          params.query = searchTerm;
+        }
+        
+        // Add filters to params if present
+        if (activeFilters.difficulty.length > 0) {
+          params.difficulty = activeFilters.difficulty.join(',');
+        }
+        
+        if (activeFilters.duration.length > 0) {
+          params.duration = activeFilters.duration.join(',');
+        }
+        
+        if (activeFilters.location.length > 0) {
+          params.location = activeFilters.location.join(',');
+        }
+        
+        if (activeFilters.price.length > 0) {
+          params.price = activeFilters.price.join(',');
+        }
+        
+        const response = await treksService.fetchTreksFromV1(params);
+        console.log("API response:", response);
+        
+        // Correctly parse the API response structure
+        if (response.data && Array.isArray(response.data.data)) {
+          // Direct data array in response
+          const transformedTreks = response.data.data.map(transformApiTrek);
+          
+          setTreks(transformedTreks);
+          
+          // Handle pagination metadata if available
+          if (response.data.meta) {
+            setTotalPages(response.data.totalPages || 1);
+            setTotalTreks(response.data.totalItems || transformedTreks.length);
+          }
+          
+          // Store all treks for potential client-side filtering fallback
+          if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
+            setAllTreks(transformedTreks);
+          }
+          
+          setError(null);
+        } else if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
+          // Nested data structure
+          const transformedTreks = response.data.data.data.map(transformApiTrek);
+          
+          setTreks(transformedTreks);
+          
+          // Handle pagination metadata if available
+          if (response.data.data) {
+            setTotalPages(response.data.data.totalPages || 1);
+            setTotalTreks(response.data.data.totalItems || transformedTreks.length);
+          }
+          
+          // Store all treks for potential client-side filtering fallback
+          if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
+            setAllTreks(transformedTreks);
+          }
+          
+          setError(null);
+        } else {
+          throw new Error('Invalid data format from API');
+        }
+      } catch (err) {
+        console.error('Error fetching trek data:', err);
+        setError('Failed to load trek data. Using mock data instead.');
+        
+        // Fallback to mock data if API fails
+        setIsServerSearch(false);
+        setAllTreks(mockTrekData);
+        applyClientSideFilters(mockTrekData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [searchTerm, activeFilters, currentPage, perPage, applyClientSideFilters]);
+
+  // Apply client-side filtering when not using server search
+  useEffect(() => {
+    if (!isServerSearch && allTreks.length > 0) {
+      applyClientSideFilters(allTreks);
+    }
+  }, [searchTerm, activeFilters, allTreks, isServerSearch, applyClientSideFilters]);
 
   // Handle search input
   const handleSearch = (term) => {
@@ -290,48 +399,204 @@ const TreksPage = () => {
         
         <Filters onFilterChange={handleFilterChange} />
         
-        {isLoading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        {error && (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div className="flex">
+              <div className="ml-3">
+                <p className="text-sm text-yellow-700">{error}</p>
+              </div>
+            </div>
           </div>
-        ) : filteredTreks.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No treks found</h3>
-            <p className="text-gray-600 mb-4">
-              Try adjusting your search or filters to find more options.
-            </p>
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setActiveFilters({
-                  difficulty: [],
-                  duration: [],
-                  location: [],
-                  price: []
-                });
-              }}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        )}
+        
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-gray-600">
+            Found {treks.length} treks
+          </p>
+          
+          {/* Pagination Controls - Top */}
+          <div className="flex items-center space-x-2">
+            <button 
+              onClick={() => setCurrentPage(1)} 
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              title="First Page"
             >
-              Reset All Filters
+              &laquo;
+            </button>
+            <button 
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            
+            {/* Page number buttons */}
+            <div className="flex space-x-1">
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                // Show at most 5 pages with current page in the middle if possible
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`px-3 py-1 border rounded-md text-sm ${
+                      currentPage === pageNum 
+                        ? "bg-blue-600 text-white" 
+                        : "hover:bg-gray-50"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+            </div>
+            
+            <button 
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+            <button 
+              onClick={() => setCurrentPage(totalPages)} 
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Last Page"
+            >
+              &raquo;
             </button>
           </div>
-        ) : (
-          <>
-            <p className="mb-4 text-gray-600">Showing {filteredTreks.length} treks</p>
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              variants={container}
-              initial="hidden"
-              animate="show"
-            >
-              {filteredTreks.map((trek) => (
-                <motion.div key={trek.id} variants={item}>
-                  <TrekCard trek={trek} />
-                </motion.div>
-              ))}
-            </motion.div>
-          </>
-        )}
+        </div>
+        
+        <div id="trek-listing">
+          {isLoading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : treks.length === 0 ? (
+            <div className="bg-white rounded-lg shadow-md p-8 text-center">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">No treks found</h3>
+              <p className="text-gray-600 mb-4">
+                Try adjusting your search or filters to find more options.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setActiveFilters({
+                    difficulty: [],
+                    duration: [],
+                    location: [],
+                    price: []
+                  });
+                }}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Reset All Filters
+              </button>
+            </div>
+          ) : (
+            <>
+              <motion.div 
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                variants={container}
+                initial="hidden"
+                animate="show"
+              >
+                {treks.map((trek) => (
+                  <motion.div key={trek.id} variants={item}>
+                    <TrekCard trek={trek} />
+                  </motion.div>
+                ))}
+              </motion.div>
+              
+              {/* Pagination Controls */}
+              <div className="mt-10 flex justify-between items-center">
+                <div className="text-sm text-gray-700">
+                  Showing <span className="font-medium">{treks.length > 0 ? (currentPage - 1) * perPage + 1 : 0}</span> to{" "}
+                  <span className="font-medium">{Math.min(currentPage * perPage, totalTreks)}</span> of{" "}
+                  <span className="font-medium">{totalTreks}</span> treks
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={() => setCurrentPage(1)} 
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="First Page"
+                  >
+                    &laquo;
+                  </button>
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  
+                  {/* Page number buttons */}
+                  <div className="flex space-x-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      // Show at most 5 pages with current page in the middle if possible
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-1 border rounded-md text-sm ${
+                            currentPage === pageNum 
+                              ? "bg-blue-600 text-white" 
+                              : "hover:bg-gray-50"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                  <button 
+                    onClick={() => setCurrentPage(totalPages)} 
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Last Page"
+                  >
+                    &raquo;
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

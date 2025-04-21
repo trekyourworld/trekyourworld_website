@@ -6,7 +6,7 @@ import apiClient from './apiClient';
 export const treksService = {
   /**
    * Get all treks
-   * @param {Object} params - Query parameters for filtering, pagination, etc.
+   * @param {Object} params - Query parameters for filtering
    * @returns {Promise<Object>} - Response with treks data
    */
   getAllTreks: async (params = {}) => {
@@ -29,6 +29,15 @@ export const treksService = {
    */
   searchTreks: async (searchParams) => {
     return apiClient.get('/treks/search', { params: searchParams });
+  },
+
+  /**
+   * Fetch treks from the v1 API endpoint
+   * @param {Object} params - Query parameters for filtering
+   * @returns {Promise<Array>} - Array of trek objects with organization, uuid, title, etc.
+   */
+  fetchTreksFromV1: async (params = {}) => {
+    return apiClient.get('/v1/treks/search', { params });
   }
 };
 
