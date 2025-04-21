@@ -1,24 +1,38 @@
 import { useState, useEffect, useRef } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { AnimatePresence, motion } from 'framer-motion';
-
-// Mock data for search suggestions
-const mockSuggestions = [
-  { id: 1, name: "Everest Base Camp Trek", location: "Nepal" },
-  { id: 2, name: "Annapurna Circuit", location: "Nepal" },
-  { id: 3, name: "Inca Trail", location: "Peru" },
-  { id: 4, name: "Mount Kilimanjaro", location: "Tanzania" },
-  { id: 5, name: "Tour du Mont Blanc", location: "France/Italy/Switzerland" },
-  { id: 6, name: "Torres del Paine W Trek", location: "Chile" },
-  { id: 7, name: "Milford Track", location: "New Zealand" },
-  { id: 8, name: "Appalachian Trail", location: "USA" }
-];
+import treksService from '../../services/api/treksService';
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [isFocused, setIsFocused] = useState(false);
+  const [allTreks, setAllTreks] = useState([]);
   const searchRef = useRef(null);
+
+  useEffect(() => {
+    // Fetch all treks when component mounts
+    const fetchTreks = async () => {
+      try {
+        const response = await treksService.getAllTreks();
+        console.log(response)
+        // Assuming the response data structure has treks with name and location properties
+        // Transform data if needed to match the expected format
+        const treksData = response.data.data.map((trek, index) => ({
+          id: trek.id || index,
+          name: trek.title,
+          organiser: trek.organiser,
+        }));
+        setAllTreks(treksData);
+      } catch (error) {
+        console.error('Error fetching treks:', error);
+        // Fallback to empty array if API call fails
+        setAllTreks([]);
+      }
+    };
+
+    fetchTreks();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,10 +50,10 @@ const SearchBar = ({ onSearch }) => {
   useEffect(() => {
     // Filter suggestions based on search term
     if (searchTerm.length > 0) {
-      const filtered = mockSuggestions.filter(
-        suggestion => 
-          suggestion.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          suggestion.location.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = allTreks.filter(
+        trek => 
+          trek.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (trek.location && trek.location.toLowerCase().includes(searchTerm.toLowerCase()))
       );
       setSuggestions(filtered);
     } else {
@@ -54,7 +68,7 @@ const SearchBar = ({ onSearch }) => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchTerm, onSearch]);
+  }, [searchTerm, onSearch, allTreks]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -101,11 +115,11 @@ const SearchBar = ({ onSearch }) => {
               {suggestions.map((suggestion) => (
                 <li 
                   key={suggestion.id}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer transition-colors"
+                  className="px-4 py-2 hover:bg-gray-100 text-left cursor-pointer transition-colors"
                   onClick={() => selectSuggestion(suggestion)}
                 >
                   <div className="font-medium">{suggestion.name}</div>
-                  <div className="text-sm text-gray-500">{suggestion.location}</div>
+                  <div className="text-sm text-gray-500">{suggestion.organiser}</div>
                 </li>
               ))}
             </ul>

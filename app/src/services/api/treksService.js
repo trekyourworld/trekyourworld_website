@@ -10,7 +10,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Response with treks data
    */
   getAllTreks: async (params = {}) => {
-    return apiClient.get('/treks', { params });
+    return apiClient.get('/v1/treks', { params });
   },
 
   /**

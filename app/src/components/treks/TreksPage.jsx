@@ -468,7 +468,7 @@ const TreksPage = () => {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Discover Treks</h1>
-          <p className="text-gray-600 max-w-3xl">
+          <p className="text-gray-600 w-full">
             Explore our collection of handpicked treks around the world. Use the search and filters to find your perfect adventure.
           </p>
         </div>
