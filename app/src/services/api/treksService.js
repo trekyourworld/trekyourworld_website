@@ -38,6 +38,30 @@ export const treksService = {
    */
   fetchTreksFromV1: async (params = {}) => {
     return apiClient.get('/v1/treks/search', { params });
+  },
+
+  /**
+   * Filter treks using specific filter endpoint
+   * @param {Object} params - All parameters including filters and pagination
+   * @returns {Promise<Object>} - Response with filtered trek data
+   */
+  filterTreks: async (params = {}) => {
+    // Separate pagination params from filter params
+    const { page, limit, ...filterParams } = params;
+    
+    // Query params for pagination only
+    const queryParams = { page, limit };
+    
+    // Send filter params in the request body
+    return apiClient.post('/v1/treks/filter', filterParams, { params: queryParams });
+  },
+
+  /**
+   * Fetch filter options from the API
+   * @returns {Promise<Object>} - Object containing filter categories and their options
+   */
+  fetchFilterOptions: async () => {
+    return apiClient.get('/v1/treks/filters');
   }
 };
 

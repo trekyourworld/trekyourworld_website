@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import SearchBar from './SearchBar';
@@ -153,7 +153,9 @@ const transformApiTrek = (apiTrek) => {
     duration: apiTrek.duration ? `${apiTrek.duration} days` : "Unknown",
     rating: 4.5, // Default rating as API doesn't provide one
     price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
-    description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`
+    description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
+    elevation: apiTrek.elevation,
+    organiser: apiTrek.organiser || "Unknown"
   };
 };
 
@@ -166,7 +168,8 @@ const TreksPage = () => {
     difficulty: [],
     duration: [],
     location: [],
-    price: []
+    price: [],
+    organiser: []
   });
   const [error, setError] = useState(null);
   const [isServerSearch, setIsServerSearch] = useState(true);
@@ -176,6 +179,36 @@ const TreksPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalTreks, setTotalTreks] = useState(0);
   const [perPage] = useState(12);
+  
+  // Filter metadata state
+  const [filterMetadata, setFilterMetadata] = useState(null);
+  const [filterError, setFilterError] = useState(null);
+  
+  // Use ref for the current page to keep the value consistent in callbacks
+  const currentPageRef = useRef(currentPage);
+  
+  // Update the ref whenever the currentPage state changes
+  useEffect(() => {
+    currentPageRef.current = currentPage;
+  }, [currentPage]);
+
+  // Fetch filter metadata on component mount
+  useEffect(() => {
+    const fetchFilterMetadata = async () => {
+      try {
+        const response = await treksService.fetchFilterOptions();
+        if (response && response.data) {
+          setFilterMetadata(response.data);
+          setFilterError(null);
+        }
+      } catch (err) {
+        console.error("Error fetching filter metadata:", err);
+        setFilterError("Failed to load filter options");
+      }
+    };
+
+    fetchFilterMetadata();
+  }, []);
 
   // Apply client-side filters if server search fails
   const applyClientSideFilters = useCallback((treksData) => {
@@ -254,102 +287,144 @@ const TreksPage = () => {
         return false;
       });
     }
+    
+    // Apply organiser filters
+    if (activeFilters.organiser.length > 0) {
+      results = results.filter(trek => {
+        const trekOrganiser = trek.organiser ? trek.organiser.toLowerCase() : '';
+        return activeFilters.organiser.some(organiser => 
+          trekOrganiser.includes(organiser.toLowerCase())
+        );
+      });
+    }
 
     setTreks(results);
   }, [searchTerm, activeFilters]);
 
-  // Fetch treks data from the API
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        // Create params object for filtering
-        const params = {
-          // Add pagination parameters
-          page: currentPage,
-          limit: perPage
-        };
-        
-        // Add search term to params if present
-        if (searchTerm) {
-          params.query = searchTerm;
-        }
-        
-        // Add filters to params if present
-        if (activeFilters.difficulty.length > 0) {
-          params.difficulty = activeFilters.difficulty.join(',');
-        }
-        
-        if (activeFilters.duration.length > 0) {
-          params.duration = activeFilters.duration.join(',');
-        }
-        
-        if (activeFilters.location.length > 0) {
-          params.location = activeFilters.location.join(',');
-        }
-        
-        if (activeFilters.price.length > 0) {
-          params.price = activeFilters.price.join(',');
-        }
-        
-        const response = await treksService.fetchTreksFromV1(params);
-        console.log("API response:", response);
-        
-        // Correctly parse the API response structure
-        if (response.data && Array.isArray(response.data.data)) {
-          // Direct data array in response
-          const transformedTreks = response.data.data.map(transformApiTrek);
-          
-          setTreks(transformedTreks);
-          
-          // Handle pagination metadata if available
-          if (response.data.meta) {
-            setTotalPages(response.data.totalPages || 1);
-            setTotalTreks(response.data.totalItems || transformedTreks.length);
-          }
-          
-          // Store all treks for potential client-side filtering fallback
-          if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
-            setAllTreks(transformedTreks);
-          }
-          
-          setError(null);
-        } else if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
-          // Nested data structure
-          const transformedTreks = response.data.data.data.map(transformApiTrek);
-          
-          setTreks(transformedTreks);
-          
-          // Handle pagination metadata if available
-          if (response.data.data) {
-            setTotalPages(response.data.data.totalPages || 1);
-            setTotalTreks(response.data.data.totalItems || transformedTreks.length);
-          }
-          
-          // Store all treks for potential client-side filtering fallback
-          if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
-            setAllTreks(transformedTreks);
-          }
-          
-          setError(null);
-        } else {
-          throw new Error('Invalid data format from API');
-        }
-      } catch (err) {
-        console.error('Error fetching trek data:', err);
-        setError('Failed to load trek data. Using mock data instead.');
-        
-        // Fallback to mock data if API fails
-        setIsServerSearch(false);
-        setAllTreks(mockTrekData);
-        applyClientSideFilters(mockTrekData);
-      } finally {
-        setIsLoading(false);
+  // Function to fetch treks based on current state
+  const fetchTreks = useCallback(async (page = currentPageRef.current) => {
+    setIsLoading(true);
+    try {
+      // Create base params object with pagination
+      const params = {
+        page: page,
+        limit: perPage
+      };
+      
+      // Create filter params object for POST body when needed
+      const filterParams = {};
+      
+      // Add search term to filter params if present
+      if (searchTerm) {
+        // Make search term an array with a single value
+        filterParams.query = [searchTerm];
       }
-    };
+      
+      // Add filters to filter params if present - ensure all are string arrays
+      if (activeFilters.difficulty.length > 0) {
+        filterParams.difficulty = activeFilters.difficulty;
+      }
+      
+      if (activeFilters.duration.length > 0) {
+        filterParams.duration = activeFilters.duration;
+      }
+      
+      if (activeFilters.location.length > 0) {
+        filterParams.location = activeFilters.location;
+      }
+      
+      if (activeFilters.price.length > 0) {
+        filterParams.price = activeFilters.price;
+      }
+      
+      if (activeFilters.organiser.length > 0) {
+        filterParams.organiser = activeFilters.organiser;
+      }
+      
+      // Check if any filters are applied
+      const hasActiveFilters = Object.values(activeFilters).some(filterArray => filterArray.length > 0) || searchTerm;
+      
+      // Use different endpoint based on whether filters are applied
+      let response;
+      if (hasActiveFilters) {
+        // Use filter endpoint with POST when filters are applied
+        // Pagination params are passed in the URL, filter params in the body
+        response = await treksService.filterTreks({
+          ...filterParams,
+          page,
+          limit: perPage
+        });
+      } else {
+        // Use standard search endpoint when no filters are applied
+        // All params are passed in the URL
+        response = await treksService.fetchTreksFromV1(params);
+      }
+      
+      // Rest of the function remains unchanged
+      if (response.data && Array.isArray(response.data.data)) {
+        const transformedTreks = response.data.data.map(transformApiTrek);
+        
+        setTreks(transformedTreks);
+        
+        if (response.data.meta) {
+          setTotalPages(response.data.totalPages || 1);
+          setTotalTreks(response.data.totalItems || transformedTreks.length);
+        }
+        
+        if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
+          setAllTreks(transformedTreks);
+        }
+        
+        setError(null);
+      } else if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
+        const transformedTreks = response.data.data.data.map(transformApiTrek);
+        
+        setTreks(transformedTreks);
+        
+        if (response.data.data) {
+          setTotalPages(response.data.data.totalPages || 1);
+          setTotalTreks(response.data.data.totalItems || transformedTreks.length);
+        }
+        
+        if (!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0)) {
+          setAllTreks(transformedTreks);
+        }
+        
+        setError(null);
+      } else {
+        throw new Error('Invalid data format from API');
+      }
+    } catch (err) {
+      console.error('Error fetching trek data:', err);
+      setError('Failed to load trek data. Using mock data instead.');
+      
+      setIsServerSearch(false);
+      setAllTreks(mockTrekData);
+      applyClientSideFilters(mockTrekData);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchTerm, activeFilters, perPage, applyClientSideFilters]);
 
-    fetchData();
-  }, [searchTerm, activeFilters, currentPage, perPage, applyClientSideFilters]);
+  // Initial fetch on component mount
+  useEffect(() => {
+    fetchTreks(1);
+    // This effect should only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Handle search and filter changes - reset to page 1
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchTreks(1);
+  }, [searchTerm, activeFilters, fetchTreks]);
+
+  // Handle page changes
+  useEffect(() => {
+    if (currentPageRef.current === currentPage) {
+      fetchTreks(currentPage);
+    }
+  }, [currentPage, fetchTreks]);
 
   // Apply client-side filtering when not using server search
   useEffect(() => {
@@ -366,6 +441,11 @@ const TreksPage = () => {
   // Handle filter changes
   const handleFilterChange = (filters) => {
     setActiveFilters(filters);
+  };
+
+  // Explicitly handle page changes
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   const container = {
@@ -388,7 +468,7 @@ const TreksPage = () => {
       <div className="container mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Discover Treks</h1>
-          <p className="text-gray-600 max-w-3xl m-auto">
+          <p className="text-gray-600 max-w-3xl">
             Explore our collection of handpicked treks around the world. Use the search and filters to find your perfect adventure.
           </p>
         </div>
@@ -396,8 +476,6 @@ const TreksPage = () => {
         <div className="mb-6">
           <SearchBar onSearch={handleSearch} />
         </div>
-        
-        <Filters onFilterChange={handleFilterChange} />
         
         {error && (
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
@@ -409,193 +487,204 @@ const TreksPage = () => {
           </div>
         )}
         
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-gray-600">
-            Found {treks.length} treks
-          </p>
-          
-          {/* Pagination Controls - Top */}
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={() => setCurrentPage(1)} 
-              disabled={currentPage === 1}
-              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              title="First Page"
-            >
-              &laquo;
-            </button>
-            <button 
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
-              disabled={currentPage === 1}
-              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Previous
-            </button>
-            
-            {/* Page number buttons */}
-            <div className="flex space-x-1">
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                // Show at most 5 pages with current page in the middle if possible
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-                
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setCurrentPage(pageNum)}
-                    className={`px-3 py-1 border rounded-md text-sm ${
-                      currentPage === pageNum 
-                        ? "bg-blue-600 text-white" 
-                        : "hover:bg-gray-50"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-            </div>
-            
-            <button 
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
-            <button 
-              onClick={() => setCurrentPage(totalPages)} 
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Last Page"
-            >
-              &raquo;
-            </button>
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left sidebar filters */}
+          <div className="w-full lg:w-1/4 lg:sticky lg:top-4 lg:self-start">
+            <Filters onFilterChange={handleFilterChange} />
           </div>
-        </div>
-        
-        <div id="trek-listing">
-          {isLoading ? (
-            <div className="flex justify-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-          ) : treks.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-md p-8 text-center">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">No treks found</h3>
-              <p className="text-gray-600 mb-4">
-                Try adjusting your search or filters to find more options.
+          
+          {/* Main content area */}
+          <div className="w-full lg:w-3/4">
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-gray-600">
+                Found {totalTreks} treks
               </p>
-              <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setActiveFilters({
-                    difficulty: [],
-                    duration: [],
-                    location: [],
-                    price: []
-                  });
-                }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Reset All Filters
-              </button>
-            </div>
-          ) : (
-            <>
-              <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                variants={container}
-                initial="hidden"
-                animate="show"
-              >
-                {treks.map((trek) => (
-                  <motion.div key={trek.id} variants={item}>
-                    <TrekCard trek={trek} />
-                  </motion.div>
-                ))}
-              </motion.div>
               
-              {/* Pagination Controls */}
-              <div className="mt-10 flex justify-between items-center">
-                <div className="text-sm text-gray-700">
-                  Showing <span className="font-medium">{treks.length > 0 ? (currentPage - 1) * perPage + 1 : 0}</span> to{" "}
-                  <span className="font-medium">{Math.min(currentPage * perPage, totalTreks)}</span> of{" "}
-                  <span className="font-medium">{totalTreks}</span> treks
+              {/* Pagination Controls - Top */}
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={() => handlePageChange(1)} 
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="First Page"
+                >
+                  &laquo;
+                </button>
+                <button 
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))} 
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                {/* Page number buttons */}
+                <div className="hidden sm:flex space-x-1">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    // Show at most 5 pages with current page in the middle if possible
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`px-3 py-1 border rounded-md text-sm ${
+                          currentPage === pageNum 
+                            ? "bg-blue-600 text-white" 
+                            : "hover:bg-gray-50"
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button 
-                    onClick={() => setCurrentPage(1)} 
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="First Page"
-                  >
-                    &laquo;
-                  </button>
-                  <button 
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))} 
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  
-                  {/* Page number buttons */}
-                  <div className="flex space-x-1">
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      // Show at most 5 pages with current page in the middle if possible
-                      let pageNum;
-                      if (totalPages <= 5) {
-                        pageNum = i + 1;
-                      } else if (currentPage <= 3) {
-                        pageNum = i + 1;
-                      } else if (currentPage >= totalPages - 2) {
-                        pageNum = totalPages - 4 + i;
-                      } else {
-                        pageNum = currentPage - 2 + i;
-                      }
-                      
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setCurrentPage(pageNum)}
-                          className={`px-3 py-1 border rounded-md text-sm ${
-                            currentPage === pageNum 
-                              ? "bg-blue-600 text-white" 
-                              : "hover:bg-gray-50"
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  
-                  <button 
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} 
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
-                  <button 
-                    onClick={() => setCurrentPage(totalPages)} 
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                    title="Last Page"
-                  >
-                    &raquo;
-                  </button>
-                </div>
+                
+                <button 
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} 
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+                <button 
+                  onClick={() => handlePageChange(totalPages)} 
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Last Page"
+                >
+                  &raquo;
+                </button>
               </div>
-            </>
-          )}
+            </div>
+            
+            <div id="trek-listing">
+              {isLoading ? (
+                <div className="flex justify-center py-20">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : treks.length === 0 ? (
+                <div className="bg-white rounded-lg shadow-md p-8 text-center">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">No treks found</h3>
+                  <p className="text-gray-600 mb-4">
+                    Try adjusting your search or filters to find more options.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setActiveFilters({
+                        difficulty: [],
+                        duration: [],
+                        location: [],
+                        price: [],
+                        organiser: []
+                      });
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Reset All Filters
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <motion.div 
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                  >
+                    {treks.map((trek) => (
+                      <motion.div key={trek.id} variants={item}>
+                        <TrekCard trek={trek} />
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                  
+                  {/* Pagination Controls - Bottom */}
+                  <div className="mt-10 flex justify-between items-center">
+                    <div className="text-sm text-gray-700">
+                      Showing <span className="font-medium">{treks.length > 0 ? (currentPage - 1) * perPage + 1 : 0}</span> to{" "}
+                      <span className="font-medium">{Math.min(currentPage * perPage, totalTreks)}</span> of{" "}
+                      <span className="font-medium">{totalTreks}</span> treks
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button 
+                        onClick={() => handlePageChange(1)} 
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="First Page"
+                      >
+                        &laquo;
+                      </button>
+                      <button 
+                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Previous
+                      </button>
+                      
+                      {/* Page number buttons */}
+                      <div className="hidden sm:flex space-x-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                          // Show at most 5 pages with current page in the middle if possible
+                          let pageNum;
+                          if (totalPages <= 5) {
+                            pageNum = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNum = i + 1;
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNum = totalPages - 4 + i;
+                          } else {
+                            pageNum = currentPage - 2 + i;
+                          }
+                          
+                          return (
+                            <button
+                              key={pageNum}
+                              onClick={() => handlePageChange(pageNum)}
+                              className={`px-3 py-1 border rounded-md text-sm ${
+                                currentPage === pageNum 
+                                  ? "bg-blue-600 text-white" 
+                                  : "hover:bg-gray-50"
+                              }`}
+                            >
+                              {pageNum}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      
+                      <button 
+                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Next
+                      </button>
+                      <button 
+                        onClick={() => handlePageChange(totalPages)}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Last Page"
+                      >
+                        &raquo;
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

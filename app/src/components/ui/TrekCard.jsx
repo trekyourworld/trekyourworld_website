@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ClockIcon, MapPinIcon, StarIcon } from '@heroicons/react/24/solid';
+import { useState } from 'react';
+import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 
 const TrekCard = ({ trek }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+  
   const { 
     id, 
     name, 
@@ -10,8 +13,8 @@ const TrekCard = ({ trek }) => {
     difficulty, 
     duration, 
     rating, 
-    price, 
-    description 
+    price,
+    elevation
   } = trek;
 
   const difficultyColor = {
@@ -29,6 +32,12 @@ const TrekCard = ({ trek }) => {
       .split(' ')
       .map(word => word.charAt(0).toUpperCase())
       .join('');
+  };
+  
+  // Function to truncate trek name if it's longer than maxLength
+  const truncateName = (name, maxLength = 25) => {
+    if (!name || name.length <= maxLength) return name;
+    return `${name.substring(0, maxLength)}..`;
   };
 
   return (
@@ -52,7 +61,20 @@ const TrekCard = ({ trek }) => {
 
       <div className="p-5">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">{name}</h3>
+          <div className="relative">
+            <h3 
+              className="text-lg font-semibold text-gray-900 mb-1 whitespace-nowrap"
+              onMouseEnter={() => name.length > 25 && setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
+              {truncateName(name)}
+            </h3>
+            {showTooltip && name.length > 25 && (
+              <div className="absolute left-0 top-full z-10 bg-gray-800 text-white text-sm py-1 px-2 rounded shadow-lg">
+                {name}
+              </div>
+            )}
+          </div>
           <div className="flex items-center">
             <StarIcon className="h-4 w-4 text-yellow-400" />
             <span className="text-sm text-gray-600 ml-1">{rating}</span>
@@ -64,9 +86,14 @@ const TrekCard = ({ trek }) => {
           <span>{location}</span>
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 text-left line-clamp-2">
+        <div className="flex text-left items-center text-gray-500 text-sm mb-2">
+          <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
+          <span>{elevation}</span>
+        </div>
+
+        {/* <p className="text-gray-600 text-sm mb-4 text-left line-clamp-2">
           {description}
-        </p>
+        </p> */}
 
         <div className="flex items-center justify-between">
           <div className="flex items-center text-gray-500 text-sm">
@@ -74,7 +101,7 @@ const TrekCard = ({ trek }) => {
             <span>{duration}</span>
           </div>
           <div className="text-blue-600 font-semibold">
-            ${price}
+            {price}
           </div>
         </div>
 
