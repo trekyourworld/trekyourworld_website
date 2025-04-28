@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { formatIndianRupees } from '../../utils/format';
 
 const TrekCard = ({ trek }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -14,7 +15,8 @@ const TrekCard = ({ trek }) => {
     duration, 
     rating, 
     price,
-    elevation
+    elevation,
+    organiser
   } = trek;
 
   const difficultyColor = {
@@ -50,6 +52,11 @@ const TrekCard = ({ trek }) => {
         <div className="h-full w-full bg-blue-200 flex items-center justify-center">
           <span className="text-6xl font-bold text-blue-600">
             {getInitial(name)}
+          </span>
+        </div>
+        <div className="absolute top-0 left-0 m-2">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            {organiser || 'Organizer'}
           </span>
         </div>
         <div className="absolute top-0 right-0 m-2">
@@ -101,7 +108,7 @@ const TrekCard = ({ trek }) => {
             <span>{duration}</span>
           </div>
           <div className="text-blue-600 font-semibold">
-            {price}
+            {formatIndianRupees(price)}
           </div>
         </div>
 
