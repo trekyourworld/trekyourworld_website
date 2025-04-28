@@ -62,6 +62,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google login function
+  const googleLogin = async (credentialResponse) => {
+    try {
+      setLoading(true);
+      setAuthError('');
+      
+      // Send the ID token to your backend
+      const response = await authService.googleLogin(credentialResponse.credential);
+      
+      setIsAuthenticated(true);
+      setUser(response.data.user);
+      
+      // Store user data in localStorage for persistence
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      
+      return true;
+    } catch (error) {
+      setAuthError(error.response?.data?.message || 'Google login failed');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Logout function
   const logout = async () => {
     try {
@@ -94,6 +118,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     user,
     login,
+    googleLogin,
     logout,
     authError,
     isAdmin,

@@ -15,7 +15,6 @@ const SearchBar = ({ onSearch }) => {
     const fetchTreks = async () => {
       try {
         const response = await treksService.getAllTreks();
-        console.log(response)
         // Assuming the response data structure has treks with name and location properties
         // Transform data if needed to match the expected format
         const treksData = response.data.data.map((trek, index) => ({

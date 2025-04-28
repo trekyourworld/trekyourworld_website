@@ -21,6 +21,22 @@ export const authService = {
   },
 
   /**
+   * Login with Google
+   * @param {string} token - Google ID token
+   * @returns {Promise<Object>} - Response with user data and token
+   */
+  googleLogin: async (token) => {
+    const response = await apiClient.post('/v1/auth/google/login', { token });
+    
+    // If successful, store the token
+    if (response.data?.token) {
+      localStorage.setItem('auth_token', response.data.token);
+    }
+    
+    return response;
+  },
+
+  /**
    * Register a new user
    * @param {Object} userData - User registration data
    * @returns {Promise<Object>} - Response with user data
