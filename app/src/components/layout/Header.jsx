@@ -111,7 +111,7 @@ const Header = () => {
               />
             </form>
             
-            {isAuthenticated ? (
+            {/* {isAuthenticated ? (
               <div className="relative" ref={userMenuRef}>
                 <button 
                   onClick={toggleUserMenu}
@@ -155,7 +155,7 @@ const Header = () => {
               >
                 Sign In
               </button>
-            )}
+            )} */}
           </div>
 
           {/* Mobile Menu Button */}

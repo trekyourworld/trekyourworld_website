@@ -95,7 +95,7 @@ const TrekCard = ({ trek }) => {
 
         <div className="flex text-left items-center text-gray-500 text-sm mb-2">
           <ArrowTrendingUpIcon className="h-4 w-4 mr-1" />
-          <span>{elevation}</span>
+          <span>{elevation} ft</span>
         </div>
 
         {/* <p className="text-gray-600 text-sm mb-4 text-left line-clamp-2">
