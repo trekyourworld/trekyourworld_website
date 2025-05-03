@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon, MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../auth/AuthContext';
+import SignInModal from '../auth/SignInModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, isAdmin, logout } = useAuth();
@@ -62,7 +64,7 @@ const Header = () => {
   };
 
   const handleSignIn = () => {
-    navigate('/login');
+    setIsSignInModalOpen(true);
   };
 
   const handleLogout = async () => {
@@ -111,7 +113,7 @@ const Header = () => {
               />
             </form>
             
-            {/* {isAuthenticated ? (
+            {isAuthenticated ? (
               <div className="relative" ref={userMenuRef}>
                 <button 
                   onClick={toggleUserMenu}
@@ -155,7 +157,7 @@ const Header = () => {
               >
                 Sign In
               </button>
-            )} */}
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -225,9 +227,20 @@ const Header = () => {
                     </Link>
                   )}
                   <button
-                    onClick={() => {
-                      handleLogout();
-                      toggleMenu();
+                    onClick={async () => {
+                      try {
+                        await handleLogout();
+                        toggleMenu();
+                        // Add a small delay to ensure state changes are processed
+                        setTimeout(() => {
+                          window.location.href = '/';
+                        }, 100);
+                      } catch (error) {
+                        console.error('Logout error:', error);
+                        // If logout fails, still close menu and redirect to home
+                        toggleMenu();
+                        window.location.href = '/';
+                      }
                     }}
                     className="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
                   >
@@ -249,6 +262,12 @@ const Header = () => {
           </nav>
         </div>
       )}
+
+      {/* Sign In Modal */}
+      <SignInModal 
+        isOpen={isSignInModalOpen} 
+        onClose={() => setIsSignInModalOpen(false)} 
+      />
     </header>
   );
 };

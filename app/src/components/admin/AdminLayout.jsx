@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { 
   Bars3Icon, 
@@ -14,7 +14,7 @@ import {
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
+//   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   
@@ -48,18 +48,32 @@ const AdminLayout = () => {
   ];
 
   // Handle logout
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      const success = await logout();
+      if (success) {
+        // Use navigate to redirect after logout
+        navigate('/login', { replace: true });
+      } else {
+        // If server logout fails but client-side clean up worked,
+        // still redirect to login page for security
+        console.error('Server-side logout failed, but client state was cleared');
+        navigate('/login', { replace: true });
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if there's an error, redirect to login page for security
+      navigate('/login', { replace: true });
+    }
   };
 
   // Check if the path matches exactly or if it's a sub-path
-  const isActive = (path) => {
-    if (path === '/admin') {
-      return location.pathname === '/admin';
-    }
-    return location.pathname.startsWith(path);
-  };
+//   const isActive = (path) => {
+//     if (path === '/admin') {
+//       return location.pathname === '/admin';
+//     }
+//     return location.pathname.startsWith(path);
+//   };
 
   return (
     <div className="flex h-screen bg-gray-100">

@@ -7,6 +7,7 @@ import AutoScrollToTop from './components/ui/AutoScrollToTop';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './components/auth/LoginPage';
+import AuthCallback from './components/auth/AuthCallback';
 
 // Lazy-loaded components for better performance
 const HomePage = lazy(() => import('./components/home/HomePage'));
@@ -60,6 +61,9 @@ function App() {
 
           {/* Login route */}
           <Route path="/login" element={<LoginPage />} />
+          
+          {/* OAuth callback route */}
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
           {/* Protected admin routes */}
           <Route path="/admin" element={

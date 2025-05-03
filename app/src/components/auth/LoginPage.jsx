@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
-import { GoogleLogin } from '@react-oauth/google';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, googleLogin, authError, loading } = useAuth();
+  const { login, authError, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,19 +21,6 @@ const LoginPage = () => {
       // Redirect to the page they were trying to access or admin dashboard
       navigate(from, { replace: true });
     }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    const success = await googleLogin(credentialResponse);
-    
-    if (success) {
-      // Redirect to the page they were trying to access or admin dashboard
-      navigate(from, { replace: true });
-    }
-  };
-
-  const handleGoogleError = (error) => {
-    console.error('Google login error:', error);
   };
 
   return (
@@ -126,32 +112,6 @@ const LoginPage = () => {
                 </button>
               </div>
             </form>
-
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <div className="flex justify-center">
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleError}
-                    useOneTap
-                    shape="pill"
-                    size="large"
-                    text="signin_with"
-                    width="250"
-                    cookiePolicy={'single_host_origin'}
-                  />
-                </div>
-              </div>
-            </div>
 
             {/* Optional: Keep this for development or remove for production */}
             <div className="mt-4 text-center text-xs text-gray-500">
