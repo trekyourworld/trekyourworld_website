@@ -93,7 +93,7 @@ const SignInModal = ({ isOpen, onClose }) => {
             </button>
 
             {/* Admin login link */}
-            <div className="text-center">
+            {/* <div className="text-center">
               <p className="text-sm text-gray-600">
                 Admin users{' '}
                 <a 
@@ -103,7 +103,7 @@ const SignInModal = ({ isOpen, onClose }) => {
                   sign in here
                 </a>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

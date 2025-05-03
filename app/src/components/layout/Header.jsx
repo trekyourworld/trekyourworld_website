@@ -38,6 +38,19 @@ const Header = () => {
     };
   }, []);
 
+  // Event listener for custom sign-in modal opening events
+  useEffect(() => {
+    const openSignInModal = () => {
+      setIsSignInModalOpen(true);
+    };
+
+    window.addEventListener('open-signin-modal', openSignInModal);
+
+    return () => {
+      window.removeEventListener('open-signin-modal', openSignInModal);
+    };
+  }, []);
+
   // Handle search submission
   const handleSearch = (e) => {
     e.preventDefault();
