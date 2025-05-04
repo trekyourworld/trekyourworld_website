@@ -6,6 +6,7 @@ import AdminLayout from './components/admin/AdminLayout';
 import AutoScrollToTop from './components/ui/AutoScrollToTop';
 import { AuthProvider } from './components/auth/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import UserProtectedRoute from './components/auth/UserProtectedRoute';
 import LoginPage from './components/auth/LoginPage';
 import AuthCallback from './components/auth/AuthCallback';
 
@@ -14,6 +15,7 @@ const HomePage = lazy(() => import('./components/home/HomePage'));
 const TreksPage = lazy(() => import('./components/treks/TreksPage'));
 const ContactPage = lazy(() => import('./components/contact/ContactPage'));
 const GuidesPage = lazy(() => import('./components/guides/GuidesPage'));
+const UserProfilePage = lazy(() => import('./components/profile/UserProfilePage'));
 
 // Admin components
 const Dashboard = lazy(() => import('./components/admin/dashboard/Dashboard'));
@@ -56,6 +58,14 @@ function App() {
               <Suspense fallback={<LoadingFallback />}>
                 <ContactPage />
               </Suspense>
+            } />
+            {/* User Profile Route */}
+            <Route path="/profile" element={
+              <UserProtectedRoute>
+                <Suspense fallback={<LoadingFallback />}>
+                  <UserProfilePage />
+                </Suspense>
+              </UserProtectedRoute>
             } />
           </Route>
 

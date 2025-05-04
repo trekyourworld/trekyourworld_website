@@ -127,7 +127,7 @@ const Header = () => {
             </form>
             
             {isAuthenticated ? (
-              <div className="relative" ref={userMenuRef}>
+              <div className="relative text-left" ref={userMenuRef}>
                 <button 
                   onClick={toggleUserMenu}
                   className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 rounded-full px-3 py-1.5 transition-colors"
@@ -219,13 +219,13 @@ const Header = () => {
               </form>
               
               {isAuthenticated ? (
-                <div className="mt-3 mb-3 space-y-2">
+                <div className="mt-3 mb-3 space-y-2 text-left">
                   <div className="py-2 px-4 bg-gray-100 rounded-lg">
                     <p className="font-medium">Signed in as: {user?.name || 'User'}</p>
                   </div>
                   <Link
                     to="/profile"
-                    className="block w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                    className="block w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
                     onClick={toggleMenu}
                   >
                     My Profile
@@ -233,7 +233,7 @@ const Header = () => {
                   {isAdmin() && (
                     <Link
                       to="/admin"
-                      className="block w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                      className="block w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
                       onClick={toggleMenu}
                     >
                       Admin Dashboard

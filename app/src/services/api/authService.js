@@ -78,7 +78,16 @@ export const authService = {
    * @returns {Promise<Object>} - Response with user profile data
    */
   getProfile: async () => {
-    return apiClient.get('/auth/profile');
+    return apiClient.get('/v1/auth/profile');
+  },
+
+  /**
+   * Update the user's profile information
+   * @param {Object} profileData - Updated profile data (name, picture, etc.)
+   * @returns {Promise<Object>} - Response with updated user profile data
+   */
+  updateProfile: async (profileData) => {
+    return apiClient.put('/v1/auth/profile', profileData);
   },
 
   /**

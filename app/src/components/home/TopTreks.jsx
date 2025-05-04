@@ -30,9 +30,7 @@ const TopTreks = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
         const response = await treksService.getTopTreks();
-        console.log(response.data)
         const transformedTreks = response.data.data.map(transformApiTrek);
         setTreks(transformedTreks || []);
       } catch (err) {
