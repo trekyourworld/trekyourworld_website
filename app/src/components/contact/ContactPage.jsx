@@ -1,15 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { INSTA_LINK } from '../../utils/constants';
+import { contactService } from '../../services/api';
+import { useAuth } from '../auth/AuthContext';
 
 const ContactPage = () => {
+  const { isAuthenticated, user } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    subject: '',
     message: ''
   });
   const [formStatus, setFormStatus] = useState(null);
+  const [error, setError] = useState(null);
+
+  // Set user email from auth context when component mounts or auth state changes
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      setFormData(prevState => ({
+        ...prevState,
+        email: user.email,
+        // If user name is available, pre-fill name fields
+        ...(user.name ? {
+          firstName: user.name.split(' ')[0] || '',
+          lastName: user.name.split(' ').slice(1).join(' ') || ''
+        } : {})
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +38,33 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate form submission
     setFormStatus('submitting');
+    setError(null);
     
-    // Mock API call
-    setTimeout(() => {
+    try {
+      // Extract name into firstName and lastName if needed
+      let contactData = { ...formData };
+      if (formData.name && !formData.firstName) {
+        const nameParts = formData.name.trim().split(' ');
+        contactData.firstName = nameParts[0];
+        contactData.lastName = nameParts.slice(1).join(' ');
+      }
+      
+      await contactService.submitContactForm(contactData);
       setFormStatus('success');
       setFormData({
-        name: '',
-        email: '',
-        subject: '',
+        firstName: isAuthenticated && user?.name ? user.name.split(' ')[0] : '',
+        lastName: isAuthenticated && user?.name ? user.name.split(' ').slice(1).join(' ') : '',
+        email: isAuthenticated && user?.email ? user.email : '',
         message: ''
       });
-    }, 1500);
+    } catch (err) {
+      console.error('Contact form submission failed:', err);
+      setFormStatus('error');
+      setError(err.response?.data?.message || 'Something went wrong. Please try again later.');
+    }
   };
 
   return (
@@ -78,46 +109,83 @@ const ContactPage = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <div className="mb-5">
-                  <label htmlFor="name" className="block text-gray-700 text-left mb-2">Your Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    placeholder="John Doe"
-                    required
-                  />
+                {formStatus === 'error' && (
+                  <div className="mb-5 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+                    <p>{error || 'An error occurred. Please try again.'}</p>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="mb-5">
+                    <label htmlFor="firstName" className="block text-gray-700 text-left mb-2">
+                      First Name
+                      {isAuthenticated && user?.name && (
+                        <span className="text-xs text-gray-500 ml-2">(From your account)</span>
+                      )}
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-200 transition-all ${
+                        isAuthenticated && user?.name ? "bg-gray-100 cursor-not-allowed focus:border-gray-300" : "focus:border-blue-500"
+                      }`}
+                      placeholder="John"
+                      required
+                      disabled={isAuthenticated && user?.name}
+                      title={isAuthenticated && user?.name ? "Name is automatically set from your account" : ""}
+                    />
+                  </div>
+                  
+                  <div className="mb-5">
+                    <label htmlFor="lastName" className="block text-gray-700 text-left mb-2">
+                      Last Name
+                      {isAuthenticated && user?.name && (
+                        <span className="text-xs text-gray-500 ml-2">(From your account)</span>
+                      )}
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-200 transition-all ${
+                        isAuthenticated && user?.name ? "bg-gray-100 cursor-not-allowed focus:border-gray-300" : "focus:border-blue-500"
+                      }`}
+                      placeholder="Doe"
+                      disabled={isAuthenticated && user?.name}
+                      title={isAuthenticated && user?.name ? "Name is automatically set from your account" : ""}
+                    />
+                  </div>
                 </div>
                 
                 <div className="mb-5">
-                  <label htmlFor="email" className="block text-gray-700 text-left mb-2">Email Address</label>
+                  <label htmlFor="email" className="block text-gray-700 text-left mb-2">
+                    Email Address
+                    {isAuthenticated && user?.email && (
+                      <span className="text-xs text-gray-500 ml-2">(Using your account email)</span>
+                    )}
+                  </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                    className={`w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-200 transition-all ${
+                      isAuthenticated && user?.email ? "bg-gray-100 cursor-not-allowed focus:border-gray-300" : "focus:border-blue-500"
+                    }`}
                     placeholder="john@example.com"
                     required
+                    disabled={isAuthenticated && user?.email}
+                    title={isAuthenticated && user?.email ? "Email is automatically set from your account" : ""}
                   />
-                </div>
-                
-                <div className="mb-5">
-                  <label htmlFor="subject" className="block text-gray-700 text-left mb-2">Subject</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    placeholder="Trek Inquiry"
-                    required
-                  />
+                  {isAuthenticated && user?.email && (
+                    <p className="text-xs text-left text-gray-500 mt-1">This email is linked to your account and cannot be changed</p>
+                  )}
                 </div>
                 
                 <div className="mb-6">
