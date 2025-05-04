@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 import { 
   Bars3Icon, 
@@ -14,9 +14,17 @@ import {
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-//   const location = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  
+  // Helper function to check if the current path matches a nav item
+  const isActive = (path) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin';
+    }
+    return location.pathname.startsWith(path);
+  };
   
   // Sidebar navigation items
   const navItems = [
@@ -67,14 +75,6 @@ const AdminLayout = () => {
     }
   };
 
-  // Check if the path matches exactly or if it's a sub-path
-//   const isActive = (path) => {
-//     if (path === '/admin') {
-//       return location.pathname === '/admin';
-//     }
-//     return location.pathname.startsWith(path);
-//   };
-
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar - Mobile */}
@@ -99,8 +99,8 @@ const AdminLayout = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={({ isActive }) => `flex items-center px-4 py-3 mb-2 rounded-lg transition-colors ${
-                  isActive 
+                className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-colors ${
+                  isActive(item.path) 
                     ? 'bg-blue-600 text-white' 
                     : 'text-gray-300 hover:bg-gray-700'
                 }`}
@@ -136,8 +136,8 @@ const AdminLayout = () => {
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) => `flex items-center px-4 py-3 mb-3 rounded-lg transition-colors ${
-                isActive 
+              className={`flex items-center px-4 py-3 mb-3 rounded-lg transition-colors ${
+                isActive(item.path) 
                   ? 'bg-blue-600 text-white' 
                   : 'text-gray-300 hover:bg-gray-700'
               }`}
