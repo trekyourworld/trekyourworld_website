@@ -1,6 +1,7 @@
 // Export all services from a single file for easier imports
 import apiClient from './apiClient';
 import authService from './authService';
+import contactService from './contactService';
 import guidesService from './guidesService';
 import treksService from './treksService';
 
@@ -8,6 +9,7 @@ import treksService from './treksService';
 export {
   apiClient,
   authService,
+  contactService,
   guidesService,
   treksService,
 };
@@ -16,6 +18,7 @@ export {
 export default {
   apiClient,
   auth: authService,
+  contact: contactService,
   guides: guidesService,
   treks: treksService,
 };

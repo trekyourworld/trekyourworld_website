@@ -34,16 +34,30 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
-    // Handle 401 Unauthorized errors (token expired)
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Skip redirect for logout requests that might return 401
+    const isLogoutRequest = originalRequest.url?.includes('/logout');
+    
+    // Handle 401 Unauthorized errors (token expired or invalid)
+    if (error.response?.status === 401 && !originalRequest._retry && !isLogoutRequest) {
       originalRequest._retry = true;
       
-      // You could implement token refresh logic here
-      // For now, we'll just redirect to login
+      // Clear auth data on 401 responses
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      
+      // Clear any auth cookies
+      document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+      // Redirect to login page if not already there
       if (window.location.pathname !== '/login') {
-        localStorage.removeItem('auth_token');
         window.location.href = '/login';
       }
+    }
+    
+    // If this is a logout request, don't worry about errors
+    // The auth service will clean up local storage
+    if (isLogoutRequest) {
+      console.warn('Logout request failed, but continuing with local logout');
     }
     
     return Promise.reject(error);

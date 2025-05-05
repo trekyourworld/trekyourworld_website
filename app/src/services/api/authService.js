@@ -30,13 +30,47 @@ export const authService = {
   },
 
   /**
+   * Process Google OAuth callback
+   * @param {string} code - Authorization code from Google
+   * @returns {Promise<Object>} - Response with user data and token
+   */
+  googleCallback: async (code) => {
+    const response = await apiClient.post('/v1/auth/google/callback', { code });
+    
+    // If successful, store the token
+    if (response.data?.token) {
+      localStorage.setItem('auth_token', response.data.token);
+    }
+    
+    return response;
+  },
+
+  /**
    * Log out the current user
    * @returns {Promise<Object>} - Response from the server
    */
   logout: async () => {
-    const response = await apiClient.post('/v1/auth/admin/logout');
-    localStorage.removeItem('auth_token');
-    return response;
+    try {
+      // Call the logout endpoint to invalidate the token on the server
+      const response = await apiClient.post('/v1/auth/admin/logout');
+      
+      // Clear all auth-related data from localStorage regardless of server response
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      
+      // Clear any auth cookies if they exist
+      document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+      return response;
+    } catch (error) {
+      // Even if the server request fails, clear local auth data for security
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+      // Re-throw the error for handling by the caller
+      throw error;
+    }
   },
 
   /**
@@ -44,7 +78,16 @@ export const authService = {
    * @returns {Promise<Object>} - Response with user profile data
    */
   getProfile: async () => {
-    return apiClient.get('/auth/profile');
+    return apiClient.get('/v1/auth/profile');
+  },
+
+  /**
+   * Update the user's profile information
+   * @param {Object} profileData - Updated profile data (name, picture, etc.)
+   * @returns {Promise<Object>} - Response with updated user profile data
+   */
+  updateProfile: async (profileData) => {
+    return apiClient.put('/v1/auth/profile', profileData);
   },
 
   /**

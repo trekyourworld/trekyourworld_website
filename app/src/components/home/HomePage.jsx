@@ -22,15 +22,15 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-6xl text-left font-bold mb-4 max-w-3xl">
+            <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
               Discover Breathtaking Adventures Around the World
             </h1>
             
-            <p className="text-xl text-left md:text-2xl mb-8 max-w-xl">
+            <p className="text-xl text-center md:text-2xl mb-8">
               Join expert guides on unforgettable treks to the world's most stunning destinations.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col justify-center sm:flex-row gap-4">
               <Link 
                 to="/treks" 
                 className="bg-white text-blue-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"

@@ -2,65 +2,46 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import TrekCard from '../ui/TrekCard';
-
-// Temporary mock data - would come from an API in a real application
-const mockTreks = [
-  {
-    id: 1,
-    name: "Everest Base Camp",
-    image: "https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Nepal",
-    difficulty: "Difficult",
-    duration: "14 days",
-    rating: 4.9,
-    price: 1299,
-    description: "Trek to the base of the world's highest mountain through stunning Sherpa villages and breathtaking landscapes."
-  },
-  {
-    id: 2,
-    name: "Inca Trail to Machu Picchu",
-    image: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Peru",
-    difficulty: "Moderate",
-    duration: "4 days",
-    rating: 4.8,
-    price: 999,
-    description: "Follow in the footsteps of the ancient Incas to the magnificent citadel of Machu Picchu."
-  },
-  {
-    id: 3,
-    name: "Annapurna Circuit",
-    image: "https://images.unsplash.com/photo-1544652742-b499ff0631bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Nepal",
-    difficulty: "Difficult",
-    duration: "21 days",
-    rating: 4.7,
-    price: 1499,
-    description: "Complete the full circuit around the Annapurna Massif, passing through diverse landscapes and cultures."
-  },
-  {
-    id: 4,
-    name: "Tour du Mont Blanc",
-    image: "https://images.unsplash.com/photo-1522527414937-8c7a25215fc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "France, Italy, Switzerland",
-    difficulty: "Moderate",
-    duration: "11 days",
-    rating: 4.8,
-    price: 1099,
-    description: "Circumnavigate the Mont Blanc massif through three alpine countries with stunning mountain views."
-  }
-];
+import treksService from '../../services/api/treksService';
 
 const TopTreks = () => {
   const [treks, setTreks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const transformApiTrek = (apiTrek) => {
+    return {
+      id: apiTrek.uuid,
+      name: apiTrek.title,
+      image: `https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80`, // Default image as API doesn't provide one
+      location: apiTrek.location || "Unknown",
+      difficulty: Array.isArray(apiTrek.difficulty) ? apiTrek.difficulty[0] : "Moderate",
+      duration: apiTrek.duration ? `${apiTrek.duration} days` : "Unknown",
+      rating: 4.5, // Default rating as API doesn't provide one
+      price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
+      description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
+      elevation: apiTrek.elevation,
+      organiser: apiTrek.org || "Unknown"
+    };
+  };
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setTreks(mockTreks);
-      setIsLoading(false);
-    }, 500);
+    const fetchTopTreks = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await treksService.getTopTreks();
+        const transformedTreks = response.data.data.map(transformApiTrek);
+        setTreks(transformedTreks || []);
+      } catch (err) {
+        console.error('Error fetching top treks:', err);
+        setError('Failed to load top treks. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTopTreks();
   }, []);
 
   const container = {
@@ -77,6 +58,19 @@ const TopTreks = () => {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   };
+
+  if (error) {
+    return (
+      <section className="py-12 bg-gray-50 w-full">
+        <div className="w-full px-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">Top Treks For This Month</h2>
+          <div className="p-4 rounded-md bg-red-50 text-red-800 max-w-md mx-auto">
+            <p>{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-12 bg-gray-50 w-full">
@@ -99,11 +93,17 @@ const TopTreks = () => {
             initial="hidden"
             animate="show"
           >
-            {treks.map((trek) => (
-              <motion.div key={trek.id} variants={item}>
-                <TrekCard trek={trek} />
-              </motion.div>
-            ))}
+            {treks.length > 0 ? (
+              treks.map((trek) => (
+                <motion.div key={trek.id} variants={item}>
+                  <TrekCard trek={trek} />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10">
+                <p className="text-gray-500">No featured treks available at the moment.</p>
+              </div>
+            )}
           </motion.div>
         )}
 

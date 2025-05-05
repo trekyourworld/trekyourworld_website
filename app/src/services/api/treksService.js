@@ -62,6 +62,15 @@ export const treksService = {
    */
   fetchFilterOptions: async () => {
     return apiClient.get('/v1/treks/filters');
+  },
+  
+  /**
+   * Fetch top/featured treks for the homepage
+   * @param {Object} params - Optional parameters like limit
+   * @returns {Promise<Array>} - Array of top trek objects
+   */
+  getTopTreks: async (params = {}) => {
+    return apiClient.get('/v1/treks/topTreks', { params });
   }
 };
 
