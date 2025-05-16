@@ -4,6 +4,7 @@ import authService from './authService';
 import contactService from './contactService';
 import guidesService from './guidesService';
 import treksService from './treksService';
+import statsService from './statsService';
 
 // Export individual services
 export {
@@ -12,6 +13,7 @@ export {
   contactService,
   guidesService,
   treksService,
+  statsService,
 };
 
 // Default export as an object containing all services
@@ -21,4 +23,5 @@ export default {
   contact: contactService,
   guides: guidesService,
   treks: treksService,
+  stats: statsService,
 };

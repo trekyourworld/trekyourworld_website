@@ -5,9 +5,10 @@ import {
   UserGroupIcon, 
   GlobeAsiaAustraliaIcon 
 } from '@heroicons/react/24/outline';
+import { statsService } from '../../services/api/index';
 
-// Mock data for statistics
-const mockStats = {
+// Fallback data in case the API call fails
+const fallbackStats = {
   treks: 120,
   guides: 45,
   locations: 28
@@ -19,16 +20,33 @@ const Statistics = () => {
     guides: 0,
     locations: 0
   });
-
+  
+  const [targetStats, setTargetStats] = useState(fallbackStats);
   const [inView, setInView] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch statistics from the API
   useEffect(() => {
-    // Simulate API call
-    const timer = setTimeout(() => {
-      setInView(true);
-    }, 500);
-
-    return () => clearTimeout(timer);
+    const fetchStats = async () => {
+      try {
+        const response = await statsService.getStats();
+        if (response.data && response.data.data) {
+          setTargetStats(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+        setError('Failed to load statistics');
+        // Use fallback data on error
+        setTargetStats(fallbackStats);
+      } finally {
+        setLoading(false);
+        // Trigger the animation after we have the data
+        setInView(true);
+      }
+    };
+    
+    fetchStats();
   }, []);
 
   useEffect(() => {
@@ -46,19 +64,19 @@ const Statistics = () => {
       const progress = currentStep / steps;
       
       setStats({
-        treks: Math.floor(progress * mockStats.treks),
-        guides: Math.floor(progress * mockStats.guides),
-        locations: Math.floor(progress * mockStats.locations),
+        treks: Math.floor(progress * targetStats.treks),
+        guides: Math.floor(progress * targetStats.guides),
+        locations: Math.floor(progress * targetStats.locations),
       });
 
       if (currentStep >= steps) {
-        setStats(mockStats);
+        setStats(targetStats);
         clearInterval(timer);
       }
     }, interval);
 
     return () => clearInterval(timer);
-  }, [inView]);
+  }, [inView, targetStats]);
 
   const statItems = [
     {
@@ -95,26 +113,30 @@ const Statistics = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {statItems.map((item) => (
-            <motion.div
-              key={item.name}
-              className="bg-white rounded-xl shadow-md p-6 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6 }}
-            >
-              <div className={`inline-flex p-3 rounded-full ${item.color} mb-4`}>
-                <item.icon className="h-8 w-8" />
-              </div>
-              <h3 className="text-3xl font-bold mb-2">
-                {item.value}+
-              </h3>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">{item.name}</h4>
-              <p className="text-gray-600">{item.description}</p>
-            </motion.div>
-          ))}
-        </div>
+        {error ? (
+          <div className="text-center text-red-500">{error}</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {statItems.map((item) => (
+              <motion.div
+                key={item.name}
+                className="bg-white rounded-xl shadow-md p-6 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6 }}
+              >
+                <div className={`inline-flex p-3 rounded-full ${item.color} mb-4`}>
+                  <item.icon className="h-8 w-8" />
+                </div>
+                <h3 className="text-3xl font-bold mb-2">
+                  {loading ? '...' : `${item.value}+`}
+                </h3>
+                <h4 className="text-lg font-semibold text-gray-900 mb-2">{item.name}</h4>
+                <p className="text-gray-600">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
