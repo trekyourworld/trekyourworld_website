@@ -24,6 +24,10 @@ export const analyticsService = {
                 "X-User-ID": userId,
             }
         });
+    },
+
+    dailyVisits: async () => {
+        return apiClient.get('/v1/analytics/daily-visits');
     }
 
 }
