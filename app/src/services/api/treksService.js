@@ -19,7 +19,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Response with trek data
    */
   getTrekById: async (id) => {
-    return apiClient.get(`/treks/${id}`);
+    return apiClient.get(`/v1/treks/${id}`);
   },
 
   /**
