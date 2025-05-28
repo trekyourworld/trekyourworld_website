@@ -68,7 +68,7 @@ const PersonalInfoSection = ({ user, setUser }) => {
         {!isEditing && (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
           >
             Edit Profile
           </button>
@@ -76,19 +76,19 @@ const PersonalInfoSection = ({ user, setUser }) => {
       </div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
           {error}
         </div>
       )}
       
       {successMessage && (
-        <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+        <div className="mb-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg">
           {successMessage}
         </div>
       )}
 
       {isEditing ? (
-        <form onSubmit={handleSubmit} className="space-y-4 text-left">
+        <form onSubmit={handleSubmit} className="space-y-5 text-left">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
               Full Name
@@ -99,7 +99,7 @@ const PersonalInfoSection = ({ user, setUser }) => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -114,7 +114,7 @@ const PersonalInfoSection = ({ user, setUser }) => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent bg-gray-100"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-100"
               disabled
               title="Email cannot be changed"
             />
@@ -131,25 +131,25 @@ const PersonalInfoSection = ({ user, setUser }) => {
               name="picture"
               value={formData.picture}
               onChange={handleInputChange}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="https://example.com/your-picture.jpg"
             />
           </div>
           
-          <div className="flex space-x-4 pt-2">
+          <div className="flex space-x-4 pt-4">
             <button
               type="submit"
               disabled={isSaving}
-              className={`px-4 py-2 bg-green-500 text-white rounded-md ${
-                isSaving ? 'opacity-75 cursor-not-allowed' : 'hover:bg-green-600'
-              }`}
+              className={`px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium ${
+                isSaving ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-700'
+              } transition-colors duration-200`}
             >
               {isSaving ? 'Saving...' : 'Save Changes'}
             </button>
             <button
               type="button"
               onClick={handleCancel}
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+              className="px-5 py-2.5 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200"
             >
               Cancel
             </button>
@@ -157,19 +157,19 @@ const PersonalInfoSection = ({ user, setUser }) => {
         </form>
       ) : (
         <div className="space-y-6 text-left">
-          <div>
+          <div className="p-5 rounded-lg bg-gray-50">
             <h4 className="text-sm font-medium text-gray-500">Full Name</h4>
-            <p className="mt-1 text-lg">{user?.name || 'Not provided'}</p>
+            <p className="mt-1 text-lg font-medium">{user?.name || 'Not provided'}</p>
           </div>
           
-          <div>
+          <div className="p-5 rounded-lg bg-gray-50">
             <h4 className="text-sm font-medium text-gray-500">Email Address</h4>
-            <p className="mt-1 text-lg">{user?.email || 'Not provided'}</p>
+            <p className="mt-1 text-lg font-medium">{user?.email || 'Not provided'}</p>
           </div>
           
-          <div>
+          <div className="p-5 rounded-lg bg-gray-50">
             <h4 className="text-sm font-medium text-gray-500">Member Since</h4>
-            <p className="mt-1 text-lg">
+            <p className="mt-1 text-lg font-medium">
               {user?.createdAt 
                 ? new Date(user.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',

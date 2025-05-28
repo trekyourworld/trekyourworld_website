@@ -63,14 +63,14 @@ const SavedTreksSection = ({ user }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
   
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
         <p>{error}</p>
       </div>
     );
@@ -82,16 +82,16 @@ const SavedTreksSection = ({ user }) => {
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-gray-800">Saved Treks</h3>
         </div>
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+          <svg className="mx-auto h-16 w-16 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
           </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No saved treks</h3>
-          <p className="mt-1 text-sm text-gray-500">You haven't saved any treks yet.</p>
+          <h3 className="mt-4 text-lg font-medium text-gray-900">No saved treks</h3>
+          <p className="mt-2 text-sm text-gray-600">You haven't saved any treks yet.</p>
           <div className="mt-6">
             <a
               href="/treks"
-              className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+              className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
             >
               Explore Treks
             </a>
@@ -105,17 +105,17 @@ const SavedTreksSection = ({ user }) => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-xl font-semibold text-gray-800">Saved Treks</h3>
-        <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+        <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1.5 rounded-full">
           {savedTreks.length} {savedTreks.length === 1 ? 'Trek' : 'Treks'}
         </span>
       </div>
       
       <div className="grid grid-cols-1 gap-6">
         {savedTreks.map((trek) => (
-          <div key={trek.id} className="relative">
+          <div key={trek.id} className="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300">
             <TrekCard trek={trek} />
             <button 
-              className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow hover:bg-red-100 transition-colors"
+              className="absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-red-100 transition-colors duration-200"
               title="Remove from saved"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">

@@ -112,13 +112,6 @@ const LoginPage = () => {
                 </button>
               </div>
             </form>
-
-            {/* Optional: Keep this for development or remove for production */}
-            <div className="mt-4 text-center text-xs text-gray-500">
-              <p>Demo credentials:</p>
-              <p>Email: admin@trekyourworld.com</p>
-              <p>Password: admin123</p>
-            </div>
           </div>
         </div>
       </div>

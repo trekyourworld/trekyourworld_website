@@ -4,17 +4,17 @@ import { UserCircleIcon } from '@heroicons/react/24/solid';
 const ProfileHeader = ({ user }) => {
   return (
     <div className="relative">
-      {/* Cover Image - Static background or gradient */}
-      <div className="h-32 bg-gradient-to-r from-green-500 to-blue-500"></div>      
+      {/* Cover Image - Gradient background that matches app theme */}
+      <div className="h-40 bg-gradient-to-r from-blue-600 to-blue-400"></div>      
       
       {/* Profile Image and Basic Info */}
-      <div className="px-6 py-4 flex flex-col sm:flex-row items-center">
-        <div className="mb-4 sm:mb-0 sm:mr-6 flex-shrink-0">
+      <div className="px-8 py-6 flex flex-col sm:flex-row items-center">
+        <div className="mb-4 sm:mb-0 sm:mr-6 flex-shrink-0 -mt-12 sm:-mt-16">
           {user?.picture ? (
             <img 
               src={user.picture}
               alt={`${user?.name || 'User'}'s profile`}
-              className="h-24 w-24 rounded-full border-4 border-white shadow"
+              className="h-28 w-28 rounded-full border-4 border-white shadow-lg object-cover"
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.style.display = 'none';
@@ -22,19 +22,19 @@ const ProfileHeader = ({ user }) => {
               }}
             />
           ) : (
-            <UserCircleIcon className="h-24 w-24 text-gray-400 bg-white rounded-full border-4 border-white shadow" />
+            <UserCircleIcon className="h-28 w-28 text-gray-400 bg-white rounded-full border-4 border-white shadow-lg" />
           )}
         </div>
         
-        <div>
-          <h2 className="text-xl font-bold text-left">{user?.name || 'User Name'}</h2>
-          <p className="text-gray-600 text-left">{user?.email || 'Email not available'}</p>
+        <div className="text-center sm:text-left">
+          <h2 className="text-2xl font-bold">{user?.name || 'User Name'}</h2>
+          <p className="text-gray-600">{user?.email || 'Email not available'}</p>
           {user?.roles && user.roles.length > 0 && (
-            <div className="mt-2 text-left">
+            <div className="mt-3 flex flex-wrap justify-center sm:justify-start">
               {user.roles.map((role, index) => (
                 <span 
                   key={index}
-                  className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2"
+                  className="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mr-2 mb-2 font-medium"
                 >
                   {role}
                 </span>

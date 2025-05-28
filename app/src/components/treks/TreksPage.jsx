@@ -6,142 +6,6 @@ import Filters from './Filters';
 import TrekCard from '../ui/TrekCard';
 import { treksService } from '../../services/api/treksService';
 
-// Mock data for fallback in case API fails
-const mockTrekData = [
-  {
-    id: 1,
-    name: "Everest Base Camp",
-    image: "https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Nepal",
-    difficulty: "Difficult",
-    duration: "14 days",
-    rating: 4.9,
-    price: 1299,
-    description: "Trek to the base of the world's highest mountain through stunning Sherpa villages and breathtaking landscapes."
-  },
-  {
-    id: 2,
-    name: "Inca Trail to Machu Picchu",
-    image: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Peru",
-    difficulty: "Moderate",
-    duration: "4 days",
-    rating: 4.8,
-    price: 999,
-    description: "Follow in the footsteps of the ancient Incas to the magnificent citadel of Machu Picchu."
-  },
-  {
-    id: 3,
-    name: "Annapurna Circuit",
-    image: "https://images.unsplash.com/photo-1544652742-b499ff0631bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Nepal",
-    difficulty: "Difficult",
-    duration: "21 days",
-    rating: 4.7,
-    price: 1499,
-    description: "Complete the full circuit around the Annapurna Massif, passing through diverse landscapes and cultures."
-  },
-  {
-    id: 4,
-    name: "Tour du Mont Blanc",
-    image: "https://images.unsplash.com/photo-1522527414937-8c7a25215fc3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "France, Italy, Switzerland",
-    difficulty: "Moderate",
-    duration: "11 days",
-    rating: 4.8,
-    price: 1099,
-    description: "Circumnavigate the Mont Blanc massif through three alpine countries with stunning mountain views."
-  },
-  {
-    id: 5,
-    name: "Mount Kilimanjaro",
-    image: "https://images.unsplash.com/photo-1521150932951-303a2303cd46?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Tanzania",
-    difficulty: "Difficult",
-    duration: "7 days",
-    rating: 4.6,
-    price: 1799,
-    description: "Climb to the roof of Africa on one of the world's most iconic and challenging treks."
-  },
-  {
-    id: 6,
-    name: "Torres del Paine W Trek",
-    image: "https://images.unsplash.com/photo-1520781359607-59ae63e4fb8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Chile",
-    difficulty: "Moderate",
-    duration: "5 days",
-    rating: 4.9,
-    price: 1299,
-    description: "Explore the dramatic landscapes of Patagonia with its stunning glaciers, lakes, and granite towers."
-  },
-  {
-    id: 7,
-    name: "Milford Track",
-    image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "New Zealand",
-    difficulty: "Moderate",
-    duration: "4 days",
-    rating: 4.9,
-    price: 899,
-    description: "Discover New Zealand's most famous walking track through lush rainforests, past crystal-clear lakes and dramatic waterfalls."
-  },
-  {
-    id: 8,
-    name: "Appalachian Trail",
-    image: "https://images.unsplash.com/photo-1500964757637-c85e8a162699?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "USA",
-    difficulty: "Extreme",
-    duration: "180 days",
-    rating: 4.7,
-    price: 3599,
-    description: "Thru-hike the legendary Appalachian Trail stretching across 14 states from Georgia to Maine."
-  },
-  {
-    id: 9,
-    name: "Salkantay Trek",
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Peru",
-    difficulty: "Difficult",
-    duration: "5 days",
-    rating: 4.6,
-    price: 699,
-    description: "A less crowded alternative to the Inca Trail, offering diverse landscapes from snow-capped mountains to tropical forests."
-  },
-  {
-    id: 10,
-    name: "West Highland Way",
-    image: "https://images.unsplash.com/photo-1548247661-3d7905940716?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Scotland",
-    difficulty: "Moderate",
-    duration: "8 days",
-    rating: 4.5,
-    price: 899,
-    description: "Scotland's premier long-distance trail through the stunning highlands, from Milngavie to Fort William."
-  },
-  {
-    id: 11,
-    name: "Overland Track",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Australia",
-    difficulty: "Moderate",
-    duration: "6 days",
-    rating: 4.7,
-    price: 999,
-    description: "A magnificent walk through the heart of Tasmania's World Heritage wilderness area."
-  },
-  {
-    id: 12,
-    name: "Kungsleden Trail",
-    image: "https://images.unsplash.com/photo-1534880642999-3acc7749e8c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-    location: "Sweden",
-    difficulty: "Moderate",
-    duration: "15 days",
-    rating: 4.6,
-    price: 1299,
-    description: "Experience the stunning landscapes of Swedish Lapland above the Arctic Circle."
-  }
-];
-
 // Helper function to transform API data to match our component's expected format
 const transformApiTrek = (apiTrek) => {
   return {
@@ -399,12 +263,12 @@ const TreksPage = () => {
       setError('Failed to load trek data. Using mock data instead.');
       
       setIsServerSearch(false);
-      setAllTreks(mockTrekData);
-      applyClientSideFilters(mockTrekData);
+    //   setAllTreks(mockTrekData);
+    //   applyClientSideFilters(mockTrekData);
     } finally {
       setIsLoading(false);
     }
-  }, [searchTerm, activeFilters, perPage, applyClientSideFilters]);
+  }, [searchTerm, activeFilters, perPage]);
 
   // Initial fetch on component mount
   useEffect(() => {
