@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import Filters from './Filters';
 import TrekCard from '../ui/TrekCard';
@@ -51,10 +52,32 @@ const TreksPage = () => {
   // Use ref for the current page to keep the value consistent in callbacks
   const currentPageRef = useRef(currentPage);
   
+  // State for trek comparison feature
+  const [selectedTreks, setSelectedTreks] = useState([]);
+  const navigate = useNavigate();
+  
   // Update the ref whenever the currentPage state changes
   useEffect(() => {
     currentPageRef.current = currentPage;
   }, [currentPage]);
+
+  // Handle trek selection/deselection for comparison
+  const handleTrekSelection = useCallback((trekId) => {
+    setSelectedTreks(prevSelected => {
+      if (prevSelected.includes(trekId)) {
+        return prevSelected.filter(id => id !== trekId);
+      } else {
+        return [...prevSelected, trekId];
+      }
+    });
+  }, []);
+
+  // Navigate to comparison page
+  const navigateToComparison = useCallback(() => {
+    if (selectedTreks.length >= 2) {
+      navigate(`/compare-treks?ids=${selectedTreks.join(',')}`);
+    }
+  }, [selectedTreks, navigate]);
 
   // Fetch filter metadata on component mount
   useEffect(() => {
@@ -460,6 +483,39 @@ const TreksPage = () => {
                 </div>
               ) : (
                 <>
+                  {/* Comparison Action Bar */}
+                  {selectedTreks.length > 0 && (
+                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex justify-between items-center">
+                      <div className="text-sm text-blue-800">
+                        <span className="font-medium">{selectedTreks.length}</span> trek{selectedTreks.length !== 1 ? 's' : ''} selected
+                        {selectedTreks.length === 1 && (
+                          <span className="ml-1">
+                            (select at least one more trek to compare)
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setSelectedTreks([])}
+                          className="px-3 py-1.5 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                        >
+                          Clear Selection
+                        </button>
+                        <button
+                          onClick={navigateToComparison}
+                          disabled={selectedTreks.length < 2}
+                          className={`px-3 py-1.5 text-sm rounded-lg ${
+                            selectedTreks.length < 2 
+                              ? 'bg-blue-300 cursor-not-allowed text-white' 
+                              : 'bg-blue-600 hover:bg-blue-700 text-white'
+                          }`}
+                        >
+                          Compare Treks
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   <motion.div 
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                     variants={container}
@@ -468,7 +524,12 @@ const TreksPage = () => {
                   >
                     {treks.map((trek) => (
                       <motion.div key={trek.id} variants={item}>
-                        <TrekCard trek={trek} />
+                        <TrekCard 
+                          trek={trek} 
+                          isSelectable={true}
+                          isSelected={selectedTreks.includes(trek.id)}
+                          onToggleSelect={handleTrekSelection}
+                        />
                       </motion.div>
                     ))}
                   </motion.div>

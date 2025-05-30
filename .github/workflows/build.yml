@@ -28,7 +28,9 @@ jobs:
             - name: Push Docker Image
               run: |
                 TAG=${{ github.event.release.tag_name }}
+                docker tag neo73/trekyourworld-website:${TAG} neo73/trekyourworld-website:latest
                 docker push neo73/trekyourworld-website:${TAG}
+                docker push neo73/trekyourworld-website:latest
 
             - name: Log out from Docker Hub
               run: docker logout
