@@ -13,6 +13,13 @@ RUN npm install
 # Copy the rest of the application code from the app directory
 COPY app/ .
 
+ARG API_BASE_URL
+ARG APP_ENV
+
+# Set environment variables for the build
+ENV VITE_API_BASE_URL=${API_BASE_URL}
+ENV VITE_APP_ENV=${APP_ENV}
+
 # Build the Vite React app
 RUN npm run build
 
