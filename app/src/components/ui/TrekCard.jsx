@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
+import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
 import { formatIndianRupees } from '../../utils/format';
 
-const TrekCard = ({ trek }) => {
+const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSelect }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   
   const { 
@@ -42,11 +42,20 @@ const TrekCard = ({ trek }) => {
     return `${name.substring(0, maxLength)}..`;
   };
 
+  const handleCardClick = (e) => {
+    // Only handle click events if card is selectable and click was not on a link or button
+    if (isSelectable && e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON' && 
+        !e.target.closest('a') && !e.target.closest('button')) {
+      onToggleSelect && onToggleSelect(id);
+    }
+  };
+
   return (
     <motion.div 
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className={`bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ${isSelectable ? 'cursor-pointer' : ''} ${isSelected ? 'ring-2 ring-blue-500' : ''}`}
       whileHover={{ y: -5 }}
       transition={{ type: 'tween' }}
+      onClick={handleCardClick}
     >
       <div className="relative h-48 w-full">
         <div className="h-full w-full bg-blue-200 flex items-center justify-center">
@@ -59,11 +68,34 @@ const TrekCard = ({ trek }) => {
             {organiser || 'Organizer'}
           </span>
         </div>
-        <div className="absolute top-0 right-0 m-2">
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${difficultyColor[difficulty.toLowerCase()]}`}>
+        <div className="absolute top-0 right-0 m-2 flex space-x-2">
+             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${difficultyColor[difficulty.toLowerCase()]}`}>
             {difficulty}
           </span>
+          {isSelectable && (
+            <div 
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleSelect && onToggleSelect(id);
+              }}
+              className={`z-10 w-6 h-6 flex items-center justify-center rounded-md border ${
+                isSelected 
+                  ? 'bg-blue-600 border-blue-700 text-white' 
+                  : 'bg-white border-gray-300 hover:border-blue-500'
+              }`}
+            >
+              {isSelected && <CheckCircleIcon className="h-5 w-5" />}
+            </div>
+          )}
+         
         </div>
+        {isSelectable && isSelected && (
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+            <div className="bg-white bg-opacity-80 rounded-full p-2">
+              <CheckCircleIcon className="h-12 w-12 text-blue-600" />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="p-5">

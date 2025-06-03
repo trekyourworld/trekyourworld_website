@@ -15,6 +15,7 @@ import { analyticsService } from './services/api/analytics';
 const HomePage = lazy(() => import('./components/home/HomePage'));
 const TreksPage = lazy(() => import('./components/treks/TreksPage'));
 const TrekDetailsPage = lazy(() => import('./components/treks/TrekDetailsPage'));
+const CompareTreksPage = lazy(() => import('./components/treks/CompareTreksPage'));
 const ContactPage = lazy(() => import('./components/contact/ContactPage'));
 const GuidesPage = lazy(() => import('./components/guides/GuidesPage'));
 const UserProfilePage = lazy(() => import('./components/profile/UserProfilePage'));
@@ -66,6 +67,11 @@ function App() {
                         <Route path="/trek/:id" element={
                             <Suspense fallback={<LoadingFallback />}>
                                 <TrekDetailsPage />
+                            </Suspense>
+                        } />
+                        <Route path="/compare-treks" element={
+                            <Suspense fallback={<LoadingFallback />}>
+                                <CompareTreksPage />
                             </Suspense>
                         } />
                         <Route path="/guides" element={
