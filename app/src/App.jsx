@@ -18,6 +18,7 @@ const TrekDetailsPage = lazy(() => import('./components/treks/TrekDetailsPage'))
 const CompareTreksPage = lazy(() => import('./components/treks/CompareTreksPage'));
 const ContactPage = lazy(() => import('./components/contact/ContactPage'));
 const GuidesPage = lazy(() => import('./components/guides/GuidesPage'));
+const GalleryPage = lazy(() => import('./components/gallery/GalleryPage'));
 const UserProfilePage = lazy(() => import('./components/profile/UserProfilePage'));
 
 // Admin components
@@ -77,6 +78,11 @@ function App() {
                         <Route path="/guides" element={
                             <Suspense fallback={<LoadingFallback />}>
                                 <GuidesPage />
+                            </Suspense>
+                        } />
+                        <Route path="/gallery" element={
+                            <Suspense fallback={<LoadingFallback />}>
+                                <GalleryPage />
                             </Suspense>
                         } />
                         <Route path="/contact" element={

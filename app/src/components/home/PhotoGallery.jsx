@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 // Mock data for photo gallery
 const galleryImages = [
@@ -72,7 +73,7 @@ const PhotoGallery = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {galleryImages.map((image, index) => (
+          {galleryImages.map((image) => (
             <motion.div 
               key={image.id}
               className="relative overflow-hidden rounded-lg shadow-md cursor-pointer aspect-[4/3]"
@@ -92,6 +93,15 @@ const PhotoGallery = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link 
+            to="/gallery" 
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+          >
+            View All Photos
+          </Link>
         </div>
 
         <AnimatePresence>
