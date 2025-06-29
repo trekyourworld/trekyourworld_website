@@ -139,9 +139,9 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
             <ClockIcon className="h-4 w-4 mr-1" />
             <span>{duration}</span>
           </div>
-          <div className="text-blue-600 font-semibold">
+          {/* <div className="text-blue-600 font-semibold">
             {formatIndianRupees(price)}
-          </div>
+          </div> */}
         </div>
 
         <Link 
