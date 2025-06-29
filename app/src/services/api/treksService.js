@@ -10,7 +10,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Response with treks data
    */
   getAllTreks: async (params = {}) => {
-    return apiClient.get('/v1/treks', { params });
+    return apiClient.get('/v1/mountains', { params });
   },
 
   /**
@@ -19,7 +19,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Response with trek data
    */
   getTrekById: async (id) => {
-    return apiClient.get(`/v1/treks/${id}`);
+    return apiClient.get(`/v1/mountains/${id}`);
   },
 
   /**
@@ -28,7 +28,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Response with search results
    */
   searchTreks: async (searchParams) => {
-    return apiClient.get('/treks/search', { params: searchParams });
+    return apiClient.get('/mountains/search', { params: searchParams });
   },
 
   /**
@@ -37,7 +37,7 @@ export const treksService = {
    * @returns {Promise<Array>} - Array of trek objects with organization, uuid, title, etc.
    */
   fetchTreksFromV1: async (params = {}) => {
-    return apiClient.get('/v1/treks/search', { params });
+    return apiClient.get('/v1/mountains/search', { params });
   },
 
   /**
@@ -53,7 +53,7 @@ export const treksService = {
     const queryParams = { page, limit };
     
     // Send filter params in the request body
-    return apiClient.post('/v1/treks/filter', filterParams, { params: queryParams });
+    return apiClient.post('/v1/mountains/filter', filterParams, { params: queryParams });
   },
 
   /**
@@ -61,7 +61,7 @@ export const treksService = {
    * @returns {Promise<Object>} - Object containing filter categories and their options
    */
   fetchFilterOptions: async () => {
-    return apiClient.get('/v1/treks/filters');
+    return apiClient.get('/v1/mountains/filters');
   },
   
   /**

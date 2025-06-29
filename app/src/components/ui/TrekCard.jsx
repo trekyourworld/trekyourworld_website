@@ -63,11 +63,11 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
             {getInitial(name)}
           </span>
         </div>
-        <div className="absolute top-0 left-0 m-2">
+        {/* <div className="absolute top-0 left-0 m-2">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
             {organiser || 'Organizer'}
           </span>
-        </div>
+        </div> */}
         <div className="absolute top-0 right-0 m-2 flex space-x-2">
              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${difficultyColor[difficulty.toLowerCase()]}`}>
             {difficulty}

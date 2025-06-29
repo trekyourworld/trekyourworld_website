@@ -22,12 +22,12 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
-              Discover Breathtaking Adventures Around the World
+             <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
+              Your Gateway to the World's Mountains, Passes & Treks
             </h1>
             
             <p className="text-xl text-center md:text-2xl mb-8">
-              Join expert guides on unforgettable treks to the world's most stunning destinations.
+              Find essential information, guides, and tips for exploring mountains, mountain passes, and treks across the globe.
             </p>
             
             <div className="flex flex-col justify-center sm:flex-row gap-4">
@@ -35,7 +35,7 @@ const HomePage = () => {
                 to="/treks" 
                 className="bg-white text-blue-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"
               >
-                Explore Treks
+                Explore
               </Link>
               <Link 
                 to="/guides" 
