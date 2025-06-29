@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { StarIcon, MapPinIcon, ClockIcon, ArrowTrendingUpIcon, BuildingOfficeIcon, TagIcon } from '@heroicons/react/24/solid';
-import { formatIndianRupees } from '../../utils/format';
 import { treksService } from '../../services/api/treksService';
 
 const TrekDetailsPage = () => {
@@ -34,7 +33,19 @@ const TrekDetailsPage = () => {
             bestTimeToVisit: apiTrek.bestTimeToTarget || [],
             distance: apiTrek.distance || "N/A",
             tags: apiTrek.tags || [],
-            url: apiTrek.url || null
+            url: apiTrek.url || null,
+            itinerary: apiTrek.itinerary
+              ? {
+                  ...apiTrek.itinerary,
+                  stops: apiTrek.itinerary.stops?.map((stop) => ({
+                    ...stop,
+                    elevation_gain: stop.elevation_gain ?? stop.elevationGain ?? 0,
+                    elevation_loss: stop.elevation_loss ?? stop.elevationLoss ?? 0,
+                    current_elevation: stop.current_elevation ?? stop.currentElevation ?? 0,
+                  })) || [],
+                }
+              : null, // Add itinerary to trek state
+            organisers: apiTrek.organisers || [],
           });
           setError(null);
         } else {
@@ -138,10 +149,10 @@ const TrekDetailsPage = () => {
             {/* Trek title and organizer */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
               <h1 className="text-3xl font-bold text-white mb-2">{trek.name}</h1>
-              <div className="flex items-center text-white">
+              {/* <div className="flex items-center text-white">
                 <BuildingOfficeIcon className="h-5 w-5 mr-2" />
                 <span className="text-sm">{trek.organiser}</span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -179,7 +190,7 @@ const TrekDetailsPage = () => {
                       <span className="text-sm text-gray-500">Elevation</span>
                       <div className="flex items-center">
                         <ArrowTrendingUpIcon className="h-4 w-4 text-blue-500 mr-1" />
-                        <span className="text-sm font-medium">{trek.elevation} ft</span>
+                        <span className="text-sm font-medium">{(trek.elevation && !isNaN(trek.elevation)) ? (trek.elevation * 0.3048).toFixed(0) : 'N/A'} m</span>
                       </div>
                     </div>
                   </div>
@@ -212,6 +223,47 @@ const TrekDetailsPage = () => {
                           {month}
                         </span>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Itinerary section */}
+                {trek.itinerary && trek.itinerary.stops && trek.itinerary.stops.length > 0 && (
+                  <div className="mb-8">
+                    <h2 className="text-xl font-semibold text-gray-800 mb-4 text-left">Itinerary</h2>
+                    <div className="bg-white rounded-lg shadow p-4">
+                      <div className="mb-4 flex flex-col md:flex-row md:items-center md:gap-4">
+                        <span className="text-sm text-gray-600 font-medium">Start: <span className="font-semibold text-blue-700">{trek.itinerary.start}</span></span>
+                        <span className="hidden md:inline-block text-gray-400">→</span>
+                        <span className="text-sm text-gray-600 font-medium">End: <span className="font-semibold text-blue-700">{trek.itinerary.end}</span></span>
+                      </div>
+                      <ol className="relative border-l-2 border-blue-200 ml-2">
+                        {trek.itinerary.stops.map((stop, idx) => (
+                          <li key={idx} className="mb-8 ml-4 text-left">
+                            <div className="absolute w-3 h-3 bg-blue-500 rounded-full mt-1.5 -left-1.5 border border-white"></div>
+                            <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+                              <span className="text-blue-700 font-bold text-lg md:w-auto w-full md:text-left">Day {stop.day}</span>
+                              <span className="text-gray-800 font-semibold text-md w-full text-left md:text-left md:w-auto block">{stop.title}</span>
+                            </div>
+                            <p className="text-gray-600 mt-1 mb-2 text-sm">{stop.description}</p>
+                            <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+                              <span>Distance: <span className="font-medium text-gray-700">{stop.distance} km</span></span>
+                              <span className="flex items-center gap-1">
+                                <ArrowTrendingUpIcon className="h-4 w-4 text-green-700 inline" />
+                                Elevation Gain: <span className="font-medium text-green-700">{(stop.elevation_gain && !isNaN(stop.elevation_gain)) ? (stop.elevation_gain * 0.3048).toFixed(0) : '0'} m</span>
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <ArrowTrendingUpIcon className="h-4 w-4 text-red-700 inline rotate-180" />
+                                Elevation Loss: <span className="font-medium text-red-700">{(stop.elevation_loss && !isNaN(stop.elevation_loss)) ? (stop.elevation_loss * 0.3048).toFixed(0) : '0'} m</span>
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <ArrowTrendingUpIcon className="h-4 w-4 text-blue-700 inline" />
+                                Current Elevation: <span className="font-medium text-blue-700">{(stop.current_elevation && !isNaN(stop.current_elevation)) ? (stop.current_elevation * 0.3048).toFixed(0) : '0'} m</span>
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
                     </div>
                   </div>
                 )}
@@ -260,13 +312,13 @@ const TrekDetailsPage = () => {
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">Trip Details</h2>
                   
                   {/* Price */}
-                  <div className="mb-6">
+                  {/* <div className="mb-6">
                     <span className="text-gray-500 text-sm text-left">Price</span>
                     <div className="flex items-center">
                       <span className="text-2xl font-bold text-gray-900">{formatIndianRupees(trek.price)}</span>
                       <span className="text-sm text-gray-500 ml-1">per person</span>
                     </div>
-                  </div>
+                  </div> */}
                   
                   {/* Rating */}
                   <div className="mb-6">
@@ -287,6 +339,24 @@ const TrekDetailsPage = () => {
                       <span className="text-gray-700">{trek.location}</span>
                     </div>
                   </div>
+
+                  {/* Organisers list */}
+                  {Array.isArray(trek.organisers) && trek.organisers.length > 0 && (
+                    <div className="mb-6 text-left">
+                      <span className="text-gray-500 text-sm text-left block mb-1">Organisers</span>
+                      <ul className="list-disc list-inside ml-2">
+                        {trek.organisers.map((org, idx) => (
+                          <li key={idx} className="text-gray-700 text-sm">
+                            {org.website ? (
+                              <a href={org.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{org.name}</a>
+                            ) : (
+                              org.name
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   
                   {/* Action buttons */}
                   <div className="space-y-3">
