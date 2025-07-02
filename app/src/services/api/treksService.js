@@ -70,7 +70,7 @@ export const treksService = {
    * @returns {Promise<Array>} - Array of top trek objects
    */
   getTopTreks: async (params = {}) => {
-    return apiClient.get('/v1/treks/topTreks', { params });
+    return apiClient.get('/v1/mountains/topTreks', { params });
   }
 };
 

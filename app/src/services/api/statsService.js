@@ -9,7 +9,7 @@ export const statsService = {
    * @returns {Promise<Object>} - Response with statistics data
    */
   getStats: async () => {
-    return apiClient.get('/v1/treks/stats');
+    return apiClient.get('/v1/mountains/stats');
   }
 };
 
