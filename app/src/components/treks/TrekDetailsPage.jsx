@@ -199,7 +199,7 @@ const TrekDetailsPage = () => {
                   <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">Distance</span>
-                      <span className="text-sm font-medium">{trek.distance}</span>
+                      <span className="text-sm font-medium">{trek.distance} km</span>
                     </div>
                   </div>
                 </div>
