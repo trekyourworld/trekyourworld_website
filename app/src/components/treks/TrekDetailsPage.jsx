@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { StarIcon, MapPinIcon, ClockIcon, ArrowTrendingUpIcon, BuildingOfficeIcon, TagIcon } from '@heroicons/react/24/solid';
+import { StarIcon, MapPinIcon, ClockIcon, ArrowTrendingUpIcon, TagIcon } from '@heroicons/react/24/solid';
 import { treksService } from '../../services/api/treksService';
+import ImageCarousel from './ImageCarousel';
+import ReviewCarousel from './ReviewCarousel';
 
 const TrekDetailsPage = () => {
   const { id } = useParams();
@@ -139,22 +141,17 @@ const TrekDetailsPage = () => {
         {/* Main content */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
           {/* Hero section with image and title */}
+          {/* Hero section with image carousel and title */}
           <div className="relative h-96 w-full bg-gray-200">
-            {/* Placeholder for trek image */}
-            <div className="h-full w-full bg-blue-200 flex items-center justify-center">
-              <span className="text-9xl font-bold text-blue-600">
-                {trek.name.charAt(0).toUpperCase()}
-              </span>
-            </div>
-            {/* Trek title and organizer */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
-              <h1 className="text-3xl font-bold text-white mb-2">{trek.name}</h1>
-              {/* <div className="flex items-center text-white">
-                <BuildingOfficeIcon className="h-5 w-5 mr-2" />
-                <span className="text-sm">{trek.organiser}</span>
-              </div> */}
-            </div>
+            {/* Carousel of images */}
+            <ImageCarousel id={trek.id} name={trek.name} />
           </div>
+
+          {/* Trek name below hero section */}
+          <div className="px-6 py-4 bg-white">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 text-left">{trek.name}</h1>
+          </div>
+
 
           {/* Trek info section */}
           <div className="p-6">
@@ -267,26 +264,10 @@ const TrekDetailsPage = () => {
                     </div>
                   </div>
                 )}
-
-                {/* Tags section */}
-                {trek.tags && trek.tags.length > 0 && (
-                  <div className="mb-8">
-                    <div className="flex items-center mb-4">
-                      <TagIcon className="h-5 w-5 text-gray-500 mr-2" />
-                      <h2 className="text-xl font-semibold text-gray-800">Tags</h2>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {trek.tags.map((tag, index) => (
-                        <span 
-                          key={index} 
-                          className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-lg"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* Review carousel section */}
+                <div className="mb-8">
+                  <ReviewCarousel />
+                </div>
 
                 {/* External link if available */}
                 {trek.url && (
@@ -308,7 +289,7 @@ const TrekDetailsPage = () => {
 
               {/* Right column with booking details */}
               <div>
-                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 mb-8">
                   <h2 className="text-xl font-semibold text-gray-800 mb-4">Trip Details</h2>
                   
                   {/* Price */}
@@ -360,14 +341,34 @@ const TrekDetailsPage = () => {
                   
                   {/* Action buttons */}
                   <div className="space-y-3">
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                      Book Now
-                    </button>
-                    <button className="w-full bg-white hover:bg-gray-50 text-blue-600 font-medium py-3 px-4 rounded-lg border border-blue-600 transition-colors">
-                      Save for Later
+                    <button className="w-full bg-white hover:bg-gray-50 text-blue-600 font-medium py-3 px-4 rounded-lg border border-blue-600 transition-colors flex items-center justify-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75v12l-5.25-3-5.25 3v-12A2.25 2.25 0 009 4.5h6a2.25 2.25 0 012.25 2.25z" />
+                      </svg>
+                      Bookmark
                     </button>
                   </div>
                 </div>
+
+                {/* Tags section */}
+                {trek.tags && trek.tags.length > 0 && (
+                  <div className="mb-8">
+                    <div className="flex items-center mb-4">
+                      <TagIcon className="h-5 w-5 text-gray-500 mr-2" />
+                      <h2 className="text-xl font-semibold text-gray-800">Tags</h2>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {trek.tags.map((tag, index) => (
+                        <span 
+                          key={index} 
+                          className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-lg"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
