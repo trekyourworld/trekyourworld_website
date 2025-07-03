@@ -24,6 +24,7 @@ const UserProfilePage = lazy(() => import('./components/profile/UserProfilePage'
 // Admin components
 const Dashboard = lazy(() => import('./components/admin/dashboard/Dashboard'));
 const ManageTreks = lazy(() => import('./components/admin/dashboard/ManageTreks'));
+const ManageBanners = lazy(() => import('./components/admin/dashboard/ManageBanners'));
 const ManageUsers = lazy(() => import('./components/admin/dashboard/ManageUsers'));
 const Analytics = lazy(() => import('./components/admin/dashboard/Analytics'));
 const Settings = lazy(() => import('./components/admin/dashboard/Settings'));
@@ -115,6 +116,11 @@ function App() {
                         <Route index element={
                             <Suspense fallback={<LoadingFallback />}>
                                 <Dashboard />
+                            </Suspense>
+                        } />
+                        <Route path="banners" element={
+                            <Suspense fallback={<LoadingFallback />}>
+                                <ManageBanners />
                             </Suspense>
                         } />
                         <Route path="treks" element={
