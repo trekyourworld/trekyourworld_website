@@ -273,14 +273,14 @@ const ManageTreks = () => {
     // Handle search with debounce
     useEffect(() => {
         const timer = setTimeout(() => {
+            // If already on page 1, fetch with search term
             if (pagination.currentPage === 1) {
                 fetchTreks(1, searchTerm);
             } else {
-                // Reset to page 1 when searching
+                // Reset to page 1 when searching, which will trigger fetchTreks via the other useEffect
                 setPagination(prev => ({ ...prev, currentPage: 1 }));
             }
-        }, 500);
-
+        }, 400);
         return () => clearTimeout(timer);
     }, [searchTerm]);
 
@@ -451,7 +451,8 @@ const ManageTreks = () => {
                             placeholder="Search treks by name or location..."
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            autoComplete="off"
                         />
                     </div>
                     <div className="flex gap-2">

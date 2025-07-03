@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import ManageBanners from './dashboard/ManageBanners';
 import { useAuth } from '../auth/AuthContext';
 import { 
   Bars3Icon, 
@@ -32,6 +33,11 @@ const AdminLayout = () => {
       name: 'Dashboard', 
       path: '/admin', 
       icon: <HomeIcon className="w-6 h-6" /> 
+    },
+    {
+      name: 'Manage Banners',
+      path: '/admin/banners',
+      icon: <ChartBarIcon className="w-6 h-6" /> // You can replace with a more suitable icon if desired
     },
     { 
       name: 'Manage Treks', 
@@ -191,6 +197,7 @@ const AdminLayout = () => {
         
         {/* Page Content */}
         <main className="flex-1 p-6 overflow-y-auto">
+          {/* Route rendering handled by Outlet, but for static test you can render ManageBanners directly: */}
           <Outlet />
         </main>
       </div>
