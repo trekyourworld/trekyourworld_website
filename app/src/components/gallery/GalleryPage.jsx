@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 

@@ -36,7 +36,7 @@ const TreksPage = () => {
         price: [],
         organiser: []
     });
-    const [setError] = useState(null);
+    // Removed unused error state
     const [isServerSearch, setIsServerSearch] = useState(true);
 
     // Pagination state
@@ -47,7 +47,7 @@ const TreksPage = () => {
 
     // Filter metadata state
     const [filterMetadata, setFilterMetadata] = useState(null);
-    const [setFilterError] = useState(null);
+    // Removed unused filterError state
 
     // Use ref for the current page to keep the value consistent in callbacks
     const currentPageRef = useRef(currentPage);
@@ -87,11 +87,11 @@ const TreksPage = () => {
                 console.log("Filter metadata response:", response);
                 if (response && response.data) {
                     setFilterMetadata(response.data.data);
-                    setFilterError(null);
+                    // setFilterError(null); // removed unused error setter
                 }
             } catch (err) {
                 console.error("Error fetching filter metadata:", err);
-                setFilterError("Failed to load filter options");
+                // setFilterError("Failed to load filter options"); // removed unused error setter
             }
         };
 
@@ -263,7 +263,7 @@ const TreksPage = () => {
                     setAllTreks(transformedTreks);
                 }
 
-                setError(null);
+                // setError(null); // removed unused error setter
             } else if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
                 const transformedTreks = response.data.data.data.map(transformApiTrek);
 
@@ -278,13 +278,13 @@ const TreksPage = () => {
                     setAllTreks(transformedTreks);
                 }
 
-                setError(null);
+                // setError(null); // removed unused error setter
             } else {
                 throw new Error('Invalid data format from API');
             }
         } catch (err) {
             console.error('Error fetching trek data:', err);
-            setError('Failed to load trek data. Using mock data instead.');
+            // setError('Failed to load trek data. Using mock data instead.'); // removed unused error setter
 
             setIsServerSearch(false);
             //   setAllTreks(mockTrekData);

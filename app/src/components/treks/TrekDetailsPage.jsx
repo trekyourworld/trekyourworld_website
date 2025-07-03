@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { StarIcon, MapPinIcon, ClockIcon, ArrowTrendingUpIcon, TagIcon } from '@heroicons/react/24/solid';
 import { treksService } from '../../services/api/treksService';

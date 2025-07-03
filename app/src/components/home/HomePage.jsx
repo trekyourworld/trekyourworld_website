@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import TopTreks from './TopTreks';
@@ -22,12 +23,12 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-             <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
-              Your Gateway to the World's Mountains, Passes & Treks
+            <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
+              Unlock Every Mountain: Peaks, Summits, Treks & Beyond
             </h1>
             
             <p className="text-xl text-center md:text-2xl mb-8">
-              Find essential information, guides, and tips for exploring mountains, mountain passes, and treks across the globe.
+              Discover comprehensive information about mountain peaks, summits, treks, and hikes worldwide. Whether you’re planning your next adventure or seeking details on any mountain, summit, or trail, we’ve got you covered.
             </p>
             
             <div className="flex flex-col justify-center sm:flex-row gap-4">
@@ -35,13 +36,13 @@ const HomePage = () => {
                 to="/treks" 
                 className="bg-white text-blue-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"
               >
-                Explore
+                Explore Mountains & Treks
               </Link>
               <Link 
                 to="/guides" 
                 className="bg-transparent border-2 border-white hover:bg-white/10 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"
               >
-                Meet Our Guides
+                Connect with Experts
               </Link>
             </div>
           </motion.div>

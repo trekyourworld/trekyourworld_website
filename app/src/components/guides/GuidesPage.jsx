@@ -3,6 +3,7 @@ import GuideCard from './GuideCard';
 import GuideSearch from './GuideSearch';
 import GuideFilters from './GuideFilters';
 import { useAuth } from '../auth/AuthContext';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 // Mock data for guides - in a real app, this would be fetched from an API
@@ -87,7 +88,6 @@ const mockGuides = [
 
 const GuidesPage = () => {
   const { isAuthenticated, loading } = useAuth();
-  const [showSignInModal, setShowSignInModal] = useState(false);
   const [guides, setGuides] = useState([]);
   const [filteredGuides, setFilteredGuides] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');

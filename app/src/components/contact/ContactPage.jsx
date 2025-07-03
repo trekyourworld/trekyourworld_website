@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { INSTA_LINK } from '../../utils/constants';
 import { contactService } from '../../services/api';
