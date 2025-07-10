@@ -126,7 +126,7 @@ const TrekDetailsPage = () => {
                     </div>
                 </div>
                 <div className="text-center">
-                    <Link to="/treks" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
+                    <Link to="/explore" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
                         Back to Treks
                     </Link>
                 </div>
@@ -145,7 +145,7 @@ const TrekDetailsPage = () => {
                     </div>
                 </div>
                 <div className="text-center">
-                    <Link to="/treks" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
+                    <Link to="/explore" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
                         Back to Treks
                     </Link>
                 </div>
@@ -165,7 +165,7 @@ const TrekDetailsPage = () => {
                 <div className="flex items-center mb-6 text-sm">
                     <Link to="/" className="text-gray-500 hover:text-gray-700">Home</Link>
                     <span className="mx-2 text-gray-400">/</span>
-                    <Link to="/treks" className="text-gray-500 hover:text-gray-700">Treks</Link>
+                    <Link to="/explore" className="text-gray-500 hover:text-gray-700">Treks</Link>
                     <span className="mx-2 text-gray-400">/</span>
                     <span className="text-gray-700">{trek.name}</span>
                 </div>
@@ -451,7 +451,7 @@ const TrekDetailsPage = () => {
                 {/* Back to all treks button */}
                 <div className="text-center mb-8">
                     <Link
-                        to="/treks"
+                        to="/explore"
                         className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                     >
                         <svg className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

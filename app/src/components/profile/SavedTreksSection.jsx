@@ -59,7 +59,7 @@ const SavedTreksSection = ({ user }) => {
                     <p className="mt-2 text-sm text-gray-600">You haven't saved any treks yet.</p>
                     <div className="mt-6">
                         <a
-                            href="/treks"
+                            href="/explore"
                             className="inline-flex items-center px-5 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
                         >
                             Explore Treks

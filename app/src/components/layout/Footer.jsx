@@ -38,7 +38,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-400 hover:text-white">Home</Link></li>
-              <li><Link to="/treks" className="text-gray-400 hover:text-white">Treks</Link></li>
+              <li><Link to="/explore" className="text-gray-400 hover:text-white">Treks</Link></li>
               <li><Link to="/guides" className="text-gray-400 hover:text-white">Guides</Link></li>
               <li><Link to="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white">Contact</Link></li>
@@ -48,11 +48,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Popular Destinations</h3>
             <ul className="space-y-2">
-              <li><Link to="/treks?location=nepal" className="text-gray-400 hover:text-white">Everest Base Camp</Link></li>
-              <li><Link to="/treks?location=nepal" className="text-gray-400 hover:text-white">Annapurna Circuit</Link></li>
-              <li><Link to="/treks?location=peru" className="text-gray-400 hover:text-white">Inca Trail</Link></li>
-              <li><Link to="/treks?location=chile" className="text-gray-400 hover:text-white">Torres del Paine</Link></li>
-              <li><Link to="/treks?location=france" className="text-gray-400 hover:text-white">Mont Blanc</Link></li>
+              <li><Link to="/explore?location=nepal" className="text-gray-400 hover:text-white">Everest Base Camp</Link></li>
+              <li><Link to="/explore?location=nepal" className="text-gray-400 hover:text-white">Annapurna Circuit</Link></li>
+              <li><Link to="/explore?location=peru" className="text-gray-400 hover:text-white">Inca Trail</Link></li>
+              <li><Link to="/explore?location=chile" className="text-gray-400 hover:text-white">Torres del Paine</Link></li>
+              <li><Link to="/explore?location=france" className="text-gray-400 hover:text-white">Mont Blanc</Link></li>
             </ul>
           </div>
           

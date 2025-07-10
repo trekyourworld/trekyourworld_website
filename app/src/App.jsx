@@ -66,7 +66,7 @@ function App() {
                                 <ExplorePage />
                             </Suspense>
                         } />
-                        <Route path="/trek/:id" element={
+                        <Route path="/explore/:id" element={
                             <Suspense fallback={<LoadingFallback />}>
                                 <TrekDetailsPage />
                             </Suspense>

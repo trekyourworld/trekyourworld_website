@@ -143,7 +143,7 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
         </div>
 
         <Link 
-          to={`/trek/${id}`}
+          to={`/explore/${id}`}
           className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors flex justify-center items-center"
         >
           View Details
