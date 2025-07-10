@@ -8,7 +8,7 @@ import { treksService } from '../../services/api/treksService';
 import Dropdown from './Dropdown';
 import { transformApiTrek } from '../../utils/utils'; // Adjust the import path as necessary
 
-const TreksPage = () => {
+const ExplorePage = () => {
     const [treks, setTreks] = useState([]);
     const [allTreks, setAllTreks] = useState([]); // Keep for filter operations
     const [isLoading, setIsLoading] = useState(true);
@@ -692,4 +692,4 @@ const TreksPage = () => {
     );
 };
 
-export default TreksPage;
+export default ExplorePage;

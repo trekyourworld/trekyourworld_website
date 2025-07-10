@@ -169,9 +169,9 @@ const GalleryPage = () => {
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Trek Photo Gallery</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h1>
           <p className="text-gray-600 max-w-3xl mx-auto text-lg mb-8">
-            Explore stunning photos from treks around the world, captured by our community of adventurous trekkers.
+            Discover real moments from treks and mountains worldwide, shared by independent trekkers and guides. Get inspired for your next adventure with authentic, unbiased glimpses from the trail—TrekYourWorld is your trusted information source, not a trekking company.
           </p>
           
           {/* Search Bar */}

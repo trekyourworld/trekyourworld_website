@@ -24,25 +24,25 @@ const HomePage = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="w-full text-4xl md:text-6xl text-center font-bold mb-4">
-              Unlock Every Mountain: Peaks, Summits, Treks & Beyond
+              Plan Your Next Trek with Confidence
             </h1>
-            
+
             <p className="text-xl text-center md:text-2xl mb-8">
-              Discover comprehensive information about mountain peaks, summits, treks, and hikes worldwide. Whether you’re planning your next adventure or seeking details on any mountain, summit, or trail, we’ve got you covered.
+              TrekYourWorld is your one-stop destination for unbiased trek and mountain information, organiser price comparisons, and direct guide contacts—empowering every trekker to explore smarter.
             </p>
-            
+
             <div className="flex flex-col justify-center sm:flex-row gap-4">
-              <Link 
-                to="/treks" 
+              <Link
+                to="/explore"
                 className="bg-white text-blue-700 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"
               >
-                Explore Mountains & Treks
+                Explore
               </Link>
-              <Link 
-                to="/guides" 
+              <Link
+                to="/guides"
                 className="bg-transparent border-2 border-white hover:bg-white/10 px-8 py-3 rounded-lg font-semibold text-lg transition-colors inline-block text-center"
               >
-                Connect with Experts
+                Guides
               </Link>
             </div>
           </motion.div>
@@ -51,7 +51,7 @@ const HomePage = () => {
 
       {/* Top Treks Section */}
       <TopTreks />
-      
+
       {/* Statistics Section */}
       <Statistics />
       
@@ -61,23 +61,23 @@ const HomePage = () => {
       {/* Newsletter Section */}
       <section className="bg-blue-700 text-white py-16 w-full">
         <div className="w-full px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">Get Inspired for Your Next Trek</h2>
+          <h2 className="text-3xl font-bold mb-6">Stay Ahead of the Trail</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Subscribe to our newsletter for the latest trek updates, exclusive offers, and travel tips.
+            Get the latest trek updates, organiser deals, and expert tips—straight to your inbox.
           </p>
-          
+
           <form className="max-w-md mx-auto flex flex-col md:flex-row gap-4">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
+            <input
+              type="email"
+              placeholder="Enter your email to subscribe"
               className="flex-grow px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
-            <button 
+            <button
               type="submit"
               className="bg-white text-blue-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Subscribe
+              Subscribe Now
             </button>
           </form>
         </div>

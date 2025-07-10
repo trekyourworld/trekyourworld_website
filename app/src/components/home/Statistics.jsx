@@ -81,24 +81,24 @@ const Statistics = () => {
 
   const statItems = [
     {
-      name: "Peaks, Treks & Hikes",
+      name: "Treks & Peaks Listed",
       value: stats.treks,
       icon: MapIcon,
-      description: "Documented mountain peaks, treks, and hiking routes",
+      description: "Unbiased information on treks, peaks, and trails worldwide.",
       color: "bg-blue-100 text-blue-600"
     },
     {
-      name: "Mountain Experts",
+      name: "Verified Guides",
       value: stats.guides,
       icon: UserGroupIcon,
-      description: "Verified guides and mountaineering professionals",
+      description: "Experienced local guides you can contact directly.",
       color: "bg-green-100 text-green-600"
     },
     {
       name: "Regions Covered",
       value: stats.locations,
       icon: GlobeAsiaAustraliaIcon,
-      description: "Countries and regions with detailed mountain info",
+      description: "Regions covered",
       color: "bg-purple-100 text-purple-600"
     }
   ];
@@ -107,9 +107,9 @@ const Statistics = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Our Mountain Footprint</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Why Trekkers Trust TrekYourWorld</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            TrekYourWorld is your trusted source for all things mountains. From the highest summits to hidden trails, our growing database and expert network help you explore, plan, and conquer your next adventure with confidence.
+            TrekYourWorld is not a trekking company, but your go-to information website before planning any trek. Get all the details about your next adventure, compare organiser prices, and connect directly with local guides—empowering you to explore smarter and safer.
           </p>
         </div>
 

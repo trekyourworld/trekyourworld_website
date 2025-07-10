@@ -67,9 +67,9 @@ const PhotoGallery = () => {
     <section className="py-12 bg-gray-100">
       <div className="container mx-auto px-4">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Trek Gallery</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Photo Gallery</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Experience the beauty of our treks through these stunning photographs captured by our community of trekkers.
+            Explore real moments from treks and mountains around the world, shared by independent trekkers and guides. Get inspired for your next adventure with authentic, unbiased glimpses from the trail.
           </p>
         </div>
 

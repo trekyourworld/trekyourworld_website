@@ -13,9 +13,9 @@ import { analyticsService } from './services/api/analytics';
 
 // Lazy-loaded components for better performance
 const HomePage = lazy(() => import('./components/home/HomePage'));
-const TreksPage = lazy(() => import('./components/treks/TreksPage'));
-const TrekDetailsPage = lazy(() => import('./components/treks/TrekDetailsPage'));
-const CompareTreksPage = lazy(() => import('./components/treks/CompareTreksPage'));
+const ExplorePage = lazy(() => import('./components/explore/ExplorePage'));
+const TrekDetailsPage = lazy(() => import('./components/explore/TrekDetailsPage'));
+const CompareTreksPage = lazy(() => import('./components/explore/CompareTreksPage'));
 const ContactPage = lazy(() => import('./components/contact/ContactPage'));
 const GuidesPage = lazy(() => import('./components/guides/GuidesPage'));
 const GalleryPage = lazy(() => import('./components/gallery/GalleryPage'));
@@ -61,9 +61,9 @@ function App() {
                                 <HomePage />
                             </Suspense>
                         } />
-                        <Route path="/treks" element={
+                        <Route path="/explore" element={
                             <Suspense fallback={<LoadingFallback />}>
-                                <TreksPage />
+                                <ExplorePage />
                             </Suspense>
                         } />
                         <Route path="/trek/:id" element={
