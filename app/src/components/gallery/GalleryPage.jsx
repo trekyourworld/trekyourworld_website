@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Helmet } from 'react-helmet-async';
 
 // Gallery images - in a real application, these would come from an API
 const galleryImages = [
@@ -166,7 +167,12 @@ const GalleryPage = () => {
   }, [selectedImage]);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <>
+      <Helmet>
+        <title>Gallery | TrekYourWorld</title>
+        <meta name="description" content="View stunning trek and mountain photos from around the world. Explore our gallery and get inspired for your next adventure." />
+      </Helmet>
+      <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h1>
@@ -354,6 +360,7 @@ const GalleryPage = () => {
         </AnimatePresence>
       </div>
     </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { INSTA_LINK } from '../../utils/constants';
 import { contactService } from '../../services/api';
 import { useAuth } from '../auth/AuthContext';
+import { Helmet } from 'react-helmet-async';
 
 const ContactPage = () => {
   const { isAuthenticated, user } = useAuth();
@@ -69,7 +70,12 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-white py-16">
+    <>
+      <Helmet>
+        <title>Contact Us | TrekYourWorld</title>
+        <meta name="description" content="Get in touch with TrekYourWorld for trek information, support, and partnership opportunities." />
+      </Helmet>
+      <div className="bg-gradient-to-b from-blue-50 to-white py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -97,7 +103,7 @@ const ContactPage = () => {
             {formStatus === 'success' ? (
               <div className="text-center py-12">
                 <div className="text-green-500 text-5xl mb-4">✓</div>
-                <h3 className="text-2xl font-medium text-gray-800 mb-2">Thank You!</h3>
+                <h2 className="text-2xl font-medium text-gray-800 mb-2">Thank You!</h2>
                 <p className="text-gray-600">
                   We've received your message and will get back to you shortly.
                 </p>
@@ -246,7 +252,7 @@ const ContactPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium text-left text-gray-900 mb-1">Email Us</h3>
+              <h2 className="text-lg font-medium text-left text-gray-900 mb-1">Email Us</h2>
                   <p className="text-gray-600 text-left">labs.neo73@gmail.com</p>
                   {/* <p className="text-gray-600 text-left">support@trekyourworld.com</p> */}
                 </div>
@@ -271,7 +277,7 @@ const ContactPage = () => {
             
             {/* Social Media Links */}
             <div className="mt-8">
-              <h3 className="text-lg font-medium text-left text-gray-900 mb-4">Connect With Us</h3>
+              <h2 className="text-lg font-medium text-left text-gray-900 mb-4">Connect With Us</h2>
               <div className="flex space-x-4">
                 {/* <a href="#" className="bg-blue-600 p-3 rounded-full text-white hover:bg-blue-700 transition-colors">
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -302,7 +308,7 @@ const ContactPage = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-gray-400 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
-                <p className="text-gray-600">Interactive Map Coming Soon</p>
+                <h2 className="text-gray-600">Interactive Map Coming Soon</h2>
               </div>
             </div>
           </motion.div>
@@ -316,18 +322,15 @@ const ContactPage = () => {
           transition={{ duration: 0.7, delay: 0.4 }}
         >
           <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Frequently Asked Questions</h2>
-          
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-medium text-gray-900 mb-2">How far in advance should I book a trek?</h3>
               <p className="text-gray-600">We recommend booking your trek at least 3-6 months in advance, especially for popular destinations during peak season. This ensures availability and gives you ample time to prepare.</p>
             </div>
-            
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-medium text-gray-900 mb-2">What fitness level is required for your treks?</h3>
               <p className="text-gray-600">The required fitness level varies by trek. Easy treks are suitable for beginners with basic fitness, while difficult and extreme treks require previous trekking experience and excellent physical condition. Each trek listing includes specific fitness requirements.</p>
             </div>
-            
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-medium text-gray-900 mb-2">What equipment do I need to bring?</h3>
               <p className="text-gray-600">Upon booking, we provide a detailed packing list specific to your trek. Generally, you'll need appropriate hiking boots, weather-suitable clothing, personal items, and any medication you require. Some specialized equipment can be rented through our partners.</p>
@@ -336,6 +339,7 @@ const ContactPage = () => {
         </motion.div>
       </div>
     </div>
+    </>
   );
 };
 
