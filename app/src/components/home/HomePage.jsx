@@ -14,6 +14,16 @@ const HomePage = () => {
       <Helmet>
         <title>TrekYourWorld | Plan Your Next Trek with Confidence</title>
         <meta name="description" content="TrekYourWorld is your one-stop destination for unbiased trek and mountain information, organiser price comparisons, and direct guide contacts—empowering every trekker to explore smarter." />
+        {/* Resource Hints for Performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://unsplash.com" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://unsplash.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        {/* Add more resource hints for other third-party origins as needed */}
       </Helmet>
     <div className="w-full">
       {/* Hero Section */}
