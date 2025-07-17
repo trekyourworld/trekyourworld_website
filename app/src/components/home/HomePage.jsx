@@ -1,10 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import TopTreks from './TopTreks';
-import Statistics from './Statistics';
-import PhotoGallery from './PhotoGallery';
+import React, { Suspense, lazy } from 'react';
 import { Helmet } from 'react-helmet-async';
+
+const TopTreks = lazy(() => import('./TopTreks'));
+const Statistics = lazy(() => import('./Statistics'));
+const PhotoGallery = lazy(() => import('./PhotoGallery'));
 
 const HomePage = () => {
   return (
@@ -63,14 +65,21 @@ const HomePage = () => {
         </div>
       </section>
 
+
       {/* Top Treks Section */}
-      <TopTreks />
+      <Suspense fallback={<div className="w-full text-center py-8">Loading top treks...</div>}>
+        <TopTreks />
+      </Suspense>
 
       {/* Statistics Section */}
-      <Statistics />
-      
+      <Suspense fallback={<div className="w-full text-center py-8">Loading statistics...</div>}>
+        <Statistics />
+      </Suspense>
+
       {/* Photo Gallery Section */}
-      <PhotoGallery />
+      <Suspense fallback={<div className="w-full text-center py-8">Loading gallery...</div>}>
+        <PhotoGallery />
+      </Suspense>
 
       {/* Newsletter Section */}
       <section className="bg-blue-700 text-white py-16 w-full">
