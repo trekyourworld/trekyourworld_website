@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import TrekCard from '../ui/TrekCard';
@@ -109,7 +110,7 @@ const TopTreks = () => {
 
         <div className="text-center mt-10">
           <Link 
-            to="/treks" 
+            to="/explore" 
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors inline-block"
           >
             Explore All Treks

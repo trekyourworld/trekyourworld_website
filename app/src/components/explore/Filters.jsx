@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { 
   FunnelIcon, 
   ChevronDownIcon,
-  ChevronUpIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
 import { treksService } from '../../services/api/treksService';

@@ -55,14 +55,14 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/treks?search=${encodeURIComponent(searchQuery)}`);
+      navigate(`/mountains?search=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
     }
   };
 
   const navItems = [
     { label: 'Home', path: '/' },
-    { label: 'Treks', path: '/treks' },
+    { label: 'Explore', path: '/explore' },
     { label: 'Guides', path: '/guides' },
     { label: 'Gallery', path: '/gallery' },
     // { label: 'About', path: '/about' },

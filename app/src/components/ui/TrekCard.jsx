@@ -1,8 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
-import { formatIndianRupees } from '../../utils/format';
 
 const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSelect }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -14,9 +14,7 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
     difficulty, 
     duration, 
     rating, 
-    price,
     elevation,
-    organiser
   } = trek;
 
   const difficultyColor = {
@@ -145,7 +143,7 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
         </div>
 
         <Link 
-          to={`/trek/${id}`}
+          to={`/explore/${id}`}
           className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors flex justify-center items-center"
         >
           View Details

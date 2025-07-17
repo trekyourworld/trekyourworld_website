@@ -68,7 +68,7 @@ const CompareTreksPage = () => {
 
         if (updatedTreks.length < 2) {
             // If less than 2 treks remain, navigate back to treks page
-            navigate('/treks');
+            navigate('/explore');
             return;
         }
 
@@ -108,7 +108,7 @@ const CompareTreksPage = () => {
                     </div>
                 </div>
                 <div className="text-center">
-                    <Link to="/treks" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
+                    <Link to="/explore" className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors mt-4">
                         Back to Treks
                     </Link>
                 </div>
@@ -125,7 +125,7 @@ const CompareTreksPage = () => {
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-3xl font-bold text-gray-900">Compare Treks</h1>
                     <Link
-                        to="/treks"
+                        to="/explore"
                         className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                     >
                         <ArrowLeftIcon className="h-4 w-4 mr-2" />

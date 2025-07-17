@@ -1,5 +1,5 @@
-// filepath: /Users/adityakumar/code/trekyourworld/ai-trekyourworld/frontend/src/components/ui/ScrollToTop.jsx
 import { useState, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpIcon } from '@heroicons/react/24/solid';
 

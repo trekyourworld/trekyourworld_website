@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { 
   MapIcon, 
@@ -80,24 +81,24 @@ const Statistics = () => {
 
   const statItems = [
     {
-      name: "Total Treks",
+      name: "Treks & Peaks Listed",
       value: stats.treks,
       icon: MapIcon,
-      description: "Unique trekking experiences across the globe",
+      description: "Unbiased information on treks, peaks, and trails worldwide.",
       color: "bg-blue-100 text-blue-600"
     },
     {
-      name: "Expert Guides",
+      name: "Verified Guides",
       value: stats.guides,
       icon: UserGroupIcon,
-      description: "Professional and certified trekking guides",
+      description: "Experienced local guides you can contact directly.",
       color: "bg-green-100 text-green-600"
     },
     {
-      name: "Locations",
+      name: "Regions Covered",
       value: stats.locations,
       icon: GlobeAsiaAustraliaIcon,
-      description: "Countries covered across all continents",
+      description: "Regions covered",
       color: "bg-purple-100 text-purple-600"
     }
   ];
@@ -106,10 +107,9 @@ const Statistics = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Our Impact In Numbers</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Why Trekkers Trust TrekYourWorld</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            We take pride in our extensive network of treks, expert guides, and global reach.
-            Here's a snapshot of our journey so far.
+            TrekYourWorld is not a trekking company, but your go-to information website before planning any trek. Get all the details about your next adventure, compare organiser prices, and connect directly with local guides—empowering you to explore smarter and safer.
           </p>
         </div>
 

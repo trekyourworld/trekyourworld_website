@@ -10,7 +10,8 @@ export const guidesService = {
    * @returns {Promise<Object>} - Response with guides data
    */
   getAllGuides: async (params = {}) => {
-    return apiClient.get('/guides', { params });
+    return []
+    // return apiClient.get('/guides', { params });
   },
 
   /**

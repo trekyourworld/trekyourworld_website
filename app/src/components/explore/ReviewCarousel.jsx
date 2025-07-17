@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 
 // Dummy reviews for demonstration
@@ -73,7 +74,7 @@ const ReviewCarousel = () => {
         </div>
       </div>
       <div className={`grid gap-4 mb-4`} style={{gridTemplateColumns: `repeat(${cardsToShow}, minmax(0, 1fr))`}}>
-        {visibleReviews.map((review, idx) => (
+        {visibleReviews.map((review) => (
           <motion.div
             key={review.name + review.insta}
             initial={{ opacity: 0, x: 40 }}

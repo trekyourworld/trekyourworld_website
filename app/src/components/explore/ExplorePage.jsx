@@ -6,25 +6,9 @@ import SearchBar from './SearchBar';
 import TrekCard from '../ui/TrekCard';
 import { treksService } from '../../services/api/treksService';
 import Dropdown from './Dropdown';
+import { transformApiTrek } from '../../utils/utils'; // Adjust the import path as necessary
 
-// Helper function to transform API data to match our component's expected format
-const transformApiTrek = (apiTrek) => {
-    return {
-        id: apiTrek.uuid,
-        name: apiTrek.title,
-        image: `https://images.unsplash.com/photo-1515876305430-f06edab8282a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80`, // Default image as API doesn't provide one
-        location: apiTrek.location || "Unknown",
-        difficulty: Array.isArray(apiTrek.difficulty) ? apiTrek.difficulty[0] : "Moderate",
-        duration: apiTrek.duration ? `${apiTrek.duration} days` : "Unknown",
-        rating: 4.5, // Default rating as API doesn't provide one
-        price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
-        description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
-        elevation: apiTrek.elevation,
-        organiser: apiTrek.org || "Unknown"
-    };
-};
-
-const TreksPage = () => {
+const ExplorePage = () => {
     const [treks, setTreks] = useState([]);
     const [allTreks, setAllTreks] = useState([]); // Keep for filter operations
     const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +20,7 @@ const TreksPage = () => {
         price: [],
         organiser: []
     });
-    const [setError] = useState(null);
+    // Removed unused error state
     const [isServerSearch, setIsServerSearch] = useState(true);
 
     // Pagination state
@@ -47,7 +31,7 @@ const TreksPage = () => {
 
     // Filter metadata state
     const [filterMetadata, setFilterMetadata] = useState(null);
-    const [setFilterError] = useState(null);
+    // Removed unused filterError state
 
     // Use ref for the current page to keep the value consistent in callbacks
     const currentPageRef = useRef(currentPage);
@@ -84,14 +68,13 @@ const TreksPage = () => {
         const fetchFilterMetadata = async () => {
             try {
                 const response = await treksService.fetchFilterOptions();
-                console.log("Filter metadata response:", response);
                 if (response && response.data) {
                     setFilterMetadata(response.data.data);
-                    setFilterError(null);
+                    // setFilterError(null); // removed unused error setter
                 }
             } catch (err) {
                 console.error("Error fetching filter metadata:", err);
-                setFilterError("Failed to load filter options");
+                // setFilterError("Failed to load filter options"); // removed unused error setter
             }
         };
 
@@ -263,7 +246,7 @@ const TreksPage = () => {
                     setAllTreks(transformedTreks);
                 }
 
-                setError(null);
+                // setError(null); // removed unused error setter
             } else if (response.data && response.data.data && Array.isArray(response.data.data.data)) {
                 const transformedTreks = response.data.data.data.map(transformApiTrek);
 
@@ -278,13 +261,13 @@ const TreksPage = () => {
                     setAllTreks(transformedTreks);
                 }
 
-                setError(null);
+                // setError(null); // removed unused error setter
             } else {
                 throw new Error('Invalid data format from API');
             }
         } catch (err) {
             console.error('Error fetching trek data:', err);
-            setError('Failed to load trek data. Using mock data instead.');
+            // setError('Failed to load trek data. Using mock data instead.'); // removed unused error setter
 
             setIsServerSearch(false);
             //   setAllTreks(mockTrekData);
@@ -709,4 +692,4 @@ const TreksPage = () => {
     );
 };
 
-export default TreksPage;
+export default ExplorePage;
