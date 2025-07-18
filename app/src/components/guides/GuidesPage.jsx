@@ -6,6 +6,7 @@ import GuideFilters from './GuideFilters';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import guidesService from '../../services/api/guidesService';
+import { Helmet } from 'react-helmet-async';
 
 // Mock data for guides - in a real app, this would be fetched from an API
 // const mockGuides = [
@@ -193,7 +194,12 @@ const GuidesPage = () => {
 //   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+    <>
+      <Helmet>
+        <title>Guides | TrekYourWorld</title>
+        <meta name="description" content="Find expert trekking guides for your next adventure. Browse profiles, ratings, and specializations on TrekYourWorld." />
+      </Helmet>
+      <div className="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Page header */}
         <div className="text-center mb-12">
@@ -212,6 +218,7 @@ const GuidesPage = () => {
           </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ import UserProtectedRoute from './components/auth/UserProtectedRoute';
 import LoginPage from './components/auth/LoginPage';
 import AuthCallback from './components/auth/AuthCallback';
 import { analyticsService } from './services/api/analytics';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Lazy-loaded components for better performance
 const HomePage = lazy(() => import('./components/home/HomePage'));
@@ -50,103 +51,105 @@ function App() {
     }
 
     return (
-        <AuthProvider>
-            <Router>
-                <AutoScrollToTop />
-                <Routes>
-                    {/* Public routes */}
-                    <Route path="/" element={<Layout />}>
-                        <Route index element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <HomePage />
-                            </Suspense>
-                        } />
-                        <Route path="/explore" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ExplorePage />
-                            </Suspense>
-                        } />
-                        <Route path="/explore/:id" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <TrekDetailsPage />
-                            </Suspense>
-                        } />
-                        <Route path="/compare-treks" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <CompareTreksPage />
-                            </Suspense>
-                        } />
-                        <Route path="/guides" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <GuidesPage />
-                            </Suspense>
-                        } />
-                        <Route path="/gallery" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <GalleryPage />
-                            </Suspense>
-                        } />
-                        <Route path="/contact" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ContactPage />
-                            </Suspense>
-                        } />
-                        {/* User Profile Route */}
-                        <Route path="/profile" element={
-                            <UserProtectedRoute>
+        <HelmetProvider>
+            <AuthProvider>
+                <Router>
+                    <AutoScrollToTop />
+                    <Routes>
+                        {/* Public routes */}
+                        <Route path="/" element={<Layout />}>
+                            <Route index element={
                                 <Suspense fallback={<LoadingFallback />}>
-                                    <UserProfilePage />
+                                    <HomePage />
                                 </Suspense>
-                            </UserProtectedRoute>
-                        } />
-                    </Route>
+                            } />
+                            <Route path="/explore" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ExplorePage />
+                                </Suspense>
+                            } />
+                            <Route path="/explore/:id" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <TrekDetailsPage />
+                                </Suspense>
+                            } />
+                            <Route path="/compare-treks" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <CompareTreksPage />
+                                </Suspense>
+                            } />
+                            <Route path="/guides" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <GuidesPage />
+                                </Suspense>
+                            } />
+                            <Route path="/gallery" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <GalleryPage />
+                                </Suspense>
+                            } />
+                            <Route path="/contact" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ContactPage />
+                                </Suspense>
+                            } />
+                            {/* User Profile Route */}
+                            <Route path="/profile" element={
+                                <UserProtectedRoute>
+                                    <Suspense fallback={<LoadingFallback />}>
+                                        <UserProfilePage />
+                                    </Suspense>
+                                </UserProtectedRoute>
+                            } />
+                        </Route>
 
-                    {/* Login route */}
-                    <Route path="/login" element={<LoginPage />} />
+                        {/* Login route */}
+                        <Route path="/login" element={<LoginPage />} />
 
-                    {/* OAuth callback route */}
-                    <Route path="/auth/callback" element={<AuthCallback />} />
+                        {/* OAuth callback route */}
+                        <Route path="/auth/callback" element={<AuthCallback />} />
 
-                    {/* Protected admin routes */}
-                    <Route path="/admin" element={
-                        <ProtectedRoute>
-                            <AdminLayout />
-                        </ProtectedRoute>
-                    }>
-                        <Route index element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <Dashboard />
-                            </Suspense>
-                        } />
-                        <Route path="banners" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ManageBanners />
-                            </Suspense>
-                        } />
-                        <Route path="treks" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ManageTreks />
-                            </Suspense>
-                        } />
-                        <Route path="users" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <ManageUsers />
-                            </Suspense>
-                        } />
-                        <Route path="analytics" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <Analytics />
-                            </Suspense>
-                        } />
-                        <Route path="settings" element={
-                            <Suspense fallback={<LoadingFallback />}>
-                                <Settings />
-                            </Suspense>
-                        } />
-                    </Route>
-                </Routes>
-            </Router>
-        </AuthProvider>
+                        {/* Protected admin routes */}
+                        <Route path="/admin" element={
+                            <ProtectedRoute>
+                                <AdminLayout />
+                            </ProtectedRoute>
+                        }>
+                            <Route index element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <Dashboard />
+                                </Suspense>
+                            } />
+                            <Route path="banners" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ManageBanners />
+                                </Suspense>
+                            } />
+                            <Route path="treks" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ManageTreks />
+                                </Suspense>
+                            } />
+                            <Route path="users" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ManageUsers />
+                                </Suspense>
+                            } />
+                            <Route path="analytics" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <Analytics />
+                                </Suspense>
+                            } />
+                            <Route path="settings" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <Settings />
+                                </Suspense>
+                            } />
+                        </Route>
+                    </Routes>
+                </Router>
+            </AuthProvider>
+        </HelmetProvider>
     );
 }
 

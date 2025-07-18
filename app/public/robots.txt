@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /admin
+Disallow: /auth
+Disallow: /node_modules
+Disallow: /backend
+Disallow: /private
+Disallow: /server
+Disallow: /bin
+Disallow: /db
+Disallow: /env
+Disallow: /repository
+Disallow: /scripts
+Disallow: /test
+Allow: /
+Sitemap: https://trekyourworld.com/sitemap.xml

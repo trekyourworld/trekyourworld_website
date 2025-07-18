@@ -7,6 +7,7 @@ import TrekCard from '../ui/TrekCard';
 import { treksService } from '../../services/api/treksService';
 import Dropdown from './Dropdown';
 import { transformApiTrek } from '../../utils/utils'; // Adjust the import path as necessary
+import { Helmet } from 'react-helmet-async';
 
 const ExplorePage = () => {
     const [treks, setTreks] = useState([]);
@@ -335,7 +336,12 @@ const ExplorePage = () => {
     };
 
     return (
-        <div className="bg-gray-50 min-h-screen py-8">
+        <>
+            <Helmet>
+                <title>Explore Treks | TrekYourWorld</title>
+                <meta name="description" content="Browse and compare trekking destinations, organisers, and guides. Find your next adventure with TrekYourWorld." />
+            </Helmet>
+            <div className="bg-gray-50 min-h-screen py-8">
             <div className="container mx-auto px-4">
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-gray-900 mb-4">Discover Treks</h1>
@@ -689,6 +695,7 @@ const ExplorePage = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
