@@ -6,13 +6,13 @@ import {
     ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { analyticsService } from '../../../services/api/analytics';
+import { adminService } from '../../../services/api/admin';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalTreks: 0,
-        totalRevenue: 0,
-        totalBookings: 0
+        totalGuides: 0
     });
     const [dailyVisits, setDailyVisits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -20,16 +20,16 @@ const Dashboard = () => {
     useEffect(() => {
         // Simulate API call to fetch dashboard data
         const fetchDashboardData = async () => {
-            // In a real app, this would be an API call
-            setTimeout(() => {
+            const response = await adminService.dashboardInfo();
+            console.log(response)
+            if (response.data.code == 200) {
                 setStats({
-                    totalUsers: 2457,
-                    totalTreks: 128,
-                    totalBookings: 876,
-                    totalRevenue: 285690
-                });
+                    totalUsers: response.data.data.totalUsers,
+                    totalTreks: response.data.data.totalTreks,
+                    totalGuides: response.data.data.totalGuides
+                })
                 setIsLoading(false);
-            }, 800);
+            }
         };
 
         const fetchDailyVisits = async () => {
@@ -62,29 +62,22 @@ const Dashboard = () => {
             title: 'Total Users',
             value: stats.totalUsers,
             icon: <UsersIcon className="h-8 w-8 text-blue-500" />,
-            change: '+12%',
-            changeType: 'increase'
+            change: '',
+            changeType: ''
         },
         {
             title: 'Total Treks',
             value: stats.totalTreks,
             icon: <MapIcon className="h-8 w-8 text-green-500" />,
-            change: '+5%',
-            changeType: 'increase'
+            change: '',
+            changeType: ''
         },
         {
-            title: 'Bookings',
-            value: stats.totalBookings,
+            title: 'Total Guides',
+            value: stats.totalGuides,
             icon: <ChartBarIcon className="h-8 w-8 text-purple-500" />,
-            change: '+18%',
-            changeType: 'increase'
-        },
-        {
-            title: 'Revenue',
-            value: `$${stats.totalRevenue.toLocaleString()}`,
-            icon: <CurrencyDollarIcon className="h-8 w-8 text-yellow-500" />,
-            change: '+8%',
-            changeType: 'increase'
+            change: '',
+            changeType: ''
         }
     ];
 
@@ -117,9 +110,9 @@ const Dashboard = () => {
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">{card.title}</p>
                                         <h3 className="text-2xl font-bold text-gray-800 mt-1">{card.value}</h3>
-                                        <p className={`text-sm mt-2 ${card.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}`}>
+                                        {/*<p className={`text-sm mt-2 ${card.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}`}>
                                             {card.change} from last month
-                                        </p>
+                                        </p>*/}
                                     </div>
                                     <div className="p-3 bg-gray-100 rounded-lg">
                                         {card.icon}
