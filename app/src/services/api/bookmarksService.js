@@ -3,7 +3,6 @@ import apiClient from './apiClient';
 // Add a trek to bookmarks
 export const addBookmark = async (trekId) => {
     const response = apiClient.post('/v1/bookmarks', { 'mountain_id': trekId });
-    console.log('Bookmark added:', response);
     return response;
 };
 
