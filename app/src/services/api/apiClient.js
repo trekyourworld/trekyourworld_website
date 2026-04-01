@@ -1,67 +1,94 @@
-import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const TIMEOUT_MS = 10000;
 
-// Create axios instance with default config
-const apiClient = axios.create({
-  // Base URL can be configured based on environment
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
-  headers: {
+function buildUrl(endpoint, params) {
+  const url = new URL(`${BASE_URL}${endpoint}`);
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        url.searchParams.append(key, String(value));
+      }
+    });
+  }
+  return url.toString();
+}
+
+async function request(method, endpoint, { body, params, headers: extraHeaders } = {}) {
+  const token = localStorage.getItem('auth_token');
+  const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-  },
-  timeout: 10000, // 10 seconds timeout
-});
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...extraHeaders,
+  };
 
-// Request interceptor for API calls
-apiClient.interceptors.request.use(
-  (config) => {
-    // Get the auth token from localStorage if it exists
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
-// Response interceptor for API calls
-apiClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
-    
-    // Skip redirect for logout requests that might return 401
-    const isLogoutRequest = originalRequest.url?.includes('/logout');
-    
-    // Handle 401 Unauthorized errors (token expired or invalid)
-    if (error.response?.status === 401 && !originalRequest._retry && !isLogoutRequest) {
-      originalRequest._retry = true;
-      
-      // Clear auth data on 401 responses
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-      
-      // Clear any auth cookies
-      document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      
-      // Redirect to login page if not already there
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
+  const url = buildUrl(endpoint, params);
+
+  let response;
+  try {
+    response = await fetch(url, {
+      method,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      const timeoutError = new Error('Request timed out');
+      timeoutError.code = 'ECONNABORTED';
+      throw timeoutError;
     }
-    
-    // If this is a logout request, don't worry about errors
-    // The auth service will clean up local storage
-    if (isLogoutRequest) {
-      console.warn('Logout request failed, but continuing with local logout');
-    }
-    
-    return Promise.reject(error);
+    throw err;
   }
-);
+
+  clearTimeout(timeoutId);
+
+  const isLogoutRequest = endpoint.includes('/logout');
+
+  // Handle 401 Unauthorized (token expired or invalid)
+  if (response.status === 401 && !isLogoutRequest) {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+  }
+
+  if (isLogoutRequest && !response.ok) {
+    console.warn('Logout request failed, but continuing with local logout');
+  }
+
+  // Parse response body
+  let data = null;
+  const contentType = response.headers.get('content-type');
+  if (response.status !== 204) {
+    if (contentType?.includes('application/json')) {
+      data = await response.json();
+    } else {
+      data = (await response.text()) || null;
+    }
+  }
+
+  if (!response.ok) {
+    const error = new Error(data?.message || `HTTP error ${response.status}`);
+    error.response = { status: response.status, data };
+    throw error;
+  }
+
+  return { data };
+}
+
+const apiClient = {
+  get: (endpoint, options = {}) => request('GET', endpoint, options),
+  post: (endpoint, body, options = {}) => request('POST', endpoint, { ...options, body }),
+  put: (endpoint, body, options = {}) => request('PUT', endpoint, { ...options, body }),
+  patch: (endpoint, body, options = {}) => request('PATCH', endpoint, { ...options, body }),
+  delete: (endpoint, options = {}) => request('DELETE', endpoint, options),
+};
 
 export default apiClient;
