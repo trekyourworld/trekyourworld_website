@@ -92,8 +92,8 @@ const AdminLayout = () => {
         ></div>
         
         {/* Sidebar */}
-        <div className="fixed inset-y-0 left-0 w-64 flex flex-col bg-gray-800 text-white">
-          <div className="h-16 flex items-center justify-between px-4 border-b border-gray-700">
+        <div className="fixed inset-y-0 left-0 w-64 flex flex-col bg-linear-to-b from-blue-700 to-blue-900 text-white">
+          <div className="h-16 flex items-center justify-between px-4 border-b border-blue-600/40">
             <span className="text-xl font-bold">Trek Admin</span>
             <button onClick={() => setSidebarOpen(false)}>
               <XMarkIcon className="h-6 w-6" />
@@ -107,8 +107,8 @@ const AdminLayout = () => {
                 to={item.path}
                 className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-colors ${
                   isActive(item.path) 
-                    ? 'bg-blue-600 text-white' 
-                    : 'text-gray-300 hover:bg-gray-700'
+                    ? 'bg-white/20 text-white' 
+                    : 'text-blue-100 hover:bg-white/10'
                 }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -120,7 +120,7 @@ const AdminLayout = () => {
             {/* Logout option in mobile menu */}
             <button
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-3 mb-2 rounded-lg transition-colors text-gray-300 hover:bg-gray-700"
+              className="flex items-center w-full px-4 py-3 mb-2 rounded-lg transition-colors text-blue-100 hover:bg-white/10"
             >
               <span className="mr-3">
                 <ArrowRightOnRectangleIcon className="w-6 h-6" />
@@ -132,8 +132,8 @@ const AdminLayout = () => {
       </div>
       
       {/* Sidebar - Desktop */}
-      <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-gray-800 text-white">
-        <div className="h-16 flex items-center px-6 border-b border-gray-700">
+      <div className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-linear-to-b from-blue-700 to-blue-900 text-white">
+        <div className="h-16 flex items-center px-6 border-b border-blue-600/40">
           <span className="text-xl font-bold">Trek Admin</span>
         </div>
         
@@ -144,8 +144,8 @@ const AdminLayout = () => {
               to={item.path}
               className={`flex items-center px-4 py-3 mb-3 rounded-lg transition-colors ${
                 isActive(item.path) 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-300 hover:bg-gray-700'
+                  ? 'bg-white/20 text-white' 
+                  : 'text-blue-100 hover:bg-white/10'
               }`}
             >
               <span className="mr-3">{item.icon}</span>
@@ -156,7 +156,7 @@ const AdminLayout = () => {
           {/* Logout option in desktop menu */}
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-3 mb-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-700"
+            className="flex items-center w-full px-4 py-3 mb-3 rounded-lg transition-colors text-blue-100 hover:bg-white/10"
           >
             <span className="mr-3">
               <ArrowRightOnRectangleIcon className="w-6 h-6" />
@@ -167,7 +167,7 @@ const AdminLayout = () => {
       </div>
       
       {/* Main Content */}
-      <div className="lg:ml-64 flex flex-col flex-grow">
+      <div className="lg:ml-64 flex flex-col grow">
         {/* Header */}
         <header className="bg-white shadow-sm z-10 h-16">
           <div className="px-4 h-full flex items-center justify-between">
@@ -178,7 +178,7 @@ const AdminLayout = () => {
               <Bars3Icon className="h-6 w-6" />
             </button>
             <div className="flex items-center">
-              <span className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+              <span className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold">
                 {user?.email.charAt(0).toUpperCase() || 'A'}
               </span>
               <span className="ml-2 text-gray-700">{user?.email || 'Admin User'}</span>

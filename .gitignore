@@ -2,3 +2,5 @@ app/node_modules
 
 app/.env
 app/.env.production
+
+TASKS.md
