@@ -19,6 +19,8 @@ const Dashboard = () => {
     });
     const [dailyVisits, setDailyVisits] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [recentBookings, setRecentBookings] = useState([]);
+    const [bookingsLoading, setBookingsLoading] = useState(true);
 
     useEffect(() => {
         // Simulate API call to fetch dashboard data
@@ -51,6 +53,23 @@ const Dashboard = () => {
 
         fetchDailyVisits()
         fetchDashboardData();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecentBookings = async () => {
+            setBookingsLoading(true);
+            try {
+                const response = await adminService.getRecentBookings();
+                if (response.data?.data) {
+                    setRecentBookings(response.data.data);
+                }
+            } catch {
+                // endpoint not yet available — empty state shown
+            } finally {
+                setBookingsLoading(false);
+            }
+        };
+        fetchRecentBookings();
     }, []);
 
     const statCards = [
@@ -86,14 +105,6 @@ const Dashboard = () => {
             change: '',
             changeType: ''
         }
-    ];
-
-    const recentBookings = [
-        { id: 'B2304', user: 'Jennifer Brown', trek: 'Everest Base Camp', date: '2025-04-10', amount: '$1,299' },
-        { id: 'B2303', user: 'Michael Smith', trek: 'Annapurna Circuit', date: '2025-04-08', amount: '$1,499' },
-        { id: 'B2302', user: 'Sarah Johnson', trek: 'Inca Trail', date: '2025-04-05', amount: '$999' },
-        { id: 'B2301', user: 'David Wilson', trek: 'Mont Blanc', date: '2025-04-02', amount: '$1,099' },
-        { id: 'B2300', user: 'Emma Davis', trek: 'Torres del Paine', date: '2025-03-30', amount: '$1,199' }
     ];
 
     return (
@@ -155,15 +166,35 @@ const Dashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {recentBookings.map((booking) => (
-                                        <tr key={booking.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3 text-sm font-medium text-gray-900">{booking.id}</td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">{booking.user}</td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">{booking.trek}</td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">{booking.date}</td>
-                                            <td className="px-4 py-3 text-sm text-gray-600">{booking.amount}</td>
+                                    {bookingsLoading ? (
+                                        [...Array(5)].map((_, i) => (
+                                            <tr key={i} className="animate-pulse">
+                                                <td className="px-4 py-3"><div className="h-4 w-16 bg-gray-200 rounded" /></td>
+                                                <td className="px-4 py-3"><div className="h-4 w-28 bg-gray-200 rounded" /></td>
+                                                <td className="px-4 py-3"><div className="h-4 w-36 bg-gray-200 rounded" /></td>
+                                                <td className="px-4 py-3"><div className="h-4 w-24 bg-gray-200 rounded" /></td>
+                                                <td className="px-4 py-3"><div className="h-4 w-16 bg-gray-200 rounded" /></td>
+                                            </tr>
+                                        ))
+                                    ) : recentBookings.length > 0 ? (
+                                        recentBookings.map((booking) => (
+                                            <tr key={booking.id} className="hover:bg-gray-50">
+                                                <td className="px-4 py-3 text-sm font-medium text-gray-900">{booking.id}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{booking.user}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{booking.trek}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{booking.date}</td>
+                                                <td className="px-4 py-3 text-sm text-gray-600">{booking.amount}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5} className="px-4 py-12 text-center">
+                                                <ChartBarIcon className="mx-auto h-10 w-10 text-gray-300 mb-2" />
+                                                <p className="text-gray-500 text-sm font-medium">No bookings data yet.</p>
+                                                <p className="text-gray-400 text-xs mt-1">Data will appear once the bookings endpoint is connected.</p>
+                                            </td>
                                         </tr>
-                                    ))}
+                                    )}
                                 </tbody>
                             </table>
                         </div>
