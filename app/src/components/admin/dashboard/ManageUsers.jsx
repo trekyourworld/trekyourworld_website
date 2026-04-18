@@ -109,7 +109,7 @@ const ManageUsers = () => {
       </div>
       
       {/* Search and Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+      <div className="bg-white p-4 rounded-xl shadow-lg mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-grow">
             <input
@@ -142,7 +142,7 @@ const ManageUsers = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">

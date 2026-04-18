@@ -209,16 +209,16 @@ const Analytics = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Trek Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Bookings
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Revenue
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Change
                 </th>
               </tr>
@@ -226,16 +226,10 @@ const Analytics = () => {
             <tbody className="bg-white divide-y divide-gray-200">
               {popularTreks.map((trek) => (
                 <tr key={trek.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{trek.name}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{trek.bookings}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">${trek.revenue.toLocaleString()}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{trek.name}</td>
+                  <td className="px-4 py-3 text-sm text-gray-500">{trek.bookings}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">${trek.revenue.toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm">
                     <div className={`inline-flex items-center ${trek.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {trek.change > 0 ? (
                         <ArrowUpIcon className="w-4 h-4 mr-1" />
