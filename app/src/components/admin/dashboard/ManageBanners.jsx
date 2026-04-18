@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const initialBanners = [
   // Example initial data
@@ -141,59 +141,63 @@ const ManageBanners = () => {
       )}
 
       {/* Banner List */}
-      <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
         {banners.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No banners found.
           </div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead>
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Image</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Link</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
-                <th className="px-4 py-2"></th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {banners.map((banner) => (
                 <tr key={banner.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 font-medium">{banner.title}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{banner.title}</td>
+                  <td className="px-4 py-3 text-sm">
                     {banner.imageUrl ? (
                       <img src={banner.imageUrl} alt={banner.title} className="h-12 w-auto rounded" />
                     ) : (
                       <span className="text-gray-400">No image</span>
                     )}
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-3 text-sm">
                     {banner.link ? (
                       <a href={banner.link} className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">{banner.link}</a>
                     ) : (
                       <span className="text-gray-400">-</span>
                     )}
                   </td>
-                  <td className="px-4 py-2">{banner.description || <span className="text-gray-400">-</span>}</td>
-                  <td className="px-4 py-2 flex gap-2">
-                    <button
-                      className="text-blue-600 hover:underline"
-                      onClick={() => handleEditClick(banner)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-red-600 hover:underline"
-                      onClick={() => handleDelete(banner.id)}
-                    >
-                      Delete
-                    </button>
+                  <td className="px-4 py-3 text-sm text-gray-600">{banner.description || <span className="text-gray-400">-</span>}</td>
+                  <td className="px-4 py-3 text-sm">
+                    <div className="flex space-x-2">
+                      <button
+                        className="text-blue-600 hover:text-blue-800"
+                        onClick={() => handleEditClick(banner)}
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        className="text-red-600 hover:text-red-800"
+                        onClick={() => handleDelete(banner.id)}
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
