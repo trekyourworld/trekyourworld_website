@@ -36,7 +36,7 @@ const Analytics = () => {
 
       {/* Time Period Selector */}
       <div className="mb-6">
-        <div className="bg-white shadow-sm rounded-lg p-1 inline-flex">
+        <div className="bg-white shadow-lg rounded-xl p-1 inline-flex">
           <button
             onClick={() => setTimeframe('week')}
             className={`px-4 py-2 rounded-md text-sm font-medium ${
@@ -83,7 +83,7 @@ const Analytics = () => {
       {/* Analytics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Bookings Card */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Bookings</p>
@@ -105,7 +105,7 @@ const Analytics = () => {
         </div>
 
         {/* Total Revenue Card */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Total Revenue</p>
@@ -127,7 +127,7 @@ const Analytics = () => {
         </div>
 
         {/* Average Rating Card */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">Average Rating</p>
@@ -151,7 +151,7 @@ const Analytics = () => {
         </div>
 
         {/* New Users Card */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="flex justify-between items-start">
             <div>
               <p className="text-sm font-medium text-gray-500">New Users</p>
@@ -177,7 +177,7 @@ const Analytics = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Chart */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Revenue Overview</h2>
           <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
             <div className="text-center text-gray-500">
@@ -188,7 +188,7 @@ const Analytics = () => {
         </div>
 
         {/* Bookings Distribution */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Bookings Distribution</h2>
           <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
             <div className="text-center text-gray-500">
@@ -200,7 +200,7 @@ const Analytics = () => {
       </div>
 
       {/* Popular Treks Table */}
-      <div className="bg-white rounded-lg shadow-md mt-6">
+      <div className="bg-white rounded-xl shadow-lg mt-6">
         <div className="px-6 py-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">Popular Treks</h2>
           <p className="text-sm text-gray-500">Top performing treks for this {timeframe}</p>

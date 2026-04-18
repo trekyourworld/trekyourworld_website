@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import {
     UsersIcon,
     MapIcon,
@@ -55,6 +56,7 @@ const Dashboard = () => {
             title: 'Daily Visits',
             value: dailyVisits,
             icon: <UsersIcon className="h-8 w-8 text-red-500" />,
+            iconBg: 'bg-red-50',
             change: '',
             changeType: ''
         },
@@ -62,6 +64,7 @@ const Dashboard = () => {
             title: 'Total Users',
             value: stats.totalUsers,
             icon: <UsersIcon className="h-8 w-8 text-blue-500" />,
+            iconBg: 'bg-blue-50',
             change: '',
             changeType: ''
         },
@@ -69,6 +72,7 @@ const Dashboard = () => {
             title: 'Total Treks',
             value: stats.totalTreks,
             icon: <MapIcon className="h-8 w-8 text-green-500" />,
+            iconBg: 'bg-green-50',
             change: '',
             changeType: ''
         },
@@ -76,6 +80,7 @@ const Dashboard = () => {
             title: 'Total Guides',
             value: stats.totalGuides,
             icon: <ChartBarIcon className="h-8 w-8 text-purple-500" />,
+            iconBg: 'bg-purple-50',
             change: '',
             changeType: ''
         }
@@ -94,36 +99,47 @@ const Dashboard = () => {
             <h1 className="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
 
             {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-3">
+                                    <div className="h-3 w-24 bg-gray-200 rounded-full" />
+                                    <div className="h-7 w-16 bg-gray-200 rounded-full" />
+                                </div>
+                                <div className="h-14 w-14 bg-gray-200 rounded-xl" />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             ) : (
                 <>
                     {/* Stats Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         {statCards.map((card, index) => (
-                            <div
+                            <motion.div
                                 key={index}
-                                className="bg-white rounded-lg shadow-sm p-6 transition-transform hover:transform hover:scale-105"
+                                className="bg-white rounded-xl shadow-lg p-6"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: index * 0.1 }}
+                                whileHover={{ y: -4 }}
                             >
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className="text-sm font-medium text-gray-500">{card.title}</p>
                                         <h3 className="text-2xl font-bold text-gray-800 mt-1">{card.value}</h3>
-                                        {/*<p className={`text-sm mt-2 ${card.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}`}>
-                                            {card.change} from last month
-                                        </p>*/}
                                     </div>
-                                    <div className="p-3 bg-gray-100 rounded-lg">
+                                    <div className={`p-3 ${card.iconBg} rounded-xl`}>
                                         {card.icon}
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
 
                     {/* Recent Bookings */}
-                    <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+                    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4">Recent Bookings</h2>
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
@@ -152,7 +168,7 @@ const Dashboard = () => {
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="bg-white rounded-lg shadow-sm p-6">
+                    <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors">

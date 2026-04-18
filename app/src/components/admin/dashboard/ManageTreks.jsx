@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import treksService from '../../../services/api/treksService';
 
@@ -329,9 +329,9 @@ const ManageTreks = () => {
                 </button>
                 {/* Add Trek Modal (rendered once at root) */}
                 {isAddModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-20">
-                        <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-                            <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={handleAddModalClose}>&times;</button>
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleAddModalClose}><XMarkIcon className="h-5 w-5" /></button>
                             <h2 className="text-xl font-semibold mb-4">Add New Trek</h2>
                             <form onSubmit={handleAddSubmit} className="space-y-4">
                                 <div>
@@ -563,9 +563,9 @@ const ManageTreks = () => {
                                                 </button>
                                                 {/* Delete Trek Modal (rendered once at root) */}
                                                 {isDeleteModalOpen && (
-                                                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-20">
-                                                        <div className="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 relative">
-                                                            <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={handleDeleteModalClose}>&times;</button>
+                                                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                        <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 relative">
+                                                            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleDeleteModalClose}><XMarkIcon className="h-5 w-5" /></button>
                                                             <h2 className="text-xl font-semibold mb-4 text-red-600">Delete Trek</h2>
                                                             <p className="mb-6">Are you sure you want to delete <span className="font-semibold">{deleteTrek?.name || deleteTrek?.title}</span>? This action cannot be undone.</p>
                                                             <div className="flex justify-end space-x-2">
@@ -578,9 +578,9 @@ const ManageTreks = () => {
                                             </div>
                                             {/* Edit Trek Modal (rendered once at root) */}
                                             {isEditModalOpen && (
-                                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-20">
-                                                    <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-                                                        <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600" onClick={handleEditModalClose}>&times;</button>
+                                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                                                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                                                        <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleEditModalClose}><XMarkIcon className="h-5 w-5" /></button>
                                                         <h2 className="text-xl font-semibold mb-4">Edit Trek</h2>
                                                         <form onSubmit={handleEditSubmit} className="space-y-4">
                                                             <div>
