@@ -330,7 +330,7 @@ const ManageTreks = () => {
                 {/* Add Trek Modal (rendered once at root) */}
                 {isAddModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                        <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative overflow-y-auto max-h-[80vh]">
                             <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleAddModalClose}><XMarkIcon className="h-5 w-5" /></button>
                             <h2 className="text-xl font-semibold mb-4">Add New Trek</h2>
                             <form onSubmit={handleAddSubmit} className="space-y-4">
@@ -579,7 +579,7 @@ const ManageTreks = () => {
                                             {/* Edit Trek Modal (rendered once at root) */}
                                             {isEditModalOpen && (
                                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-                                                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative">
+                                                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative overflow-y-auto max-h-[80vh]">
                                                         <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleEditModalClose}><XMarkIcon className="h-5 w-5" /></button>
                                                         <h2 className="text-xl font-semibold mb-4">Edit Trek</h2>
                                                         <form onSubmit={handleEditSubmit} className="space-y-4">

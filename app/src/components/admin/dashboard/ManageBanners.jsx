@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, XMarkIcon, PlusIcon, PhotoIcon } from '@heroicons/react/24/outline';
 
 const initialBanners = [
   // Example initial data
@@ -57,11 +57,15 @@ const ManageBanners = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Manage Banners</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Manage Banners</h1>
+          <p className="text-gray-500 text-sm mt-1">Create and manage homepage banners and promotional content.</p>
+        </div>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
           onClick={handleAddClick}
         >
+          <PlusIcon className="h-5 w-5 mr-2" />
           Add Banner
         </button>
       </div>
@@ -143,8 +147,17 @@ const ManageBanners = () => {
       {/* Banner List */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
         {banners.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No banners found.
+          <div className="text-center py-16">
+            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+            <p className="text-gray-500 font-medium">No banners yet.</p>
+            <p className="text-gray-400 text-sm mt-1">Add your first banner to display on the homepage.</p>
+            <button
+              className="mt-4 inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+              onClick={handleAddClick}
+            >
+              <PlusIcon className="h-4 w-4 mr-1" />
+              Add Banner
+            </button>
           </div>
         ) : (
           <div className="overflow-x-auto">

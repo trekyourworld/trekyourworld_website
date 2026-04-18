@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
     UsersIcon,
@@ -10,6 +11,7 @@ import { analyticsService } from '../../../services/api/analytics';
 import { adminService } from '../../../services/api/admin';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalTreks: 0,
@@ -171,13 +173,13 @@ const Dashboard = () => {
                     <div className="bg-white rounded-xl shadow-lg p-6">
                         <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors">
+                            <button onClick={() => navigate('/admin/treks')} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors">
                                 Add New Trek
                             </button>
-                            <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md transition-colors">
+                            <button onClick={() => navigate('/admin/analytics')} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md transition-colors">
                                 View All Bookings
                             </button>
-                            <button className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md transition-colors">
+                            <button onClick={() => navigate('/admin/analytics')} className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-md transition-colors">
                                 Generate Reports
                             </button>
                         </div>
