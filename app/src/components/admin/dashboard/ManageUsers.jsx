@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PencilIcon, TrashIcon, PlusIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon, EyeIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -101,7 +101,10 @@ const ManageUsers = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Manage Users</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Manage Users</h1>
+          <p className="text-gray-500 text-sm mt-1">View and manage all registered platform users.</p>
+        </div>
         <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
           <PlusIcon className="h-5 w-5 mr-2" />
           Add New User
@@ -138,8 +141,38 @@ const ManageUsers = () => {
       
       {/* Users Table */}
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  {['ID', 'Name', 'Email', 'Role', 'Join Date', 'Treks', 'Status', 'Actions'].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {[...Array(6)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td className="px-4 py-3"><div className="h-4 w-8 bg-gray-200 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-28 bg-gray-200 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-40 bg-gray-200 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-5 w-16 bg-gray-200 rounded-full" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-24 bg-gray-200 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-4 w-8 bg-gray-200 rounded" /></td>
+                    <td className="px-4 py-3"><div className="h-5 w-14 bg-gray-200 rounded-full" /></td>
+                    <td className="px-4 py-3">
+                      <div className="flex space-x-2">
+                        <div className="h-5 w-5 bg-gray-200 rounded" />
+                        <div className="h-5 w-5 bg-gray-200 rounded" />
+                        <div className="h-5 w-5 bg-gray-200 rounded" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -203,8 +236,20 @@ const ManageUsers = () => {
           </div>
 
           {filteredUsers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No users found matching your search criteria.
+            <div className="text-center py-12">
+              <UsersIcon className="mx-auto h-12 w-12 text-gray-300 mb-3" />
+              <p className="text-gray-500 font-medium">
+                {searchTerm ? 'No users match your search.' : 'No users registered yet.'}
+              </p>
+              {!searchTerm && (
+                <button
+                  className="mt-4 inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors"
+                  onClick={() => {}}
+                >
+                  <PlusIcon className="h-4 w-4 mr-1" />
+                  Add New User
+                </button>
+              )}
             </div>
           )}
 
