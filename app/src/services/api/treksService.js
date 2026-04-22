@@ -71,7 +71,35 @@ export const treksService = {
    */
   getTopTreks: async (params = {}) => {
     return apiClient.get('/v1/mountains/topTreks', { params });
-  }
+  },
+
+  /**
+   * Create a new trek (admin only)
+   * @param {Object} data - Trek data to create
+   * @returns {Promise<Object>} - Created trek object
+   */
+  createTrek: async (data) => {
+    return apiClient.post('/v1/mountains', data);
+  },
+
+  /**
+   * Update an existing trek by UUID (admin only)
+   * @param {string} uuid - Trek UUID
+   * @param {Object} data - Fields to update
+   * @returns {Promise<Object>} - Updated trek object
+   */
+  updateTrek: async (uuid, data) => {
+    return apiClient.put(`/v1/mountains/${uuid}`, data);
+  },
+
+  /**
+   * Delete (soft-delete) a trek by UUID (admin only)
+   * @param {string} uuid - Trek UUID
+   * @returns {Promise<void>}
+   */
+  deleteTrek: async (uuid) => {
+    return apiClient.delete(`/v1/mountains/${uuid}`);
+  },
 };
 
 export default treksService;
