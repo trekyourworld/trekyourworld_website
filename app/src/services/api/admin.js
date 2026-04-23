@@ -6,9 +6,21 @@ export const adminService = {
         return apiClient.get('/v1/admin/dashboard')
     },
 
-    // 🔴 Backend: GET /v1/admin/bookings/recent not yet built
     getRecentBookings: async () => {
         return apiClient.get('/v1/admin/bookings/recent')
+    },
+
+    // User management
+    getUsers: async () => {
+        return apiClient.get('/v1/admin/users')
+    },
+
+    updateUser: async (id, data) => {
+        return apiClient.put(`/v1/admin/users/${id}`, data)
+    },
+
+    deleteUser: async (id) => {
+        return apiClient.delete(`/v1/admin/users/${id}`)
     },
 
 }
