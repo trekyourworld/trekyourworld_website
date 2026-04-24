@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { PencilIcon, TrashIcon, UsersIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon, UsersIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { adminService } from '../../../services/api/admin';
 
 const ROLES = ['user', 'guide', 'admin'];
