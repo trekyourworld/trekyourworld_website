@@ -45,4 +45,9 @@ export const adminService = {
         return apiClient.get(`/v1/admin/analytics?period=${period}`)
     },
 
+    // Settings
+    saveSettings: async (tab, data) => {
+        return apiClient.put('/v1/admin/settings', { tab, data })
+    },
+
 }
