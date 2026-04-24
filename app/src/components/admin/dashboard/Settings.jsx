@@ -24,7 +24,7 @@ const SaveRow = ({ isSaving, onSave, onCancel, showCancel = false }) => (
       <button
         type="button"
         onClick={onCancel}
-        className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
       >
         Cancel
       </button>
@@ -33,7 +33,7 @@ const SaveRow = ({ isSaving, onSave, onCancel, showCancel = false }) => (
       type="button"
       onClick={onSave}
       disabled={isSaving}
-      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      className="inline-flex justify-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isSaving ? 'Saving…' : 'Save Changes'}
     </button>
@@ -127,7 +127,7 @@ const Settings = () => {
         {/* Mobile select */}
         <div className="sm:hidden p-4">
           <select
-            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="block w-full py-2 px-3 border border-gray-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value)}
           >
@@ -176,7 +176,7 @@ const Settings = () => {
                     id="site-name"
                     value={general.siteName}
                     onChange={(e) => setGeneral({ ...general, siteName: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -186,7 +186,7 @@ const Settings = () => {
                     rows={3}
                     value={general.siteDescription}
                     onChange={(e) => setGeneral({ ...general, siteDescription: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -195,7 +195,7 @@ const Settings = () => {
                     id="timezone"
                     value={general.timezone}
                     onChange={(e) => setGeneral({ ...general, timezone: e.target.value })}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="UTC">UTC (Coordinated Universal Time)</option>
                     <option value="UTC+1">UTC+1 (Central European Time)</option>
@@ -213,7 +213,7 @@ const Settings = () => {
                     id="language"
                     value={general.language}
                     onChange={(e) => setGeneral({ ...general, language: e.target.value })}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
@@ -285,7 +285,7 @@ const Settings = () => {
                     id="passwordExpiry"
                     value={security.passwordExpiry}
                     onChange={(e) => setSecurity({ ...security, passwordExpiry: e.target.value })}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="never">Never</option>
                     <option value="30days">Every 30 days</option>
@@ -308,7 +308,7 @@ const Settings = () => {
                   <h3 className="text-sm font-medium text-gray-700 mb-2">Session Management</h3>
                   <button
                     type="button"
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     Sign Out All Other Sessions
                   </button>
@@ -333,7 +333,7 @@ const Settings = () => {
                     id="name"
                     value={account.name}
                     onChange={(e) => setAccount({ ...account, name: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -343,7 +343,7 @@ const Settings = () => {
                     id="email"
                     value={account.email}
                     onChange={(e) => setAccount({ ...account, email: e.target.value })}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -356,7 +356,7 @@ const Settings = () => {
                         id="current-password"
                         value={account.currentPassword}
                         onChange={(e) => setAccount({ ...account, currentPassword: e.target.value })}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -366,7 +366,7 @@ const Settings = () => {
                         id="new-password"
                         value={account.newPassword}
                         onChange={(e) => setAccount({ ...account, newPassword: e.target.value })}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                     <div>
@@ -376,7 +376,7 @@ const Settings = () => {
                         id="confirm-password"
                         value={account.confirmPassword}
                         onChange={(e) => setAccount({ ...account, confirmPassword: e.target.value })}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="mt-1 block w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
@@ -385,7 +385,7 @@ const Settings = () => {
                   <h3 className="text-sm font-medium text-gray-700 mb-2">Danger Zone</h3>
                   <button
                     type="button"
-                    className="inline-flex items-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="px-4 py-2 text-sm font-medium text-red-700 border border-red-300 rounded-lg hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Delete Account
                   </button>

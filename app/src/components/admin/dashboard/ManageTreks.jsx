@@ -336,11 +336,11 @@ const ManageTreks = () => {
                             <form onSubmit={handleAddSubmit} className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Name</label>
-                                    <input type="text" name="name" value={addForm.name} onChange={handleAddFormChange} className="w-full px-3 py-2 border rounded-lg" required />
+                                    <input type="text" name="name" value={addForm.name} onChange={handleAddFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Location</label>
-                                    <input type="text" name="location" value={addForm.location} onChange={handleAddFormChange} className="w-full px-3 py-2 border rounded-lg" required />
+                                    <input type="text" name="location" value={addForm.location} onChange={handleAddFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Difficulty</label>
@@ -423,18 +423,18 @@ const ManageTreks = () => {
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Duration (days)</label>
-                                    <input type="number" name="duration" value={addForm.duration} onChange={handleAddFormChange} className="w-full px-3 py-2 border rounded-lg" min="1" required />
+                                    <input type="number" name="duration" value={addForm.duration} onChange={handleAddFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" required />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium mb-1">Status</label>
-                                    <select name="status" value={addForm.status} onChange={handleAddFormChange} className="w-full px-3 py-2 border rounded-lg" required>
+                                    <select name="status" value={addForm.status} onChange={handleAddFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
-                                <div className="flex justify-end">
-                                    <button type="button" className="mr-2 px-4 py-2 rounded bg-gray-200 hover:bg-gray-300" onClick={handleAddModalClose}>Cancel</button>
-                                    <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700" disabled={isAddLoading}>{isAddLoading ? 'Adding...' : 'Add Trek'}</button>
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <button type="button" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors" onClick={handleAddModalClose}>Cancel</button>
+                                    <button type="submit" className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-colors" disabled={isAddLoading}>{isAddLoading ? 'Adding...' : 'Add Trek'}</button>
                                 </div>
                             </form>
                         </div>
@@ -443,7 +443,7 @@ const ManageTreks = () => {
             </div>
 
             {/* Search and Filters */}
-            <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+            <div className="bg-white p-4 rounded-xl shadow-lg mb-6">
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex-grow">
                         <input
@@ -481,7 +481,7 @@ const ManageTreks = () => {
 
             {/* Error Message */}
             {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm" role="alert">
                     <p>{error}</p>
                 </div>
             )}
@@ -492,7 +492,7 @@ const ManageTreks = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                 </div>
             ) : (
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
@@ -568,9 +568,9 @@ const ManageTreks = () => {
                                                             <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" onClick={handleDeleteModalClose}><XMarkIcon className="h-5 w-5" /></button>
                                                             <h2 className="text-xl font-semibold mb-4 text-red-600">Delete Trek</h2>
                                                             <p className="mb-6">Are you sure you want to delete <span className="font-semibold">{deleteTrek?.name || deleteTrek?.title}</span>? This action cannot be undone.</p>
-                                                            <div className="flex justify-end space-x-2">
-                                                                <button type="button" className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300" onClick={handleDeleteModalClose} disabled={isDeleteLoading}>Cancel</button>
-                                                                <button type="button" className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700" onClick={handleDeleteConfirm} disabled={isDeleteLoading}>{isDeleteLoading ? 'Deleting...' : 'Delete'}</button>
+                                                            <div className="flex justify-end gap-2">
+                                                                <button type="button" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors" onClick={handleDeleteModalClose} disabled={isDeleteLoading}>Cancel</button>
+                                                                <button type="button" className="px-4 py-2 rounded-lg text-sm font-medium bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 transition-colors" onClick={handleDeleteConfirm} disabled={isDeleteLoading}>{isDeleteLoading ? 'Deleting...' : 'Delete'}</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -585,11 +585,11 @@ const ManageTreks = () => {
                                                         <form onSubmit={handleEditSubmit} className="space-y-4">
                                                             <div>
                                                                 <label className="block text-sm font-medium mb-1">Name</label>
-                                                                <input type="text" name="name" value={editForm.name} onChange={handleEditFormChange} className="w-full px-3 py-2 border rounded-lg" required />
+                                                                <input type="text" name="name" value={editForm.name} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                                                             </div>
                                                             <div>
                                                                 <label className="block text-sm font-medium mb-1">Location</label>
-                                                                <input type="text" name="location" value={editForm.location} onChange={handleEditFormChange} className="w-full px-3 py-2 border rounded-lg" required />
+                                                                <input type="text" name="location" value={editForm.location} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                                                             </div>
                                                             <div>
                                                                 <label className="block text-sm font-medium mb-1">Difficulty</label>
@@ -674,18 +674,18 @@ const ManageTreks = () => {
                                                             {/* End of Difficulty Multi-Select */}
                                                             <div>
                                                                 <label className="block text-sm font-medium mb-1">Duration (days)</label>
-                                                                <input type="number" name="duration" value={editForm.duration} onChange={handleEditFormChange} className="w-full px-3 py-2 border rounded-lg" min="1" required />
+                                                                <input type="number" name="duration" value={editForm.duration} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" required />
                                                             </div>
                                                             <div>
                                                                 <label className="block text-sm font-medium mb-1">Status</label>
-                                                                <select name="status" value={editForm.status} onChange={handleEditFormChange} className="w-full px-3 py-2 border rounded-lg" required>
+                                                                <select name="status" value={editForm.status} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                                                     <option value="Active">Active</option>
                                                                     <option value="Inactive">Inactive</option>
                                                                 </select>
                                                             </div>
-                                                            <div className="flex justify-end">
-                                                                <button type="button" className="mr-2 px-4 py-2 rounded bg-gray-200 hover:bg-gray-300" onClick={handleEditModalClose}>Cancel</button>
-                                                                <button type="submit" className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700" disabled={isEditLoading}>{isEditLoading ? 'Saving...' : 'Save Changes'}</button>
+                                                            <div className="flex justify-end gap-2 pt-2">
+                                                                <button type="button" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors" onClick={handleEditModalClose}>Cancel</button>
+                                                                <button type="submit" className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-colors" disabled={isEditLoading}>{isEditLoading ? 'Saving...' : 'Save Changes'}</button>
                                                             </div>
                                                         </form>
                                                     </div>

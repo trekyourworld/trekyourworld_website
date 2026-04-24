@@ -222,7 +222,7 @@ const ManageBanners = () => {
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
-                  className="px-4 py-2 rounded-lg border text-sm"
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors"
                   onClick={handleCancel}
                 >
                   Cancel
