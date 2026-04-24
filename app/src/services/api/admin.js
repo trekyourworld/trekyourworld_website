@@ -23,4 +23,21 @@ export const adminService = {
         return apiClient.delete(`/v1/admin/users/${id}`)
     },
 
+    // Banner management
+    getBanners: async () => {
+        return apiClient.get('/v1/admin/banners')
+    },
+
+    createBanner: async (data) => {
+        return apiClient.post('/v1/admin/banners', data)
+    },
+
+    updateBanner: async (id, data) => {
+        return apiClient.put(`/v1/admin/banners/${id}`, data)
+    },
+
+    deleteBanner: async (id) => {
+        return apiClient.delete(`/v1/admin/banners/${id}`)
+    },
+
 }
