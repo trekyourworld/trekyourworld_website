@@ -40,4 +40,9 @@ export const adminService = {
         return apiClient.delete(`/v1/admin/banners/${id}`)
     },
 
+    // Analytics
+    getAnalytics: async (period) => {
+        return apiClient.get(`/v1/admin/analytics?period=${period}`)
+    },
+
 }
