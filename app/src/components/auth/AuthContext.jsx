@@ -132,6 +132,18 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
 
+  // Check if current user is a guide (guide, community_admin, or admin)
+  const isGuide = () => {
+    if (!user?.roles) return false;
+    return user.roles.some(r => r === 'guide' || r === 'community_admin' || r === 'admin');
+  };
+
+  // Check if current user is a community admin (community_admin or admin)
+  const isCommunityAdmin = () => {
+    if (!user?.roles) return false;
+    return user.roles.some(r => r === 'community_admin' || r === 'admin');
+  };
+
   // Context value
   const value = {
     isAuthenticated,
@@ -142,6 +154,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     authError,
     isAdmin,
+    isGuide,
+    isCommunityAdmin,
     loading,
   };
 

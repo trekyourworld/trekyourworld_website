@@ -10,7 +10,7 @@ const Header = () => {
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, user, isAdmin, logout } = useAuth();
+  const { isAuthenticated, user, isAdmin, isGuide, isCommunityAdmin, logout } = useAuth();
   const userMenuRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -146,6 +146,24 @@ const Header = () => {
                     >
                       My Profile
                     </Link>
+                    {isGuide() && (
+                      <Link 
+                        to="/profile?tab=trails" 
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Trails
+                      </Link>
+                    )}
+                    {isCommunityAdmin() && (
+                      <Link 
+                        to="/profile?tab=community" 
+                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Community
+                      </Link>
+                    )}
                     {isAdmin() && (
                       <Link 
                         to="/admin" 
@@ -231,6 +249,24 @@ const Header = () => {
                   >
                     My Profile
                   </Link>
+                  {isGuide() && (
+                    <Link
+                      to="/profile?tab=trails"
+                      className="block w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                      onClick={toggleMenu}
+                    >
+                      My Trails
+                    </Link>
+                  )}
+                  {isCommunityAdmin() && (
+                    <Link
+                      to="/profile?tab=community"
+                      className="block w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors"
+                      onClick={toggleMenu}
+                    >
+                      My Community
+                    </Link>
+                  )}
                   {isAdmin() && (
                     <Link
                       to="/admin"
