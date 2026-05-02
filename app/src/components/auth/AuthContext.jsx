@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchUserProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
   // Set up Google OAuth callback handler
@@ -148,6 +149,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 // Hook to use auth context
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

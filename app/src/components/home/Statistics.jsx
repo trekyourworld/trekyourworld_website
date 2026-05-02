@@ -109,7 +109,7 @@ const Statistics = () => {
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Why Trekkers Trust TrekYourWorld</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            TrekYourWorld is not a trekking company, but your go-to information website before planning any trek. Get all the details about your next adventure, compare organiser prices, and connect directly with local guides—empowering you to explore smarter and safer.
+            TrekYourWorld is not a trekking company, but your go-to information website before planning any trek. Get all the details about your next adventure, compare community prices, and connect directly with local guides—empowering you to explore smarter and safer.
           </p>
         </div>
 

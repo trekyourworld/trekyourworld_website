@@ -91,9 +91,9 @@ import { Helmet } from 'react-helmet-async';
 const GuidesPage = () => {
 //   const { isAuthenticated, loading } = useAuth();
   const [guides, setGuides] = useState([]);
-  const [filteredGuides, setFilteredGuides] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
+  const [_filteredGuides, setFilteredGuides] = useState([]);
+  const [searchQuery, _setSearchQuery] = useState('');
+  const [filters, _setFilters] = useState({
     specializations: [],
     languages: [],
     experience: 0,

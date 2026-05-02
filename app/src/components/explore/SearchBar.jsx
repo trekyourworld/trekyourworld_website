@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch }) => {
         const treksData = response.data.data.map((trek, index) => ({
           id: trek.id || index,
           name: trek.title,
-          organiser: trek.organiser,
+          community: trek.community,
         }));
         setAllTreks(treksData);
       } catch (error) {
@@ -134,7 +134,7 @@ const SearchBar = ({ onSearch }) => {
                   onClick={() => selectSuggestion(suggestion)}
                 >
                   <div className="font-medium">{suggestion.name}</div>
-                  <div className="text-sm text-gray-500">{suggestion.organiser}</div>
+                  <div className="text-sm text-gray-500">{suggestion.community}</div>
                 </li>
               ))}
             </ul>

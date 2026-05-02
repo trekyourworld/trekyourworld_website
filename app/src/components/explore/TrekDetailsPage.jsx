@@ -63,7 +63,7 @@ const TrekDetailsPage = () => {
                         price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
                         description: apiTrek.description || `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
                         elevation: apiTrek.elevation,
-                        organiser: apiTrek.org || "Unknown",
+                        community: apiTrek.org || "Unknown",
                         bestTimeToVisit: apiTrek.bestTimeToTarget || [],
                         distance: apiTrek.distance || "N/A",
                         tags: apiTrek.tags || [],
@@ -79,7 +79,7 @@ const TrekDetailsPage = () => {
                                 })) || [],
                             }
                             : null, // Add itinerary to trek state
-                        organisers: apiTrek.organisers || [],
+                        communities: apiTrek.communities || [],
                     });
                     setError(null);
                 } else {
@@ -353,17 +353,17 @@ const TrekDetailsPage = () => {
                                         </div>
                                     </div>
 
-                                    {/* Organisers list */}
-                                    {Array.isArray(trek.organisers) && trek.organisers.length > 0 && (
+                                    {/* Communities list */}
+                                    {Array.isArray(trek.communities) && trek.communities.length > 0 && (
                                         <div className="mb-6 text-left">
-                                            <span className="text-gray-500 text-sm text-left block mb-1">Organisers</span>
+                                            <span className="text-gray-500 text-sm text-left block mb-1">Communities</span>
                                             <ul className="list-disc list-inside ml-2">
-                                                {trek.organisers.map((org, idx) => (
+                                                {trek.communities.map((community, idx) => (
                                                     <li key={idx} className="text-gray-700 text-sm">
-                                                        {org.website ? (
-                                                            <a href={org.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{org.name}</a>
+                                                        {community.website ? (
+                                                            <a href={community.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{community.name}</a>
                                                         ) : (
-                                                            org.name
+                                                            community.name
                                                         )}
                                                     </li>
                                                 ))}

@@ -34,7 +34,7 @@ export const treksService = {
   /**
    * Fetch treks from the v1 API endpoint
    * @param {Object} params - Query parameters for filtering
-   * @returns {Promise<Array>} - Array of trek objects with organization, uuid, title, etc.
+   * @returns {Promise<Array>} - Array of trek objects with community, uuid, title, etc.
    */
   fetchTreksFromV1: async (params = {}) => {
     return apiClient.get('/v1/mountains/search', { params });

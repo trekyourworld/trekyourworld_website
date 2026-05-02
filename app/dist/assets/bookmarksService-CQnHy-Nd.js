@@ -1,1 +1,0 @@
-import{d as o}from"./index-CqS5lih9.js";const r=async e=>{const a=o.post("/v1/bookmarks",{mountain_id:e});return console.log("Bookmark added:",a),a},s=async e=>o.delete(`/v1/bookmarks/${e}`),t=async()=>o.get("/v1/bookmarks"),n=async()=>o.get("/v1/bookmarks?callType=detailed"),m={addBookmark:r,removeBookmark:s,getBookmarks:t};export{m as b,n as g};
