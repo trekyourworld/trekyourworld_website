@@ -9,7 +9,7 @@ export const guidesService = {
    * @param {Object} params - Query parameters for filtering, pagination, etc.
    * @returns {Promise<Object>} - Response with guides data
    */
-  getAllGuides: async (params = {}) => {
+  getAllGuides: async () => {
     return []
     // return apiClient.get('/guides', { params });
   },

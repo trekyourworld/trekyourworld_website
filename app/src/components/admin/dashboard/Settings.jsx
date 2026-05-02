@@ -146,7 +146,7 @@ const Settings = () => {
               { key: 'notifications', label: 'Notifications', Icon: BellIcon },
               { key: 'security', label: 'Security & Privacy', Icon: ShieldCheckIcon },
               { key: 'account', label: 'Account', Icon: UserCircleIcon },
-            ].map(({ key, label, Icon: TabIcon }) => (
+            ].map(({ key, label, Icon }) => (
               <button
                 key={key}
                 onClick={() => setActiveTab(key)}
@@ -156,7 +156,7 @@ const Settings = () => {
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <TabIcon className="w-5 h-5 inline-block mr-2 -mt-1" />
+                <Icon className="w-5 h-5 inline-block mr-2 -mt-1" />
                 {label}
               </button>
             ))}

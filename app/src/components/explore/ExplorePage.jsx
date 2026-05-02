@@ -19,9 +19,8 @@ const ExplorePage = () => {
         duration: [],
         location: [],
         price: [],
-        organiser: []
+        community: []
     });
-    // Removed unused error state
     const [isServerSearch, setIsServerSearch] = useState(true);
 
     // Pagination state
@@ -160,12 +159,12 @@ const ExplorePage = () => {
             });
         }
 
-        // Apply organiser filters
-        if (activeFilters.organiser.length > 0) {
+        // Apply community filters
+        if (activeFilters.community.length > 0) {
             results = results.filter(trek => {
-                const trekOrganiser = trek.organiser ? trek.organiser.toLowerCase() : '';
-                return activeFilters.organiser.some(organiser =>
-                    trekOrganiser.includes(organiser.toLowerCase())
+                const trekCommunity = trek.community ? trek.community.toLowerCase() : '';
+                return activeFilters.community.some(community =>
+                    trekCommunity.includes(community.toLowerCase())
                 );
             });
         }
@@ -209,8 +208,8 @@ const ExplorePage = () => {
                 filterParams.price = activeFilters.price;
             }
 
-            if (activeFilters.organiser.length > 0) {
-                filterParams.organiser = activeFilters.organiser;
+            if (activeFilters.community.length > 0) {
+                filterParams.community = activeFilters.community;
             }
 
             // Check if any filters are applied
@@ -339,7 +338,7 @@ const ExplorePage = () => {
         <>
             <Helmet>
                 <title>Explore Treks | TrekYourWorld</title>
-                <meta name="description" content="Browse and compare trekking destinations, organisers, and guides. Find your next adventure with TrekYourWorld." />
+                <meta name="description" content="Browse and compare trekking destinations, communities, and guides. Find your next adventure with TrekYourWorld." />
             </Helmet>
             <div className="bg-gray-50 min-h-screen py-8">
             <div className="container mx-auto px-4">
@@ -557,7 +556,7 @@ const ExplorePage = () => {
                                                 duration: [],
                                                 location: [],
                                                 price: [],
-                                                organiser: []
+                                                community: []
                                             });
                                         }}
                                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

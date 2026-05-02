@@ -13,7 +13,7 @@ const HomePage = () => {
     <>
       <Helmet>
         <title>TrekYourWorld | Plan Your Next Trek with Confidence</title>
-        <meta name="description" content="TrekYourWorld is your one-stop destination for unbiased trek and mountain information, organiser price comparisons, and direct guide contacts—empowering every trekker to explore smarter." />
+        <meta name="description" content="TrekYourWorld is your one-stop destination for unbiased trek and mountain information, community price comparisons, and direct guide contacts—empowering every trekker to explore smarter." />
         {/* Resource Hints for Performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -54,7 +54,7 @@ const HomePage = () => {
             </h1>
 
             <p className="text-xl text-center md:text-2xl mb-8">
-              TrekYourWorld is your one-stop destination for unbiased trek and mountain information, organiser price comparisons, and direct guide contacts—empowering every trekker to explore smarter.
+              TrekYourWorld is your one-stop destination for unbiased trek and mountain information, community price comparisons, and direct guide contacts—empowering every trekker to explore smarter.
             </p>
 
             <div className="flex flex-col justify-center sm:flex-row gap-4">
@@ -96,7 +96,7 @@ const HomePage = () => {
         <div className="w-full px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Stay Ahead of the Trail</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Get the latest trek updates, organiser deals, and expert tips—straight to your inbox.
+            Get the latest trek updates, community deals, and expert tips—straight to your inbox.
           </p>
 
           <form className="max-w-md mx-auto flex flex-col md:flex-row gap-4">

@@ -268,6 +268,7 @@ const ManageTreks = () => {
     // Initial load and when page changes
     useEffect(() => {
         fetchTreks(pagination.currentPage, searchTerm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pagination.currentPage, filters]);
 
     // Handle search with debounce
@@ -282,6 +283,7 @@ const ManageTreks = () => {
             }
         }, 400);
         return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm]);
 
     const handlePageChange = (newPage) => {

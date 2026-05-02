@@ -11,7 +11,7 @@ export const transformApiTrek = (apiTrek) => {
         price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
         description: `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
         elevation: apiTrek.elevation,
-        organiser: apiTrek.org || "Unknown"
+        community: apiTrek.org || "Unknown"
     };
 };
 

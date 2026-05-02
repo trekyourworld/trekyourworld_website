@@ -43,7 +43,7 @@ const CompareTreksPage = () => {
                         price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
                         description: apiTrek.description || `Trek to ${apiTrek.title}`,
                         elevation: apiTrek.elevation || "N/A",
-                        organiser: apiTrek.org || "Unknown",
+                        community: apiTrek.org || "Unknown",
                         bestTimeToVisit: apiTrek.bestTimeToTarget || [],
                         distance: apiTrek.distance || "N/A",
                         tags: apiTrek.tags || []
@@ -252,16 +252,16 @@ const CompareTreksPage = () => {
                                 ))}
                             </tr>
 
-                            {/* Organizer Row */}
+                            {/* Community Row */}
                             <tr>
                                 <td className="py-3 px-4 border-b font-medium text-gray-700">
                                     <div className="flex items-center">
                                         <BuildingOfficeIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                        Organizer
+                                        Community
                                     </div>
                                 </td>
                                 {compareTreks.map(trek => (
-                                    <td key={trek.id} className="py-3 px-4 border-b">{trek.organiser}</td>
+                                    <td key={trek.id} className="py-3 px-4 border-b">{trek.community}</td>
                                 ))}
                             </tr>
 
