@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ClockIcon, MapPinIcon, StarIcon, ArrowTrendingUpIcon, CheckCircleIcon } from '@heroicons/react/24/solid';
+import { ACTIVITY_TYPE_LABELS } from '../../constants/activityTypes';
 
 const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSelect }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -15,6 +16,7 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
     duration, 
     rating, 
     elevation,
+    activityType,
   } = trek;
 
   const difficultyColor = {
@@ -70,6 +72,11 @@ const TrekCard = ({ trek, isSelectable = false, isSelected = false, onToggleSele
              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${difficultyColor[difficulty.toLowerCase()]}`}>
             {difficulty}
           </span>
+          {activityType && activityType !== 'trek' && (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+              {ACTIVITY_TYPE_LABELS[activityType] || activityType}
+            </span>
+          )}
           {isSelectable && (
             <div 
               onClick={(e) => {
