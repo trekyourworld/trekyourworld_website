@@ -29,6 +29,7 @@ const ManageBanners = lazy(() => import('./components/admin/dashboard/ManageBann
 const ManageUsers = lazy(() => import('./components/admin/dashboard/ManageUsers'));
 const Analytics = lazy(() => import('./components/admin/dashboard/Analytics'));
 const Settings = lazy(() => import('./components/admin/dashboard/Settings'));
+const PendingTrails = lazy(() => import('./components/admin/dashboard/PendingTrails'));
 
 // Loading component for suspense fallback
 const LoadingFallback = () => (
@@ -143,6 +144,11 @@ function App() {
                             <Route path="settings" element={
                                 <Suspense fallback={<LoadingFallback />}>
                                     <Settings />
+                                </Suspense>
+                            } />
+                            <Route path="trails" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <PendingTrails />
                                 </Suspense>
                             } />
                         </Route>
