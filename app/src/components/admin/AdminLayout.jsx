@@ -54,10 +54,11 @@ const AdminLayout = () => {
   };
 
   const navItems = [
-    { name: 'Dashboard',      path: '/admin',           icon: <HomeIcon className="w-5 h-5" /> },
-    { name: 'Manage Banners', path: '/admin/banners',   icon: <PhotoIcon className="w-5 h-5" /> },
-    { name: 'Manage Treks',   path: '/admin/treks',     icon: <MapIcon className="w-5 h-5" /> },
-    { name: 'Manage Users',   path: '/admin/users',     icon: <UsersIcon className="w-5 h-5" /> },
+    { name: 'Dashboard',       path: '/admin',           icon: <HomeIcon className="w-5 h-5" /> },
+    { name: 'Manage Banners',  path: '/admin/banners',   icon: <PhotoIcon className="w-5 h-5" /> },
+    { name: 'Manage Treks',    path: '/admin/treks',     icon: <MapIcon className="w-5 h-5" /> },
+    { name: 'Pending Trails',  path: '/admin/trails',    icon: <UserCircleIcon className="w-5 h-5" /> },
+    { name: 'Manage Users',    path: '/admin/users',     icon: <UsersIcon className="w-5 h-5" /> },
     { name: 'Analytics',      path: '/admin/analytics', icon: <ChartBarIcon className="w-5 h-5" /> },
     { name: 'Settings',       path: '/admin/settings',  icon: <Cog6ToothIcon className="w-5 h-5" /> },
   ];
