@@ -8,6 +8,7 @@ import { treksService } from '../../services/api/treksService';
 import Dropdown from './Dropdown';
 import { transformApiTrek } from '../../utils/utils'; // Adjust the import path as necessary
 import { Helmet } from 'react-helmet-async';
+import { ACTIVITY_TYPE_LABELS } from '../../constants/activityTypes';
 
 const ExplorePage = () => {
     const [treks, setTreks] = useState([]);
@@ -19,7 +20,8 @@ const ExplorePage = () => {
         duration: [],
         location: [],
         price: [],
-        community: []
+        community: [],
+        activityType: [],
     });
     const [isServerSearch, setIsServerSearch] = useState(true);
 
@@ -210,6 +212,10 @@ const ExplorePage = () => {
 
             if (activeFilters.community.length > 0) {
                 filterParams.community = activeFilters.community;
+            }
+
+            if (activeFilters.activityType.length > 0) {
+                filterParams.activityType = activeFilters.activityType;
             }
 
             // Check if any filters are applied
@@ -406,9 +412,26 @@ const ExplorePage = () => {
                         placeholder="All"
                         buttonClass="border-purple-300 focus:ring-purple-500 hover:border-purple-400"
                     />
+                    {/* Activity Type Dropdown */}
+                    <Dropdown
+                        label="Activity Type:"
+                        id="activity-type-select"
+                        options={
+                            filterMetadata && Array.isArray(filterMetadata)
+                                ? (filterMetadata.find(f => f.name === 'activityType')?.options || [])
+                                : []
+                        }
+                        value={activeFilters.activityType}
+                        onChange={vals => setActiveFilters(prev => ({
+                            ...prev,
+                            activityType: vals
+                        }))}
+                        placeholder="All"
+                        buttonClass="border-orange-300 focus:ring-orange-500 hover:border-orange-400"
+                    />
                 </div>
                 {/* Active Filters Display as removable pills */}
-                {(activeFilters.difficulty.length > 0 || activeFilters.duration.length > 0 || activeFilters.location.length > 0) && (
+                {(activeFilters.difficulty.length > 0 || activeFilters.duration.length > 0 || activeFilters.location.length > 0 || activeFilters.activityType.length > 0) && (
                     <div className="mb-4 flex flex-wrap gap-2 items-center">
                         <span className="text-gray-700 font-medium">Active Filters:</span>
                         {activeFilters.difficulty.map(val => (
@@ -452,6 +475,22 @@ const ExplorePage = () => {
                                     onClick={() => setActiveFilters(prev => ({
                                         ...prev,
                                         location: prev.location.filter(v => v !== val)
+                                    }))}
+                                    aria-label={`Remove ${val} filter`}
+                                >
+                                    &times;
+                                </button>
+                            </span>
+                        ))}
+                        {activeFilters.activityType.map(val => (
+                            <span key={val} className="flex items-center px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-semibold">
+                                {ACTIVITY_TYPE_LABELS[val] || val}
+                                <button
+                                    type="button"
+                                    className="ml-1 text-orange-500 hover:text-orange-700 focus:outline-none"
+                                    onClick={() => setActiveFilters(prev => ({
+                                        ...prev,
+                                        activityType: prev.activityType.filter(v => v !== val)
                                     }))}
                                     aria-label={`Remove ${val} filter`}
                                 >

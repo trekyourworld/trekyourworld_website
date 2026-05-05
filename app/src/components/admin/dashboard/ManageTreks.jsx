@@ -2,17 +2,18 @@ import { useState, useEffect, useRef } from 'react';
 import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import treksService from '../../../services/api/treksService';
+import { ACTIVITY_TYPE_LABELS } from '../../../constants/activityTypes';
 
 const ManageTreks = () => {
     // State for editing trek
     // State for adding trek
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [addForm, setAddForm] = useState({ name: '', location: '', difficulty: [], duration: '', status: 'Active' });
+    const [addForm, setAddForm] = useState({ name: '', location: '', difficulty: [], duration: '', status: 'Active', activityType: 'trek' });
     const [isAddLoading, setIsAddLoading] = useState(false);
 
     // Open add modal
     const handleAddClick = () => {
-        setAddForm({ name: '', location: '', difficulty: '', duration: '', status: 'Active' });
+        setAddForm({ name: '', location: '', difficulty: '', duration: '', status: 'Active', activityType: 'trek' });
         setIsAddModalOpen(true);
     };
 
@@ -57,6 +58,7 @@ const ManageTreks = () => {
                 difficulty: addForm.difficulty,
                 duration: addForm.duration,
                 status: addForm.status,
+                activityType: addForm.activityType,
             });
             setIsAddModalOpen(false);
             fetchTreks(pagination.currentPage, searchTerm);
@@ -103,7 +105,7 @@ const ManageTreks = () => {
     };
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editTrek, setEditTrek] = useState(null);
-    const [editForm, setEditForm] = useState({ name: '', location: '', difficulty: '', duration: '', status: '' });
+    const [editForm, setEditForm] = useState({ name: '', location: '', difficulty: '', duration: '', status: '', activityType: 'trek' });
     const [isEditLoading, setIsEditLoading] = useState(false);
     // State for custom multi-select dropdown (edit modal)
     // --- Custom Multi-Select Dropdown State for Edit Modal ---
@@ -137,6 +139,7 @@ const ManageTreks = () => {
             difficulty: Array.isArray(trek.difficulty) ? trek.difficulty : trek.difficulty ? [trek.difficulty] : [],
             duration: trek.duration || '',
             status: trek.status || '',
+            activityType: trek.activityType || 'trek',
         });
         setIsEditModalOpen(true);
         setShowDifficultyDropdown(false);
@@ -163,6 +166,7 @@ const ManageTreks = () => {
                 difficulty: editForm.difficulty,
                 duration: editForm.duration,
                 status: editForm.status,
+                activityType: editForm.activityType,
             });
             setIsEditModalOpen(false);
             setEditTrek(null);
@@ -434,6 +438,14 @@ const ManageTreks = () => {
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Activity Type</label>
+                                    <select name="activityType" value={addForm.activityType} onChange={handleAddFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                        {Object.entries(ACTIVITY_TYPE_LABELS).map(([value, label]) => (
+                                            <option key={value} value={value}>{label}</option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <div className="flex justify-end gap-2 pt-2">
                                     <button type="button" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors" onClick={handleAddModalClose}>Cancel</button>
                                     <button type="submit" className="px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition-colors" disabled={isAddLoading}>{isAddLoading ? 'Adding...' : 'Add Trek'}</button>
@@ -683,6 +695,14 @@ const ManageTreks = () => {
                                                                 <select name="status" value={editForm.status} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                                                     <option value="Active">Active</option>
                                                                     <option value="Inactive">Inactive</option>
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-sm font-medium mb-1">Activity Type</label>
+                                                                <select name="activityType" value={editForm.activityType} onChange={handleEditFormChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                                                    {Object.entries(ACTIVITY_TYPE_LABELS).map(([value, label]) => (
+                                                                        <option key={value} value={value}>{label}</option>
+                                                                    ))}
                                                                 </select>
                                                             </div>
                                                             <div className="flex justify-end gap-2 pt-2">
