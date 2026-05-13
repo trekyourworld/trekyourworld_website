@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { bookmarksService } from '../../services/api/bookmarksService';
 import { useAuth } from '../auth/AuthContext';
 import SignInModal from '../auth/SignInModal';
@@ -8,7 +8,8 @@ import { motion } from 'framer-motion';
 import { StarIcon, MapPinIcon, ClockIcon, ArrowTrendingUpIcon, TagIcon } from '@heroicons/react/24/solid';
 import { treksService } from '../../services/api/treksService';
 import ImageCarousel from './ImageCarousel';
-import ReviewCarousel from './ReviewCarousel';
+import { reviewService } from '../../services/api/reviewService';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const TrekDetailsPage = () => {
     const { id } = useParams();
@@ -18,9 +19,75 @@ const TrekDetailsPage = () => {
 
     const { isAuthenticated } = useAuth();
     const [showSignInModal, setShowSignInModal] = useState(false);
+
+    // Reviews state
+    const [reviews, setReviews] = useState([]);
+    const [reviewsTotal, setReviewsTotal] = useState(0);
+    const [reviewsPage, setReviewsPage] = useState(1);
+    const [reviewsLoading, setReviewsLoading] = useState(false);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [reviewForm, setReviewForm] = useState({ rating: 5, body: '' });
+    const [reviewSubmitting, setReviewSubmitting] = useState(false);
+    const [reviewError, setReviewError] = useState('');
+    const [reviewSuccess, setReviewSuccess] = useState(false);
     const [bookmarkLoading, setBookmarkLoading] = useState(false);
     const [bookmarkError, setBookmarkError] = useState('');
     const [isBookmarked, setIsBookmarked] = useState(false);
+
+    const REVIEWS_LIMIT = 5;
+
+    // Fetch published reviews for this trek
+    const fetchReviews = useCallback(async (page = 1, replace = false) => {
+        if (!id) return;
+        setReviewsLoading(true);
+        try {
+            const res = await reviewService.getTrekReviews(id, { page, limit: REVIEWS_LIMIT });
+            const paginated = res?.data?.data || {};
+            const items = paginated.data || [];
+            setReviewsTotal(paginated.totalItems || 0);
+            setReviews(prev => replace ? items : [...prev, ...items]);
+        } catch (e) {
+            console.error('Failed to fetch reviews:', e);
+        } finally {
+            setReviewsLoading(false);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        setReviews([]);
+        setReviewsPage(1);
+        fetchReviews(1, true);
+    }, [fetchReviews]);
+
+    const handleLoadMoreReviews = () => {
+        const next = reviewsPage + 1;
+        setReviewsPage(next);
+        fetchReviews(next);
+    };
+
+    const handleSubmitReview = async (e) => {
+        e.preventDefault();
+        if (!reviewForm.body || reviewForm.body.length < 10) {
+            setReviewError('Review must be at least 10 characters.');
+            return;
+        }
+        setReviewSubmitting(true);
+        setReviewError('');
+        try {
+            await reviewService.submitReview({ mountainId: id, rating: reviewForm.rating, body: reviewForm.body });
+            setReviewSuccess(true);
+            setReviewForm({ rating: 5, body: '' });
+            setTimeout(() => {
+                setShowReviewModal(false);
+                setReviewSuccess(false);
+            }, 1500);
+        } catch (err) {
+            const msg = err?.response?.data?.error || err?.message || 'Failed to submit review';
+            setReviewError(msg);
+        } finally {
+            setReviewSubmitting(false);
+        }
+    };
 
     // Fetch bookmarks for the user and check if this trek is already bookmarked
     useEffect(() => {
@@ -59,7 +126,7 @@ const TrekDetailsPage = () => {
                         location: apiTrek.location || "Unknown",
                         difficulty: Array.isArray(apiTrek.difficulty) ? apiTrek.difficulty[0] : "Moderate",
                         duration: apiTrek.duration ? `${apiTrek.duration} days` : "Unknown",
-                        rating: 4.5, // Default rating as API doesn't provide one
+                        rating: apiTrek.rating || null, // Populated by backend rating aggregation
                         price: apiTrek.cost ? parseInt(apiTrek.cost.replace(',', '')) : 999,
                         description: apiTrek.description || `Trek to ${apiTrek.title} - Elevation: ${apiTrek.elevation || 'N/A'}`,
                         elevation: apiTrek.elevation,
@@ -296,10 +363,109 @@ const TrekDetailsPage = () => {
                                         </div>
                                     </div>
                                 )}
-                                {/* Review carousel section */}
+                                {/* Reviews section */}
                                 <div className="mb-8">
-                                    <ReviewCarousel />
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h2 className="text-xl font-semibold text-gray-800">Reviews</h2>
+                                        {isAuthenticated && (
+                                            <button
+                                                onClick={() => setShowReviewModal(true)}
+                                                className="text-sm bg-green-600 text-white px-4 py-1.5 rounded-lg hover:bg-green-700 transition-colors"
+                                            >
+                                                Write a Review
+                                            </button>
+                                        )}
+                                    </div>
+                                    {reviews.length === 0 && !reviewsLoading && (
+                                        <p className="text-gray-500 text-sm">No reviews yet. Be the first to review!</p>
+                                    )}
+                                    <div className="space-y-4">
+                                        {reviews.map((rev) => (
+                                            <div key={rev.reviewId} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="font-medium text-gray-800 text-sm">{rev.userName || 'User'}</span>
+                                                    <span className="flex items-center gap-0.5">
+                                                        {[1,2,3,4,5].map(s => (
+                                                            <StarIcon key={s} className={`h-3.5 w-3.5 ${s <= rev.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
+                                                        ))}
+                                                    </span>
+                                                    <span className="text-xs text-gray-400 ml-auto">
+                                                        {new Date(rev.createdAt).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                                <p className="text-gray-700 text-sm">{rev.body}</p>
+                                                {rev.guideReply && (
+                                                    <div className="mt-3 ml-4 pl-3 border-l-2 border-green-200">
+                                                        <p className="text-xs text-green-700 font-medium mb-0.5">Guide Reply — {rev.guideReply.guideName}</p>
+                                                        <p className="text-sm text-gray-600">{rev.guideReply.body}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {reviews.length < reviewsTotal && (
+                                        <button
+                                            onClick={handleLoadMoreReviews}
+                                            disabled={reviewsLoading}
+                                            className="mt-4 text-sm text-blue-600 hover:underline disabled:opacity-50"
+                                        >
+                                            {reviewsLoading ? 'Loading…' : 'Load more reviews'}
+                                        </button>
+                                    )}
                                 </div>
+
+                                {/* Write Review Modal */}
+                                {showReviewModal && (
+                                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 relative">
+                                            <button
+                                                onClick={() => { setShowReviewModal(false); setReviewError(''); setReviewSuccess(false); }}
+                                                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                                            >
+                                                <XMarkIcon className="h-5 w-5" />
+                                            </button>
+                                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Write a Review</h3>
+                                            {reviewSuccess ? (
+                                                <p className="text-green-600 font-medium">Review submitted! It will appear after moderation.</p>
+                                            ) : (
+                                                <form onSubmit={handleSubmitReview} className="space-y-4">
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                                        <div className="flex gap-1">
+                                                            {[1,2,3,4,5].map(s => (
+                                                                <button
+                                                                    key={s}
+                                                                    type="button"
+                                                                    onClick={() => setReviewForm(f => ({ ...f, rating: s }))}
+                                                                >
+                                                                    <StarIcon className={`h-7 w-7 ${s <= reviewForm.rating ? 'text-yellow-400' : 'text-gray-300'}`} />
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-1">Your review</label>
+                                                        <textarea
+                                                            rows={4}
+                                                            value={reviewForm.body}
+                                                            onChange={e => setReviewForm(f => ({ ...f, body: e.target.value }))}
+                                                            placeholder="Share your experience (min 10 characters)"
+                                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                                                        />
+                                                    </div>
+                                                    {reviewError && <p className="text-red-500 text-sm">{reviewError}</p>}
+                                                    <button
+                                                        type="submit"
+                                                        disabled={reviewSubmitting}
+                                                        className="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50"
+                                                    >
+                                                        {reviewSubmitting ? 'Submitting…' : 'Submit Review'}
+                                                    </button>
+                                                </form>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* External link if available */}
                                 {trek.url && (
@@ -334,15 +500,18 @@ const TrekDetailsPage = () => {
                   </div> */}
 
                                     {/* Rating */}
-                                    <div className="mb-6">
-                                        <div className="flex items-center">
-                                            <span className="text-gray-500 text-sm mr-2">Rating</span>
+                                    {trek.rating && trek.rating.count > 0 && (
+                                        <div className="mb-6">
                                             <div className="flex items-center">
-                                                <StarIcon className="h-5 w-5 text-yellow-400" />
-                                                <span className="ml-1 text-gray-700">{trek.rating}</span>
+                                                <span className="text-gray-500 text-sm mr-2">Rating</span>
+                                                <div className="flex items-center">
+                                                    <StarIcon className="h-5 w-5 text-yellow-400" />
+                                                    <span className="ml-1 text-gray-700">{trek.rating.average}</span>
+                                                    <span className="ml-1 text-gray-400 text-xs">({trek.rating.count})</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                     {/* Location */}
                                     <div className="mb-6">

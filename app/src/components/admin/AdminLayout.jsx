@@ -14,6 +14,7 @@ import {
   ChevronRightIcon,
   PhotoIcon,
   UserCircleIcon,
+  StarIcon,
 } from '@heroicons/react/24/outline';
 
 // Inline chevron for the user dropdown trigger
@@ -59,6 +60,7 @@ const AdminLayout = () => {
     { name: 'Manage Treks',    path: '/admin/treks',     icon: <MapIcon className="w-5 h-5" /> },
     { name: 'Pending Trails',  path: '/admin/trails',    icon: <UserCircleIcon className="w-5 h-5" /> },
     { name: 'Manage Users',    path: '/admin/users',     icon: <UsersIcon className="w-5 h-5" /> },
+    { name: 'Reviews',         path: '/admin/reviews',   icon: <StarIcon className="w-5 h-5" /> },
     { name: 'Analytics',      path: '/admin/analytics', icon: <ChartBarIcon className="w-5 h-5" /> },
     { name: 'Settings',       path: '/admin/settings',  icon: <Cog6ToothIcon className="w-5 h-5" /> },
   ];
