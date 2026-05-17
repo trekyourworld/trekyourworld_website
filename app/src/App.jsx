@@ -31,6 +31,7 @@ const Analytics = lazy(() => import('./components/admin/dashboard/Analytics'));
 const Settings = lazy(() => import('./components/admin/dashboard/Settings'));
 const PendingTrails = lazy(() => import('./components/admin/dashboard/PendingTrails'));
 const ManageReviews = lazy(() => import('./components/admin/dashboard/ManageReviews'));
+const ManageSuggestions = lazy(() => import('./components/admin/dashboard/ManageSuggestions'));
 
 // Loading component for suspense fallback
 const LoadingFallback = () => (
@@ -155,6 +156,11 @@ function App() {
                             <Route path="reviews" element={
                                 <Suspense fallback={<LoadingFallback />}>
                                     <ManageReviews />
+                                </Suspense>
+                            } />
+                            <Route path="suggestions" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <ManageSuggestions />
                                 </Suspense>
                             } />
                         </Route>
