@@ -617,6 +617,14 @@ const TrekDetailsPage = () => {
                     <p className="text-gray-600">This feature is coming soon.</p>
                 </div>
 
+                {/* Suggest a trek CTA */}
+                <div className="text-center mb-4 text-sm text-gray-500">
+                    Don&apos;t see a trail you know?{' '}
+                    <Link to="/profile?tab=suggest" className="text-blue-600 hover:underline font-medium">
+                        Suggest it →
+                    </Link>
+                </div>
+
                 {/* Back to all treks button */}
                 <div className="text-center mb-8">
                     <Link
