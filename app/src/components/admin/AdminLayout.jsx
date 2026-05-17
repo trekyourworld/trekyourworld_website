@@ -16,6 +16,7 @@ import {
   UserCircleIcon,
   StarIcon,
   LightBulbIcon,
+  CameraIcon,
 } from '@heroicons/react/24/outline';
 
 // Inline chevron for the user dropdown trigger
@@ -63,6 +64,7 @@ const AdminLayout = () => {
     { name: 'Manage Users',    path: '/admin/users',     icon: <UsersIcon className="w-5 h-5" /> },
     { name: 'Reviews',         path: '/admin/reviews',      icon: <StarIcon className="w-5 h-5" /> },
     { name: 'Suggestions',     path: '/admin/suggestions',  icon: <LightBulbIcon className="w-5 h-5" /> },
+    { name: 'Photos',          path: '/admin/photos',       icon: <CameraIcon className="w-5 h-5" /> },
     { name: 'Analytics',      path: '/admin/analytics', icon: <ChartBarIcon className="w-5 h-5" /> },
     { name: 'Settings',       path: '/admin/settings',  icon: <Cog6ToothIcon className="w-5 h-5" /> },
   ];

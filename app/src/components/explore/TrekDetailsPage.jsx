@@ -10,6 +10,7 @@ import { treksService } from '../../services/api/treksService';
 import ImageCarousel from './ImageCarousel';
 import { reviewService } from '../../services/api/reviewService';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import CommunityPhotosSection from './CommunityPhotosSection';
 
 const TrekDetailsPage = () => {
     const { id } = useParams();
@@ -610,6 +611,9 @@ const TrekDetailsPage = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Community Photos */}
+                <CommunityPhotosSection mountainId={trek?.uid} communityPhotosEnabled={false} />
 
                 {/* Related treks section placeholder */}
                 <div className="mb-8">
