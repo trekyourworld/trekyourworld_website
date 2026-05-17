@@ -10,6 +10,7 @@ import GuideEarningsTab from './GuideEarningsTab';
 import GuideReviewsTab from './GuideReviewsTab';
 import MyReviewsTab from './MyReviewsTab';
 import SuggestTrekTab from './SuggestTrekTab';
+import MyPhotosTab from './MyPhotosTab';
 import { authService } from '../../services/api/authService';
 
 const UserProfilePage = () => {
@@ -134,6 +135,18 @@ const UserProfilePage = () => {
                 <span>Suggest a Trek</span>
               </button>
 
+              <button
+                className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-all flex items-center space-x-2 ${
+                  activeSection === 'my-photos' ? 'bg-blue-600 text-white' : 'hover:bg-gray-200 text-gray-700'
+                }`}
+                onClick={() => handleSectionChange('my-photos')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                </svg>
+                <span>My Photos</span>
+              </button>
+
               {showGuide && (
                 <>
                   <button
@@ -210,6 +223,12 @@ const UserProfilePage = () => {
             {activeSection === 'suggest-trek' && (
               <div className="animate-fadeIn">
                 <SuggestTrekTab />
+              </div>
+            )}
+
+            {activeSection === 'my-photos' && (
+              <div className="animate-fadeIn">
+                <MyPhotosTab communityPhotosEnabled={false} />
               </div>
             )}
 

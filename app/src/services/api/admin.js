@@ -50,4 +50,22 @@ export const adminService = {
         return apiClient.put('/v1/admin/settings', { tab, data })
     },
 
+    // Feature flags
+    getFeatureFlags: async () => {
+        return apiClient.get('/v1/admin/features')
+    },
+
+    // Community photo moderation
+    getPhotos: async (status, page = 1, limit = 20) => {
+        return apiClient.get(`/v1/admin/photos?status=${status}&page=${page}&limit=${limit}`)
+    },
+
+    reviewPhoto: async (photoId, action) => {
+        return apiClient.put(`/v1/admin/photos/${photoId}/review`, { action })
+    },
+
+    adminDeletePhoto: async (photoId) => {
+        return apiClient.delete(`/v1/admin/photos/${photoId}`)
+    },
+
 }

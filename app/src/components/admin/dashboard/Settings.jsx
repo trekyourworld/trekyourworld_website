@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { CogIcon, BellIcon, ShieldCheckIcon, UserCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { useState, useEffect } from 'react';
+import { CogIcon, BellIcon, ShieldCheckIcon, UserCircleIcon, CheckCircleIcon, BeakerIcon } from '@heroicons/react/24/outline';
 import { adminService } from '../../../services/api/admin';
 
 // ── Toggle switch ─────────────────────────────────────────────────────────────
@@ -69,6 +69,26 @@ const Settings = () => {
     loginAlerts: true,
   });
 
+  // ── Features state ─────────────────────────────────────────────────────────
+  const [features, setFeatures] = useState({ community_photos_enabled: false });
+  const [featuresLoaded, setFeaturesLoaded] = useState(false);
+
+  useEffect(() => {
+    if (activeTab === 'features' && !featuresLoaded) {
+      adminService.getFeatureFlags()
+        .then(res => {
+          const data = res.data?.data;
+          if (data) {
+            setFeatures({
+              community_photos_enabled: !!data.communityPhotosEnabled,
+            });
+          }
+          setFeaturesLoaded(true);
+        })
+        .catch(() => setFeaturesLoaded(true));
+    }
+  }, [activeTab, featuresLoaded]);
+
   // ── Account state ──────────────────────────────────────────────────────────
   const [account, setAccount] = useState({
     name: 'Admin User',
@@ -100,6 +120,7 @@ const Settings = () => {
     notifications: notifications,
     security: security,
     account: { name: account.name, email: account.email },
+    features: features,
   };
 
   return (
@@ -135,6 +156,7 @@ const Settings = () => {
             <option value="notifications">Notifications</option>
             <option value="security">Security &amp; Privacy</option>
             <option value="account">Account</option>
+            <option value="features">Features</option>
           </select>
         </div>
 
@@ -146,6 +168,7 @@ const Settings = () => {
               { key: 'notifications', label: 'Notifications', Icon: BellIcon },
               { key: 'security', label: 'Security & Privacy', Icon: ShieldCheckIcon },
               { key: 'account', label: 'Account', Icon: UserCircleIcon },
+              { key: 'features', label: 'Features', Icon: BeakerIcon },
             ].map(({ key, label, Icon }) => (
               <button
                 key={key}
@@ -396,6 +419,33 @@ const Settings = () => {
                   showCancel
                 />
               </div>
+            </div>
+          )}
+          {/* ── Features ─────────────────────────────────────────────────────── */}
+          {activeTab === 'features' && (
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-1">Feature Flags</h2>
+              <p className="text-sm text-gray-500 mb-4">Enable or disable experimental features site-wide.</p>
+              {!featuresLoaded ? (
+                <p className="text-sm text-gray-400">Loading…</p>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-700">Community Photo Upload</h3>
+                      <p className="text-sm text-gray-500">Allow users to upload photos for trek pages. Uploaded photos are held for admin review before appearing publicly.</p>
+                    </div>
+                    <Toggle
+                      checked={features.community_photos_enabled}
+                      onChange={() => setFeatures({ ...features, community_photos_enabled: !features.community_photos_enabled })}
+                    />
+                  </div>
+                  <SaveRow
+                    isSaving={isSaving}
+                    onSave={() => handleSave('features', tabDataMap.features)}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
