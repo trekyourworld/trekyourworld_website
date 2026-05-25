@@ -541,6 +541,38 @@ const TrekDetailsPage = () => {
                                         </div>
                                     )}
 
+                                    {/* Book Now button */}
+                                    {Array.isArray(trek.communities) && trek.communities.some(c => c.website) && (
+                                        <div className="mb-6">
+                                            {trek.communities.filter(c => c.website).length === 1 ? (
+                                                <button
+                                                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                                                    onClick={() => window.open(trek.communities.find(c => c.website).website, '_blank', 'noopener')}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                    </svg>
+                                                    Book Now
+                                                </button>
+                                            ) : (
+                                                <div>
+                                                    <p className="text-gray-500 text-xs mb-2">Book with:</p>
+                                                    <div className="space-y-2">
+                                                        {trek.communities.filter(c => c.website).map((community, idx) => (
+                                                            <button
+                                                                key={idx}
+                                                                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm"
+                                                                onClick={() => window.open(community.website, '_blank', 'noopener')}
+                                                            >
+                                                                {community.name}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {/* Action buttons */}
                                     <div className="space-y-3">
                                         <button
