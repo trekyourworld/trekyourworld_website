@@ -2,19 +2,19 @@ import apiClient from './apiClient';
 
 export const guideService = {
   // Profile
-  getProfile: () => apiClient.request('GET', '/guide/profile'),
-  updateProfile: (data) => apiClient.request('PUT', '/guide/profile', { body: data }),
+  getProfile: () => apiClient.get('/v1/guide/profile'),
+  updateProfile: (data) => apiClient.put('/v1/guide/profile', data),
 
   // Trails
-  getTrails: (params = {}) => apiClient.request('GET', '/guide/trails', { params }),
-  submitTrail: (data) => apiClient.request('POST', '/guide/trails', { body: data }),
-  updateTrail: (uuid, data) => apiClient.request('PUT', `/guide/trails/${uuid}`, { body: data }),
+  getTrails: (params = {}) => apiClient.get('/v1/guide/trails', { params }),
+  submitTrail: (data) => apiClient.post('/v1/guide/trails', data),
+  updateTrail: (uuid, data) => apiClient.put(`/v1/guide/trails/${uuid}`, data),
 
   // Bookings & Earnings
-  getBookings: (params = {}) => apiClient.request('GET', '/guide/bookings', { params }),
-  getEarnings: () => apiClient.request('GET', '/guide/earnings'),
+  getBookings: (params = {}) => apiClient.get('/v1/guide/bookings', { params }),
+  getEarnings: () => apiClient.get('/v1/guide/earnings'),
 
   // Admin: pending trail review
-  getPendingTrails: (params = {}) => apiClient.request('GET', '/admin/trails/pending', { params }),
-  reviewTrail: (uuid, data) => apiClient.request('PUT', `/admin/trails/${uuid}/review`, { body: data }),
+  getPendingTrails: (params = {}) => apiClient.get('/v1/admin/trails/pending', { params }),
+  reviewTrail: (uuid, data) => apiClient.put(`/v1/admin/trails/${uuid}/review`, data),
 };

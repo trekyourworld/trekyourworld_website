@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
     UsersIcon,
     MapIcon,
@@ -39,11 +40,7 @@ const Dashboard = () => {
         const fetchDailyVisits = async () => {
             analyticsService.dailyVisits()
                 .then((response) => {
-                    if (response.status === 200) {
-                        setDailyVisits(response.data.count);
-                    } else {
-                        console.error('Error fetching daily visits:', response.statusText);
-                    }
+                    setDailyVisits(response.data.count);
                 })
                 .catch((error) => {
                     console.error('Error fetching daily visits:', error);
