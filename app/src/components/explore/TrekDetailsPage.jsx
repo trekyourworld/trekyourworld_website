@@ -530,7 +530,9 @@ const TrekDetailsPage = () => {
                                             <ul className="list-disc list-inside ml-2">
                                                 {trek.communities.map((community, idx) => (
                                                     <li key={idx} className="text-gray-700 text-sm">
-                                                        {community.website ? (
+                                                        {community.slug ? (
+                                                            <Link to={`/communities/${community.slug}`} className="text-blue-600 hover:underline">{community.name}</Link>
+                                                        ) : community.website ? (
                                                             <a href={community.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{community.name}</a>
                                                         ) : (
                                                             community.name

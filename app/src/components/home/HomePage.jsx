@@ -1,14 +1,26 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { communityService } from '../../services/api/communityService';
 
 const TopTreks = lazy(() => import('./TopTreks'));
 const Statistics = lazy(() => import('./Statistics'));
 const PhotoGallery = lazy(() => import('./PhotoGallery'));
 
 const HomePage = () => {
+  const [featuredCommunities, setFeaturedCommunities] = useState([]);
+
+  useEffect(() => {
+    communityService.getCommunities({ page: 1, limit: 6 })
+      .then(res => {
+        const items = res?.data?.data?.data || [];
+        setFeaturedCommunities(items);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <Helmet>
@@ -90,6 +102,41 @@ const HomePage = () => {
       <Suspense fallback={<div className="w-full text-center py-8">Loading gallery...</div>}>
         <PhotoGallery />
       </Suspense>
+
+      {/* Partner Communities Section */}
+      {featuredCommunities.length > 0 && (
+        <section className="py-14 bg-white w-full">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Our Partner Communities</h2>
+              <Link to="/communities" className="text-sm text-blue-600 hover:underline font-medium">
+                View All →
+              </Link>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-2 -mx-1 px-1">
+              {featuredCommunities.map(c => {
+                const initials = c.name ? c.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?';
+                return (
+                  <Link
+                    key={c.id}
+                    to={c.slug ? `/communities/${c.slug}` : '/communities'}
+                    className="flex-shrink-0 flex flex-col items-center gap-2 bg-gray-50 hover:bg-blue-50 border border-gray-200 hover:border-blue-300 rounded-xl p-4 w-32 transition-colors"
+                  >
+                    {c.logo_url ? (
+                      <img src={c.logo_url} alt={c.name} className="w-12 h-12 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold text-sm">
+                        {initials}
+                      </div>
+                    )}
+                    <span className="text-xs font-medium text-gray-700 text-center leading-tight line-clamp-2">{c.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Newsletter Section */}
       <section className="bg-blue-700 text-white py-16 w-full">

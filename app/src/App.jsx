@@ -21,6 +21,8 @@ const ContactPage = lazy(() => import('./components/contact/ContactPage'));
 const GuidesPage = lazy(() => import('./components/guides/GuidesPage'));
 const GalleryPage = lazy(() => import('./components/gallery/GalleryPage'));
 const UserProfilePage = lazy(() => import('./components/profile/UserProfilePage'));
+const CommunitiesPage = lazy(() => import('./pages/CommunitiesPage'));
+const CommunityProfilePage = lazy(() => import('./pages/CommunityProfilePage'));
 
 // Admin components
 const Dashboard = lazy(() => import('./components/admin/dashboard/Dashboard'));
@@ -95,6 +97,16 @@ function App() {
                             <Route path="/contact" element={
                                 <Suspense fallback={<LoadingFallback />}>
                                     <ContactPage />
+                                </Suspense>
+                            } />
+                            <Route path="/communities" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <CommunitiesPage />
+                                </Suspense>
+                            } />
+                            <Route path="/communities/:slug" element={
+                                <Suspense fallback={<LoadingFallback />}>
+                                    <CommunityProfilePage />
                                 </Suspense>
                             } />
                             {/* User Profile Route */}
